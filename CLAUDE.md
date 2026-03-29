@@ -1,0 +1,1 @@
+/home/nosey/canijo-sabroso/pets-theme/AGENTS.md

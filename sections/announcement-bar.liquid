@@ -1,0 +1,161 @@
+{% if section.settings.enabled and section.settings.text != blank %}
+  <div
+    id="shopify-section-{{ section.id }}-announcement"
+    class="announcement-bar full-width"
+    data-announcement-bar
+  >
+    <div class="announcement-bar__inner">
+      {% if section.settings.link != blank %}
+        <a class="announcement-bar__message" href="{{ section.settings.link }}">
+          {{ section.settings.text }}
+        </a>
+      {% else %}
+        <p class="announcement-bar__message">{{ section.settings.text }}</p>
+      {% endif %}
+
+      <button
+        class="announcement-bar__dismiss"
+        type="button"
+        aria-label="Dismiss announcement"
+        data-announcement-dismiss
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      const bar = document.getElementById('shopify-section-{{ section.id }}-announcement');
+
+      if (!bar) return;
+
+      const dismissButton = bar.querySelector('[data-announcement-dismiss]');
+      const storageKey =
+        'canijo-announcement:' + {{ section.id | json }} + ':' + {{ section.settings.text | strip_html | json }};
+
+      try {
+        if (window.localStorage.getItem(storageKey) === 'dismissed') {
+          bar.hidden = true;
+          return;
+        }
+      } catch (error) {
+      }
+
+      dismissButton?.addEventListener('click', () => {
+        bar.hidden = true;
+
+        try {
+          window.localStorage.setItem(storageKey, 'dismissed');
+        } catch (error) {
+        }
+      });
+    })();
+  </script>
+{% endif %}
+
+{% stylesheet %}
+    .announcement-bar {
+      background: #f86d4e;
+      color: #fff;
+    }
+
+    .announcement-bar__inner {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 2.5rem;
+      padding: 0.625rem 2.75rem;
+      text-align: center;
+    }
+
+    .announcement-bar__message {
+      margin: 0;
+      color: inherit;
+      font-size: 0.875rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      line-height: 1.4;
+      text-decoration: none;
+    }
+
+    .announcement-bar__message:hover {
+      color: #fff6e5;
+    }
+
+    .announcement-bar__dismiss {
+      position: absolute;
+      top: 50%;
+      right: max(var(--page-margin), 1rem);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2rem;
+      height: 2rem;
+      padding: 0;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+      box-shadow: none;
+      transform: translateY(-50%);
+      transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .announcement-bar__dismiss:hover {
+      background: rgba(255, 255, 255, 0.16);
+      transform: translateY(-50%) scale(1.05);
+    }
+
+    .announcement-bar__dismiss:active {
+      transform: translateY(-50%);
+    }
+
+    .announcement-bar__dismiss span {
+      font-size: 1.25rem;
+      line-height: 1;
+    }
+
+    @media screen and (max-width: 749px) {
+      .announcement-bar__inner {
+        min-height: 2.75rem;
+        padding-right: 3rem;
+        padding-left: 1rem;
+      }
+
+      .announcement-bar__message {
+        font-size: 0.8125rem;
+      }
+
+      .announcement-bar__dismiss {
+        right: 0.5rem;
+      }
+    }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Announcement bar",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enabled",
+      "label": "Enable announcement bar",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Announcement text",
+      "default": "Free local delivery in Tijuana on orders over $799 MXN"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Optional link"
+    }
+  ]
+}
+{% endschema %}

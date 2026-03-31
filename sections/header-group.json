@@ -11,12 +11,20 @@
   "type": "header",
   "name": "t:general.header",
   "sections": {
+    "announcement_bar": {
+      "type": "announcement-bar",
+      "settings": {
+        "enabled": true,
+        "text": "Free local delivery in Tijuana on orders over $799 MXN"
+      }
+    },
     "header": {
       "type": "header",
       "settings": {}
     }
   },
   "order": [
+    "announcement_bar",
     "header"
   ],
 }

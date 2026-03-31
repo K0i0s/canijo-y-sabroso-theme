@@ -1,7 +1,7 @@
 [
   {
     "name": "theme_info",
-    "theme_name": "Skeleton",
+    "theme_name": "Canijo y Sabroso",
     "theme_version": "0.1.0",
     "theme_author": "Shopify",
     "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
@@ -16,9 +16,15 @@
       },
       {
         "type": "font_picker",
-        "id": "type_primary_font",
-        "default": "work_sans_n4",
-        "label": "t:general.primary"
+        "id": "type_heading_font",
+        "default": "fredoka_n4",
+        "label": "t:general.heading_font"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_body_font",
+        "default": "nunito_sans_n4",
+        "label": "t:general.body_font"
       }
     ]
   },
@@ -54,17 +60,41 @@
     ]
   },
   {
-    "name": "t:general.colors",
+    "name": "Colors",
     "settings": [
       {
         "type": "color",
-        "id": "background_color",
-        "default": "#FFFFFF",
+        "id": "color_accent",
+        "default": "#F86D4E",
+        "label": "t:labels.accent"
+      },
+      {
+        "type": "color",
+        "id": "color_secondary",
+        "default": "#0296B4",
+        "label": "t:labels.secondary"
+      },
+      {
+        "type": "color",
+        "id": "color_cream",
+        "default": "#FCECC9",
+        "label": "t:labels.cream"
+      },
+      {
+        "type": "color",
+        "id": "color_light_cream",
+        "default": "#FFF6E5",
+        "label": "t:labels.light_cream"
+      },
+      {
+        "type": "color",
+        "id": "color_background",
+        "default": "#FFF6E5",
         "label": "t:labels.background"
       },
       {
         "type": "color",
-        "id": "foreground_color",
+        "id": "color_foreground",
         "default": "#333333",
         "label": "t:labels.foreground"
       },

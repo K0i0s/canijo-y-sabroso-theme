@@ -50,6 +50,18 @@
 
       }
     },
+    "social_media": {
+      "type": "social-media",
+      "settings":{
+
+      }
+    },
+    "newsletter":{
+      "type": "newsletter",
+      "settings": {
+
+      }
+    },
     "main": {
       "type": "hello-world",
       "settings": {}
@@ -59,6 +71,8 @@
     "hero_banner",
     "products_facts",
     "featured_products",
+    "social_media",
+    "newsletter",
     "main"
   ]
 }

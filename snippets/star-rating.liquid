@@ -1,0 +1,67 @@
+{% comment %}
+  Renders 1–5 SVG stars based on a numeric rating.
+  Usage: {% render 'star-rating', rating: product.metafields.reviews.rating.value %}
+  Accepts:
+    - rating {Number} 1–5 (supports decimals, e.g. 4.5)
+    - size   {String} 'sm' | 'md' (default 'md')
+{% endcomment %}
+
+{%- liquid
+  assign rating_val  = rating | default: 0 | plus: 0.0
+  assign size_class  = size | default: 'md'
+  assign full_stars  = rating_val | floor
+  assign remainder   = rating_val | minus: full_stars
+  assign half_star   = false
+  if remainder >= 0.4 and remainder < 0.9
+    assign half_star = true
+  endif
+  if remainder >= 0.9
+    assign full_stars = full_stars | plus: 1
+  endif
+  assign empty_stars = 5 | minus: full_stars
+  if half_star
+    assign empty_stars = empty_stars | minus: 1
+  endif
+  assign uid = 'now' | date: '%N' | modulo: 99999
+-%}
+
+<div class="star-rating star-rating--{{ size_class }}" aria-label="{{ rating_val | round: 1 }} de 5 estrellas" role="img">
+  {%- for i in (1..full_stars) -%}
+    <svg class="star star--full" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.953a1 1 0 00.95.69h4.162c.969 0 1.372 1.24.588 1.81l-3.368 2.448a1 1 0 00-.364 1.118l1.286 3.953c.3.921-.755 1.688-1.54 1.118L10 15.347l-3.951 2.87c-.784.57-1.838-.197-1.539-1.118l1.286-3.953a1 1 0 00-.364-1.118L2.064 9.38c-.784-.57-.38-1.81.588-1.81h4.162a1 1 0 00.951-.69l1.284-3.953z"/>
+    </svg>
+  {%- endfor -%}
+
+  {%- if half_star -%}
+    <svg class="star star--half" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <linearGradient id="half-grad-{{ uid }}">
+          <stop offset="50%" stop-color="currentColor"/>
+          <stop offset="50%" stop-color="transparent"/>
+        </linearGradient>
+      </defs>
+      <path fill="url(#half-grad-{{ uid }})" stroke="currentColor" stroke-width="0.5" d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.953a1 1 0 00.95.69h4.162c.969 0 1.372 1.24.588 1.81l-3.368 2.448a1 1 0 00-.364 1.118l1.286 3.953c.3.921-.755 1.688-1.54 1.118L10 15.347l-3.951 2.87c-.784.57-1.838-.197-1.539-1.118l1.286-3.953a1 1 0 00-.364-1.118L2.064 9.38c-.784-.57-.38-1.81.588-1.81h4.162a1 1 0 00.951-.69l1.284-3.953z"/>
+    </svg>
+  {%- endif -%}
+
+  {%- for i in (1..empty_stars) -%}
+    <svg class="star star--empty" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.953a1 1 0 00.95.69h4.162c.969 0 1.372 1.24.588 1.81l-3.368 2.448a1 1 0 00-.364 1.118l1.286 3.953c.3.921-.755 1.688-1.54 1.118L10 15.347l-3.951 2.87c-.784.57-1.838-.197-1.539-1.118l1.286-3.953a1 1 0 00-.364-1.118L2.064 9.38c-.784-.57-.38-1.81.588-1.81h4.162a1 1 0 00.951-.69l1.284-3.953z"/>
+    </svg>
+  {%- endfor -%}
+</div>
+
+{% stylesheet %}
+  .star-rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.15rem;
+    color: #F86D4E;
+  }
+
+  .star-rating--sm .star { width: 0.9rem; height: 0.9rem; }
+  .star-rating--md .star { width: 1.1rem; height: 1.1rem; }
+
+  .star--empty { color: #d6cfc4; }
+  .star--half  { color: #F86D4E; }
+{% endstylesheet %}

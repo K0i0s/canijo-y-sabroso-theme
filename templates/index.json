@@ -44,6 +44,12 @@
       },
       "block_order": ["fact_1", "fact_2", "fact_3"]
     },
+    "featured_products": {
+      "type": "featured-products",
+      "settings": {
+
+      }
+    },
     "main": {
       "type": "hello-world",
       "settings": {}
@@ -52,6 +58,7 @@
   "order": [
     "hero_banner",
     "products_facts",
+    "featured_products",
     "main"
   ]
 }

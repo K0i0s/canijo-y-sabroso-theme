@@ -1,0 +1,304 @@
+<section class="product-facts full-width" style="--pf-bg: {{ section.settings.bg_color }};">
+
+  <div class="product-facts__inner">
+    {% if section.settings.heading != blank %}
+      <h2 class="product-facts__heading">
+        {{ section.settings.heading }}
+        <span class="product-facts__heading-squiggle" aria-hidden="true">
+          <svg viewBox="0 0 200 12" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+            <path d="M0 6 C20 0, 40 12, 60 6 S100 0, 120 6 S160 12, 180 6 S195 2, 200 6" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+        </span>
+      </h2>
+    {% endif %}
+
+    <div class="product-facts__grid">
+      {% for block in section.blocks %}
+        <div class="product-facts__card" {{ block.shopify_attributes }}>
+          <div class="product-facts__icon-wrap">
+            <div class="product-facts__icon">
+              {% case block.settings.icon %}
+                {% when 'leaf' %}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M11 20A7 7 0 0 1 9.8 6.9C15.5 4.9 17 3.5 19 1c1 2 2 4.5 2 8 0 5.5-4.78 11-10 11Z"/>
+                    <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
+                  </svg>
+                {% when 'shield' %}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>
+                    <path d="m9 12 2 2 4-4"/>
+                  </svg>
+                {% when 'stethoscope' %}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4.8 2.3A.3.3 0 1 0 5 2H4a2 2 0 0 0-2 2v5a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6V4a2 2 0 0 0-2-2h-1a.2.2 0 1 0 .3.3"/>
+                    <path d="M8 15v1a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6v-4"/>
+                    <circle cx="20" cy="10" r="2"/>
+                  </svg>
+                {% when 'wheat-off' %}
+                  <svg fill="currentColor" viewBox="0 0 14 14" width="28" height="28" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+                    <path d="m 6.5232086,12.983925 c -2.402919,-0.158 -4.531541,-1.8703 -5.229897,-4.2071 -0.34855497,-1.1663 -0.36992997,-2.0644 -0.07666,-3.2205 0.568674,-2.2418 2.339724,-3.9468 4.578899,-4.4082 1.037499,-0.2137 1.617793,-0.2001 2.726022,0.064 2.0387694,0.486 3.7598434,2.2094 4.3337064,4.3396 0.186507,0.6923 0.172678,2.3026 -0.02602,3.0298 -0.652295,2.3874 -2.745872,4.1714 -5.1597044,4.3969 -0.279066,0.026 -0.794924,0.028 -1.146352,0.01 z m 1.870005,-1.3055 c 2.6262414,-0.7559 4.1102714,-3.5955 3.2415114,-6.2024 -0.185144,-0.5556 -0.632726,-1.3636 -0.755317,-1.3636 -0.04337,0 -0.260049,0.1828 -0.4815,0.4062 l -0.4026374,0.4063 -0.490059,0.038 c -0.269533,0.021 -0.626638,0.08 -0.793566,0.1306 l -0.303506,0.092 0,-0.2231 c 0,-0.1993 0.08346,-0.3083 0.781756,-1.0205 l 0.781755,-0.7973 -0.158769,-0.1225 c -0.258941,-0.1997 -1.149904,-0.6117 -1.59643,-0.7383 -0.559027,-0.1584 -1.780823,-0.1622 -2.36415,-0.01 -0.57961,0.1539 -1.501678,0.6218 -1.903167,0.9658 -0.784206,0.672 -1.405346,1.6445 -1.657139,2.5947 -0.151103,0.5702 -0.148372,1.7325 0.0055,2.3322 0.122827,0.4787 0.624422,1.568 0.782474,1.6992 0.08002,0.066 0.163853,0.012 0.513055,-0.3307 l 0.41741,-0.4101 0.105711,0.1598 c 0.05814,0.088 0.244017,0.3078 0.41306,0.4888 l 0.307351,0.3292 -0.354713,0.3691 c -0.195093,0.2031 -0.354714,0.3898 -0.354714,0.415 0,0.1328 1.054359,0.678 1.603793,0.8294 0.815667,0.2246 1.791557,0.2096 2.66231,-0.041 z m -2.609889,-1.8373 c -0.479798,-0.1974 -0.777824,-0.4356 -1.02311,-0.8178 -0.178315,-0.2779 -0.373502,-0.8657 -0.376522,-1.1338 -0.0017,-0.1494 0.767787,-0.052 1.178392,0.1484 0.63217,0.3093 1.18476,1.117 1.18476,1.7317 l 0,0.2212 -0.303506,0 c -0.167053,0 -0.463787,-0.068 -0.660014,-0.1482 z m 1.538584,-0.086 c 0,-0.4121 0.180926,-0.8288 0.521775,-1.2018 0.390043,-0.4267 0.864676,-0.6702 1.401442,-0.7189 l 0.396934,-0.036 -0.03637,0.3524 c -0.09721,0.9419 -0.926957,1.7343 -1.909129,1.8234 l -0.374648,0.034 0,-0.2531 z m -1.23099,-1.9428 c -0.874006,-0.2059 -1.55623,-0.9692 -1.673652,-1.8725 l -0.04064,-0.3126 0.354608,0.042 c 1.069923,0.1257 1.897788,0.8981 1.997431,1.8636 l 0.03606,0.3494 -0.216601,-0.01 c -0.119131,0 -0.324873,-0.032 -0.457204,-0.063 z m 1.246063,-0.2924 c 0.07748,-0.8545 0.737264,-1.5758 1.63447,-1.7869 0.600694,-0.1414 0.650712,-0.1287 0.650712,0.1657 0,0.7121 -0.590621,1.5169 -1.311154,1.7865 -0.209386,0.078 -0.521995,0.1591 -0.694688,0.1796 l -0.313986,0.037 0.03465,-0.3821 z m -0.521453,-1.3995 c -0.36342,-0.4139 -0.482759,-0.7524 -0.482759,-1.3694 0,-0.6143 0.119412,-0.9557 0.476551,-1.3624 0.23767,-0.2707 0.273925,-0.2595 0.57519,0.1784 0.208298,0.3027 0.38467,0.8478 0.38467,1.1888 0,0.4099 -0.234888,1.0416 -0.497203,1.3372 l -0.241529,0.2722 -0.21492,-0.2448 z"/>
+                  </svg>
+              {% endcase %}
+            </div>
+            <div class="product-facts__icon-ring" aria-hidden="true"></div>
+          </div>
+
+          <h3 class="product-facts__title">{{ block.settings.title }}</h3>
+          <p class="product-facts__description">{{ block.settings.description }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  @keyframes pf-bob {
+    0%, 100% { transform: scale(1); }
+    50%       { transform: scale(1.12); }
+  }
+
+  @keyframes pf-ring-pulse {
+    0%   { transform: scale(1);    opacity: 0.6; }
+    100% { transform: scale(1.55); opacity: 0;   }
+  }
+
+  @keyframes pf-squiggle {
+    0%, 100% { stroke-dashoffset: 0;  }
+    50%       { stroke-dashoffset: 12; }
+  }
+
+  /* ── Section ─────────────────────────────────────────── */
+  .product-facts {
+    background: var(--pf-bg, var(--color-light-cream));
+    position: relative;
+    overflow: hidden;
+  }
+
+ 
+
+  /* ── Inner ───────────────────────────────────────────── */
+  .product-facts__inner {
+    position: relative;
+    width: min(var(--page-width), calc(100% - (var(--page-margin) * 2)));
+    margin: 0 auto;
+    padding: clamp(3rem, 6vw, 5rem) 0;
+  }
+
+  /* ── Heading ─────────────────────────────────────────── */
+  .product-facts__heading {
+    margin: 0 0 clamp(2rem, 4vw, 3rem);
+    text-align: center;
+    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.75rem, 4.5vw, 2.75rem);
+    color: var(--color-accent);
+    letter-spacing: -0.01em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .product-facts__heading-squiggle {
+    display: block;
+    width: clamp(120px, 30%, 200px);
+    height: 12px;
+    color: var(--color-secondary);
+  }
+
+  .product-facts__heading-squiggle svg {
+    width: 100%;
+    height: 100%;
+    stroke-dasharray: 8 4;
+    animation: pf-squiggle 2.8s ease-in-out infinite;
+  }
+
+  /* ── Grid ────────────────────────────────────────────── */
+  .product-facts__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+
+  @media screen and (min-width: 750px) {
+    .product-facts__grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+  }
+
+  /* ── Cards ───────────────────────────────────────────── */
+  .product-facts__card {
+    --card-tilt: 0deg;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: #fff;
+    border: 2.5px solid #1a1a1a;
+    border-radius: 1.75rem;
+    padding: clamp(1.75rem, 3.5vw, 2.25rem) clamp(1.25rem, 2.5vw, 1.75rem);
+    box-shadow: 5px 6px 0px 0px #1a1a1a;
+    transition: transform 0.22s cubic-bezier(.34,1.56,.64,1),
+                box-shadow 0.22s cubic-bezier(.34,1.56,.64,1);
+    position: relative;
+    will-change: transform;
+  }
+
+  /* Teal top strip */
+
+  @media screen and (min-width: 750px) {
+    .product-facts__card:nth-child(1) { transform: rotate(-1.5deg); }
+    .product-facts__card:nth-child(2) { transform: rotate(0.5deg);  }
+    .product-facts__card:nth-child(3) { transform: rotate(1.5deg);  }
+  }
+
+  .product-facts__card:hover {
+    transform: translateY(-8px) rotate(0deg) scale(1.02) !important;
+    box-shadow: 8px 10px 0px 0px #1a1a1a;
+  }
+
+  /* ── Icon ────────────────────────────────────────────── */
+  .product-facts__icon-wrap {
+    position: relative;
+    width: 5rem;
+    height: 5rem;
+    margin-bottom: 1.25rem;
+    flex-shrink: 0;
+  }
+
+  .product-facts__icon {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: var(--color-secondary);
+    color: #fff;
+    border: 2.5px solid #1a1a1a;
+    box-shadow: 3px 3px 0px 0px #1a1a1a;
+    transition: transform 0.3s cubic-bezier(.34,1.56,.64,1);
+  }
+
+  .product-facts__card:hover .product-facts__icon {
+    animation: pf-bob 0.6s ease-in-out;
+  }
+
+  .product-facts__icon-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 2px solid var(--color-secondary);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .product-facts__card:hover .product-facts__icon-ring {
+    animation: pf-ring-pulse 0.7s ease-out forwards;
+  }
+
+  /* ── Title ───────────────────────────────────────────── */
+  .product-facts__title {
+    margin: 0 0 0.5rem;
+    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    color: var(--color-foreground);
+  }
+
+  /* ── Description ─────────────────────────────────────── */
+  .product-facts__description {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: rgba(51, 51, 51, 0.72);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Product facts",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "¿Por qué elegirnos?"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#FFF6E5"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "fact",
+      "name": "Fact",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "leaf",        "label": "Leaf"        },
+            { "value": "shield",      "label": "Shield"      },
+            { "value": "stethoscope", "label": "Stethoscope" },
+            { "value": "wheat-off",   "label": "Wheat off"   }
+          ],
+          "default": "leaf"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "100% natural"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Description",
+          "default": "Ingredientes simples y naturales."
+        }
+      ]
+    }
+  ],
+  "max_blocks": 3,
+  "presets": [
+    {
+      "name": "Product facts",
+      "blocks": [
+        {
+          "type": "fact",
+          "settings": {
+            "icon": "leaf",
+            "title": "100% Natural",
+            "description": "Ingredientes simples y naturales para tu mejor amigo."
+          }
+        },
+        {
+          "type": "fact",
+          "settings": {
+            "icon": "shield",
+            "title": "Sin Conservadores",
+            "description": "Sin aditivos ni químicos raros, solo lo bueno."
+          }
+        },
+        {
+          "type": "fact",
+          "settings": {
+            "icon": "stethoscope",
+            "title": "Aprobado por Vets",
+            "description": "Nutricionalmente balanceado y avalado por veterinarios."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

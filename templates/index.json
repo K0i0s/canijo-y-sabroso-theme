@@ -13,6 +13,37 @@
       "type": "hero-banner",
       "settings": {}
     },
+    "products_facts": {
+      "type": "product-facts",
+      "settings": {},
+      "blocks": {
+        "fact_1": {
+          "type": "fact",
+          "settings": {
+            "icon": "leaf",
+            "title": "100% natural",
+            "description": "Ingredientes simples y naturales para tu mejor amigo."
+          }
+        },
+        "fact_2": {
+          "type": "fact",
+          "settings": {
+            "icon": "shield",
+            "title": "Sin conservadores artificiales",
+            "description": "Sin aditivos ni químicos raros, solo lo bueno."
+          }
+        },
+        "fact_3": {
+          "type": "fact",
+          "settings": {
+            "icon": "wheat-off",
+            "title": "Libre de gluten",
+            "description": "Apto para perros con sensibilidad al gluten."
+          }
+        }
+      },
+      "block_order": ["fact_1", "fact_2", "fact_3"]
+    },
     "main": {
       "type": "hello-world",
       "settings": {}
@@ -20,6 +51,7 @@
   },
   "order": [
     "hero_banner",
+    "products_facts",
     "main"
   ]
 }

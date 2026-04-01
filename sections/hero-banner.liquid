@@ -88,7 +88,7 @@
 
   .hero-banner__eyebrow {
     margin: 0;
-    color: #0296b4;
+    color: var(--color-secondary);
     font-family: var(--font-heading-family);
     font-size: 0.8rem;
     font-weight: 600;
@@ -98,7 +98,7 @@
 
   .hero-banner__heading {
     margin: 0;
-    color: #f86d4e;
+    color: var(--color-accent);
     font-weight: 600;
     font-size: clamp(2.45rem, 8vw, 4.4rem);
     line-height: 0.92;
@@ -125,7 +125,7 @@
     min-height: 3.5rem;
     padding: 0.95rem 1.6rem;
     border-radius: 999px;
-    background: #f86d4e;
+    background: var(--color-accent);
     color: #fff;
     font-family: var(--font-heading-family);
     font-size: 1rem;
@@ -137,7 +137,7 @@
   }
 
   .hero-banner__cta:hover {
-    background: #0296b4;
+    background: var(--color-secondary);
     color: #fff;
     transform: translateY(-2px);
     box-shadow: 0 16px 26px rgba(2, 150, 180, 0.24);
@@ -185,25 +185,25 @@
   }
 
   .hero-banner__stroke--1 {
-    transform: rotate(-42deg);
+    transform: rotate(42deg);
   }
 
   .hero-banner__stroke--2 {
     top: 23%;
     left: 4%;
     width: 2.1rem;
-    transform: rotate(-17deg);
+    transform: rotate(17deg);
   }
 
   .hero-banner__paw {
     width: 1.35rem;
     height: 1.35rem;
-    background: #0296b4;
+    background: var(--color-secondary);
     border-radius: 50%;
     box-shadow:
-      0 -1rem 0 -0.45rem #0296b4,
-      -0.7rem -0.45rem 0 -0.5rem #0296b4,
-      0.7rem -0.45rem 0 -0.5rem #0296b4;
+      0 -1rem 0 -0.45rem var(--color-secondary),
+      -0.7rem -0.45rem 0 -0.5rem var(--color-secondary),
+      0.7rem -0.45rem 0 -0.5rem var(--color-secondary);
   }
 
   .hero-banner__paw--1 {
@@ -344,7 +344,7 @@
       "type": "color",
       "id": "bg_color",
       "label": "Background color",
-      "default": "#FFF6E5"
+      "default": "#FCECC9"
     }
   ],
   "presets": [

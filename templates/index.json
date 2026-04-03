@@ -11,11 +11,16 @@
   "sections": {
     "hero_banner": {
       "type": "hero-banner",
-      "settings": {}
+      "settings": {
+        "heading": "Premios canijos para perros con gran antojo.",
+        "subtext": "Snacks deshidratados hechos en México para consentir a tu perro con ingredientes simples, textura crujiente y mucho sabor.",
+        "button_text": "¡Compra ahora!",
+        "button_url": "",
+        "bg_color": "#fcecc9"
+      }
     },
     "products_facts": {
       "type": "product-facts",
-      "settings": {},
       "blocks": {
         "fact_1": {
           "type": "fact",
@@ -42,17 +47,29 @@
           }
         }
       },
-      "block_order": ["fact_1", "fact_2", "fact_3"]
+      "block_order": [
+        "fact_1",
+        "fact_2",
+        "fact_3"
+      ],
+      "settings": {
+        "heading": "¿Por qué elegirnos?",
+        "bg_color": "#fff6e5"
+      }
     },
     "featured_products": {
       "type": "featured-products",
       "settings": {
-
+        "heading": "Los favoritos de tu Canijo",
+        "subheading": "Recetas hechas con amor, aprobadas por colas movidas.",
+        "collection": "pechuga-de-pollo",
+        "products_to_show": 3,
+        "show_cta": true,
+        "cta_label": "Ver todo el catálogo"
       }
     },
     "reviews": {
       "type": "reviews",
-      "settings": {},
       "blocks": {
         "review_1": {
           "type": "review",
@@ -91,16 +108,24 @@
           }
         }
       },
-      "block_order": ["review_1", "review_2", "review_3", "review_4"]
+      "block_order": [
+        "review_1",
+        "review_2",
+        "review_3",
+        "review_4"
+      ],
+      "settings": {
+        "eyebrow": "Lo que dicen los dueños",
+        "heading": "Colas que no mienten",
+        "subheading": "Miles de perros felices (y sus humanos también)."
+      }
     },
     "why_us": {
       "type": "why-us",
-      "settings": {},
       "blocks": {
         "feature_1": {
           "type": "feature",
           "settings": {
-            "icon": "🌿",
             "label": "Ingredientes naturales",
             "canijo_value": "yes",
             "competitor_value": "no"
@@ -109,7 +134,6 @@
         "feature_2": {
           "type": "feature",
           "settings": {
-            "icon": "🚫",
             "label": "Sin conservadores",
             "canijo_value": "yes",
             "competitor_value": "no"
@@ -118,7 +142,6 @@
         "feature_3": {
           "type": "feature",
           "settings": {
-            "icon": "🌾",
             "label": "Libre de gluten",
             "canijo_value": "yes",
             "competitor_value": "no"
@@ -127,7 +150,6 @@
         "feature_4": {
           "type": "feature",
           "settings": {
-            "icon": "💪",
             "label": "Proteína alta",
             "canijo_value": "yes",
             "competitor_value": "no"
@@ -136,31 +158,52 @@
         "feature_5": {
           "type": "feature",
           "settings": {
-            "icon": "😋",
             "label": "Sabor real",
             "canijo_value": "yes",
             "competitor_value": "no"
           }
         }
       },
-      "block_order": ["feature_1", "feature_2", "feature_3", "feature_4", "feature_5"]
+      "block_order": [
+        "feature_1",
+        "feature_2",
+        "feature_3",
+        "feature_4",
+        "feature_5"
+      ],
+      "settings": {
+        "eyebrow": "La diferencia importa",
+        "heading": "¿Por qué Canijo y Sabroso?",
+        "subheading": "No todos los snacks son iguales. Aquí está la prueba.",
+        "brand_name": "Canijo y Sabroso",
+        "competitor_name": "Snacks promedio",
+        "cta_url": "",
+        "cta_label": "Probar ahora"
+      }
     },
     "social_media": {
       "type": "social-media",
-      "settings":{
-
+      "settings": {
+        "heading": "¡Síguenos en redes!",
+        "instagram_label": "@canijo-y-sabroso",
+        "instagram_url": "",
+        "tiktok_label": "TikTok",
+        "tiktok_url": "",
+        "facebook_label": "Facebook",
+        "facebook_url": ""
       }
     },
-    "newsletter":{
+    "newsletter": {
       "type": "newsletter",
       "settings": {
-
+        "heading": "Únete a la manada",
+        "subtext": "Recetas nuevas, descuentos exclusivos y tips para tu perro. Sin spam, solo lo bueno.",
+        "input_placeholder": "tu@correo.com",
+        "button_label": "Suscribirse",
+        "success_message": "¡Listo! Ahora eres parte de la manada. 🐾",
+        "privacy_note": "Sin spam. Puedes darte de baja cuando quieras."
       }
-    },
-    // "main": {
-    //   "type": "hello-world",
-    //   "settings": {}
-    // }
+    }
   },
   "order": [
     "hero_banner",
@@ -169,6 +212,6 @@
     "reviews",
     "why_us",
     "social_media",
-    "newsletter",
+    "newsletter"
   ]
 }

@@ -1,0 +1,539 @@
+<section class="reviews full-width" id="reviews-{{ section.id }}" data-section-id="{{ section.id }}">
+
+  
+  <div class="reviews__inner">
+
+    {{- '<!-- Header -->' -}}
+    <div class="reviews__header">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="reviews__eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h2 class="reviews__heading">
+          {{ section.settings.heading }}
+          <span class="reviews__squiggle" aria-hidden="true">
+            <svg viewBox="0 0 220 14" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+              <path d="M0 7 C22 1, 44 13, 66 7 S110 1, 132 7 S176 13, 198 7 S215 3, 220 7" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+            </svg>
+          </span>
+        </h2>
+      {%- endif -%}
+
+      {%- if section.settings.subheading != blank -%}
+        <p class="reviews__subheading">{{ section.settings.subheading }}</p>
+      {%- endif -%}
+    </div>
+
+    {{- '<!-- Carousel shell -->' -}}
+    <div class="reviews__carousel-shell">
+
+      {{- '<!-- Track -->' -}}
+      <div
+        class="reviews__track"
+        id="reviews-track-{{ section.id }}"
+        role="region"
+        aria-label="Carrusel de reseñas"
+        tabindex="0"
+      >
+        {%- for block in section.blocks -%}
+          {%- assign rating_val  = block.settings.rating | plus: 0 -%}
+          {%- assign full_stars  = rating_val | floor -%}
+          {%- assign empty_count = 5 | minus: full_stars -%}
+
+          <article
+            class="reviews__card"
+            id="reviews-card-{{ section.id }}-{{ forloop.index0 }}"
+            {{ block.shopify_attributes }}
+            aria-label="Reseña de {{ block.settings.name }}"
+          >
+            {{- '<!-- Teal accent top strip -->' -}}
+            <div class="reviews__card-strip" aria-hidden="true"></div>
+
+            {{- '<!-- Quote icon -->' -}}
+            <div class="reviews__quote-icon" aria-hidden="true">
+              <svg width="28" height="22" viewBox="0 0 28 22" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 22V13.4C0 9.8 1.03333 6.73333 3.1 4.2C5.16667 1.6 8.06667 0.0666667 11.8 0L12.6 2.4C10.2 2.86667 8.3 3.93333 6.9 5.6C5.56667 7.2 4.9 9 4.9 11H9.8V22H0ZM15.4 22V13.4C15.4 9.8 16.4333 6.73333 18.5 4.2C20.5667 1.6 23.4667 0.0666667 27.2 0L28 2.4C25.6 2.86667 23.7 3.93333 22.3 5.6C20.9667 7.2 20.3 9 20.3 11H25.2V22H15.4Z"/>
+              </svg>
+            </div>
+
+            {{- '<!-- Stars -->' -}}
+            <div class="reviews__stars" role="img" aria-label="{{ rating_val }} de 5 estrellas">
+              {%- for i in (1..full_stars) -%}
+                <svg class="reviews__star reviews__star--full" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.953a1 1 0 00.95.69h4.162c.969 0 1.372 1.24.588 1.81l-3.368 2.448a1 1 0 00-.364 1.118l1.286 3.953c.3.921-.755 1.688-1.54 1.118L10 15.347l-3.951 2.87c-.784.57-1.838-.197-1.539-1.118l1.286-3.953a1 1 0 00-.364-1.118L2.064 9.38c-.784-.57-.38-1.81.588-1.81h4.162a1 1 0 00.951-.69l1.284-3.953z"/>
+                </svg>
+              {%- endfor -%}
+              {%- for i in (1..empty_count) -%}
+                <svg class="reviews__star reviews__star--empty" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.953a1 1 0 00.95.69h4.162c.969 0 1.372 1.24.588 1.81l-3.368 2.448a1 1 0 00-.364 1.118l1.286 3.953c.3.921-.755 1.688-1.54 1.118L10 15.347l-3.951 2.87c-.784.57-1.838-.197-1.539-1.118l1.286-3.953a1 1 0 00-.364-1.118L2.064 9.38c-.784-.57-.38-1.81.588-1.81h4.162a1 1 0 00.951-.69l1.284-3.953z"/>
+                </svg>
+              {%- endfor -%}
+            </div>
+
+            {{- '<!-- Review text -->' -}}
+            <blockquote class="reviews__text">
+              <p>{{ block.settings.text }}</p>
+            </blockquote>
+
+            {{- '<!-- Footer: avatar + name + dog -->' -}}
+            <footer class="reviews__card-footer">
+              <div class="reviews__avatar" aria-hidden="true">
+                {%- assign initials = block.settings.name | split: ' ' -%}
+                {{ initials[0] | slice: 0 }}{{ initials[1] | slice: 0 }}
+              </div>
+              <div class="reviews__meta">
+                <span class="reviews__name">{{ block.settings.name }}</span>
+                {%- if block.settings.dog_name != blank -%}
+                  <span class="reviews__dog">
+                    <svg width="11" height="11" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                      <ellipse cx="24" cy="30" rx="10" ry="12" fill="currentColor"/>
+                      <ellipse cx="12" cy="20" rx="5" ry="6.5" fill="currentColor"/>
+                      <ellipse cx="36" cy="20" rx="5" ry="6.5" fill="currentColor"/>
+                      <ellipse cx="17" cy="13" rx="4" ry="5" fill="currentColor"/>
+                      <ellipse cx="31" cy="13" rx="4" ry="5" fill="currentColor"/>
+                    </svg>
+                    {{ block.settings.dog_name }}
+                  </span>
+                {%- endif -%}
+              </div>
+            </footer>
+
+          </article>
+        {%- endfor -%}
+      </div>
+
+    </div>{{- '<!-- /carousel-shell -->' -}}
+
+  </div>
+</section>
+
+{% stylesheet %}
+  /* ── Keyframes ──────────────────────────────────────── */
+  @keyframes rv-squiggle {
+    0%, 100% { stroke-dashoffset: 0;  }
+    50%       { stroke-dashoffset: 14; }
+  }
+
+  @keyframes rv-star-float {
+    0%, 100% { transform: scale(1)    rotate(var(--r, 0deg)); opacity: 0.45; }
+    50%       { transform: scale(1.35) rotate(var(--r, 0deg)); opacity: 0.8;  }
+  }
+
+  @keyframes rv-card-in {
+    from { opacity: 0; transform: translateY(18px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0)    scale(1);    }
+  }
+
+  @keyframes rv-nav-bounce {
+    0%, 100% { transform: translateX(0);   }
+    50%       { transform: translateX(var(--nudge, 3px)); }
+  }
+
+  @keyframes rv-dot-pop {
+    0%   { transform: scale(1);   }
+    50%  { transform: scale(1.5); }
+    100% { transform: scale(1);   }
+  }
+
+  /* ── Section ────────────────────────────────────────── */
+  .reviews {
+    position: relative;
+    background: var(--color-cream, #FCECC9);
+    overflow: hidden;
+  }
+
+
+  /* ── Decos ──────────────────────────────────────────── */
+  .reviews__deco {
+    position: absolute;
+    pointer-events: none;
+    user-select: none;
+  }
+
+
+  /* ── Inner ──────────────────────────────────────────── */
+  .reviews__inner {
+    position: relative;
+    width: min(var(--page-width, 90rem), calc(100% - (var(--page-margin, 20px) * 2)));
+    margin: 0 auto;
+    padding: clamp(3rem, 6vw, 5rem) 0;
+  }
+
+  /* ── Header ─────────────────────────────────────────── */
+  .reviews__header {
+    text-align: center;
+    margin-bottom: clamp(2rem, 4vw, 3rem);
+  }
+
+  .reviews__eyebrow {
+    margin: 0 0 0.6rem;
+    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-secondary, #0296B4);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .reviews__eyebrow::before,
+  .reviews__eyebrow::after {
+    content: '';
+    display: inline-block;
+    width: 22px;
+    height: 2px;
+    background: currentColor;
+    border-radius: 2px;
+  }
+
+  .reviews__heading {
+    margin: 0 0 0.5rem;
+    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.75rem, 4.5vw, 2.75rem);
+    color: var(--color-accent, #F86D4E);
+    letter-spacing: -0.01em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    line-height: 1.15;
+  }
+
+  .reviews__squiggle {
+    display: block;
+    width: clamp(130px, 35%, 220px);
+    height: 14px;
+    color: var(--color-secondary, #0296B4);
+  }
+
+  .reviews__squiggle svg {
+    width: 100%;
+    height: 100%;
+    stroke-dasharray: 10 4;
+    animation: rv-squiggle 3.2s ease-in-out infinite;
+  }
+
+  .reviews__subheading {
+    margin: 0.6rem auto 0;
+    max-width: 44ch;
+    font-size: clamp(0.88rem, 2vw, 1rem);
+    color: rgba(51,51,51,0.6);
+    line-height: 1.6;
+  }
+
+  /* ── Carousel shell ─────────────────────────────────── */
+  .reviews__carousel-shell {
+    width: 100%;
+  }
+
+  /* ── Track ──────────────────────────────────────────── */
+  .reviews__track {
+    display: flex;
+    gap: 1.25rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    will-change: scroll-position;
+    outline-offset: 4px;
+    border-radius: 0.25rem;
+    padding-bottom: 4px;
+  }
+
+  .reviews__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* ── Cards ──────────────────────────────────────────── */
+  .reviews__card {
+    position: relative;
+    flex: 0 0 calc(100% - 0.5rem);
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+
+    background: #fff;
+    border: 2.5px solid #1a1a1a;
+    border-radius: 1.5rem;
+    box-shadow: 5px 6px 0px 0px #1a1a1a;
+    padding: 1.5rem 1.35rem 1.25rem;
+    overflow: hidden;
+
+    transition: transform 0.22s cubic-bezier(.34,1.56,.64,1),
+                box-shadow 0.22s cubic-bezier(.34,1.56,.64,1);
+    animation: rv-card-in 0.4s cubic-bezier(.34,1.56,.64,1) both;
+  }
+
+  .reviews__card:hover {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 8px 9px 0px 0px #1a1a1a;
+  }
+
+  @media screen and (min-width: 600px) {
+    .reviews__card { flex: 0 0 calc(50% - 0.63rem); }
+  }
+
+  @media screen and (min-width: 900px) {
+    .reviews__card { flex: 0 0 calc(33.333% - 0.84rem); }
+  }
+
+  /* Stagger entrance per card */
+  .reviews__card:nth-child(1) { animation-delay: 0.05s; }
+  .reviews__card:nth-child(2) { animation-delay: 0.13s; }
+  .reviews__card:nth-child(3) { animation-delay: 0.21s; }
+  .reviews__card:nth-child(4) { animation-delay: 0.29s; }
+  .reviews__card:nth-child(5) { animation-delay: 0.37s; }
+  .reviews__card:nth-child(6) { animation-delay: 0.45s; }
+
+  /* ── Card teal top strip ────────────────────────────── */
+  .reviews__card-strip {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    background: var(--color-secondary, #0296B4);
+    border-radius: 1.5rem 1.5rem 0 0;
+  }
+
+  /* ── Quote icon ─────────────────────────────────────── */
+  .reviews__quote-icon {
+    color: var(--color-secondary, #0296B4);
+    opacity: 0.25;
+    line-height: 1;
+    margin-top: 0.25rem;
+  }
+
+  /* ── Stars ──────────────────────────────────────────── */
+  .reviews__stars {
+    display: flex;
+    align-items: center;
+    gap: 0.1rem;
+  }
+
+  .reviews__star {
+    width: 1.05rem;
+    height: 1.05rem;
+  }
+
+  .reviews__star--full  { color: var(--color-accent, #F86D4E); }
+  .reviews__star--empty { color: #d6cfc4; }
+
+  /* ── Review text ────────────────────────────────────── */
+  .reviews__text {
+    margin: 0;
+    flex: 1;
+  }
+
+  .reviews__text p {
+    margin: 0;
+    font-size: clamp(0.88rem, 2vw, 0.95rem);
+    line-height: 1.65;
+    color: rgba(51,51,51,0.8);
+    font-style: italic;
+  }
+
+  /* ── Card footer ────────────────────────────────────── */
+  .reviews__card-footer {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding-top: 0.75rem;
+    border-top: 1.5px dashed rgba(2,150,180,0.25);
+    margin-top: auto;
+  }
+
+  /* ── Avatar initials bubble ─────────────────────────── */
+  .reviews__avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 50%;
+    background: var(--color-secondary, #0296B4);
+    color: #fff;
+    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    border: 2px solid #1a1a1a;
+    box-shadow: 2px 2px 0px 0px #1a1a1a;
+    flex-shrink: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+
+  /* ── Meta: name + dog ───────────────────────────────── */
+  .reviews__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+  }
+
+  .reviews__name {
+    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--color-foreground, #333);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .reviews__dog {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-secondary, #0296B4);
+  }
+
+{% endstylesheet %}
+
+{% javascript %}
+(function () {
+  var sections = document.querySelectorAll('.reviews[data-section-id]');
+  if (!sections.length) return;
+
+  sections.forEach(function (section) {
+    var track = section.querySelector('.reviews__track');
+    if (!track) return;
+
+    var cards = Array.from(track.querySelectorAll('.reviews__card'));
+    if (!cards.length) return;
+
+    if (!('IntersectionObserver' in window)) {
+      cards.forEach(function (c) { c.classList.add('is-visible'); });
+      return;
+    }
+
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.2, root: track, rootMargin: '0px 0px -20px 0px' }
+    );
+
+    cards.forEach(function (card) { observer.observe(card); });
+  });
+})();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Reviews carousel",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow label",
+      "default": "Lo que dicen los dueños"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Colas que no mienten"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Miles de perros felices (y sus humanos también)."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        {
+          "type": "range",
+          "id": "rating",
+          "label": "Star rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Review text",
+          "default": "Mi perro está obsesionado con estos snacks. Desde que los probó ya no quiere nada más. ¡Calidad increíble!"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Customer name",
+          "default": "María G."
+        },
+        {
+          "type": "text",
+          "id": "dog_name",
+          "label": "Dog's name",
+          "default": "Canelo"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "Reviews carousel",
+      "blocks": [
+        {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "Canelo enloquece cada vez que escucha el paquete. Ingredientes reales, se nota la diferencia.",
+            "name": "María G.",
+            "dog_name": "Canelo"
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "Pensé que era exagerado hasta que vi cómo mejoró el pelaje de mi perrita. Ya somos clientes de por vida.",
+            "name": "Roberto M.",
+            "dog_name": "Luna"
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "Por fin snacks sin rellenos raros. Mi veterinaria me los recomendó y no me arrepiento para nada.",
+            "name": "Ana P.",
+            "dog_name": "Toby"
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "rating": 4,
+            "text": "El envío fue rapidísimo y los snacks frescos. Pancho los acabó en dos días. Eso lo dice todo.",
+            "name": "Carlos R.",
+            "dog_name": "Pancho"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

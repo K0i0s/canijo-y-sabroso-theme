@@ -1,57 +1,591 @@
-<footer>
-  <div class="footer__copyright">
-    &copy;
-    {{ 'now' | date: '%Y' }}
-    {{ shop.name | link_to: routes.root_url }}, {{ powered_by_link }}
+<footer class="footer full-width" role="contentinfo">
+
+  {{- '<!-- Top wave divider -->' -}}
+  <div class="footer__wave" aria-hidden="true">
+    <svg viewBox="0 0 1440 64" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <path d="M0 32 C180 0, 360 64, 540 32 S900 0, 1080 32 S1350 56, 1440 32 L1440 64 L0 64 Z" fill="var(--footer-bg)"/>
+    </svg>
+  </div>
+  <div class="footer__main">
+    <div class="footer__inner">
+
+      {{- '<!-- Grid -->' -}}
+      <div class="footer__grid">
+
+        {{- '<!-- Col 1: About -->' -}}
+        <div class="footer__col footer__col--about">
+          <div class="footer__logo-wrap">
+            {%- if section.settings.logo != blank -%}
+              <img
+                class="footer__logo"
+                src="{{ section.settings.logo | image_url: width: 180 }}"
+                alt="{{ shop.name }}"
+                width="180"
+                loading="lazy"
+                height="auto"
+              >
+            {%- else -%}
+              <span class="footer__shop-name">{{ shop.name }}</span>
+            {%- endif -%}
+          </div>
+
+          {%- if section.settings.about_text != blank -%}
+            <p class="footer__about">{{ section.settings.about_text }}</p>
+          {%- endif -%}
+
+          {{- '<!-- Social row -->' -}}
+          <div class="footer__social">
+            {%- if section.settings.instagram_url != blank -%}
+              <a class="footer__social-btn footer__social-btn--instagram" href="{{ section.settings.instagram_url }}" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                  <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
+                </svg>
+              </a>
+            {%- endif -%}
+
+            {%- if section.settings.tiktok_url != blank -%}
+              <a class="footer__social-btn footer__social-btn--tiktok" href="{{ section.settings.tiktok_url }}" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.32 6.32 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/>
+                </svg>
+              </a>
+            {%- endif -%}
+
+            {%- if section.settings.facebook_url != blank -%}
+              <a class="footer__social-btn footer__social-btn--facebook" href="{{ section.settings.facebook_url }}" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                </svg>
+              </a>
+            {%- endif -%}
+          </div>
+        </div>
+
+        {{- '<!-- Col 2: Links -->' -}}
+        <div class="footer__col footer__col--links">
+          <h3 class="footer__col-heading">
+            {{ section.settings.links_heading | default: 'Explora' }}
+          </h3>
+          {%- if section.settings.menu != blank -%}
+            {%- assign footer_menu = linklists[section.settings.menu] -%}
+            {%- if footer_menu != blank -%}
+              <ul class="footer__links" role="list">
+                {%- for link in footer_menu.links -%}
+                  <li class="footer__link-item">
+                    <a class="footer__link" href="{{ link.url }}">
+                      <span class="footer__link-arrow" aria-hidden="true">→</span>
+                      {{ link.title }}
+                    </a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
+          {%- endif -%}
+        </div>
+
+        {{- '<!-- Col 3: Contact -->' -}}
+        <div class="footer__col footer__col--contact">
+          <h3 class="footer__col-heading">
+            {{ section.settings.contact_heading | default: 'Contáctanos' }}
+          </h3>
+
+          <ul class="footer__contact-list" role="list">
+            {%- if section.settings.contact_email != blank -%}
+              <li class="footer__contact-item">
+                <span class="footer__contact-icon" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                  </svg>
+                </span>
+                <a class="footer__contact-link" href="mailto:{{ section.settings.contact_email }}">{{ section.settings.contact_email }}</a>
+              </li>
+            {%- endif -%}
+
+            {%- if section.settings.contact_phone != blank -%}
+              <li class="footer__contact-item">
+                <span class="footer__contact-icon" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13 19.79 19.79 0 0 1 1.62 4.41 2 2 0 0 1 3.6 2.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.06 6.06l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+                  </svg>
+                </span>
+                <a class="footer__contact-link" href="tel:{{ section.settings.contact_phone }}">{{ section.settings.contact_phone }}</a>
+              </li>
+            {%- endif -%}
+
+            {%- if section.settings.contact_location != blank -%}
+              <li class="footer__contact-item">
+                <span class="footer__contact-icon" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>
+                  </svg>
+                </span>
+                <span>{{ section.settings.contact_location }}</span>
+              </li>
+            {%- endif -%}
+          </ul>
+
+          {%- if section.settings.contact_note != blank -%}
+            <div class="footer__contact-badge">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/>
+              </svg>
+              {{ section.settings.contact_note }}
+            </div>
+          {%- endif -%}
+        </div>
+
+      </div>{{- '<!-- /grid -->' -}}
+    </div>
   </div>
 
-  <div class="footer__links">
-    {% for link in section.settings.menu.links %}
-      {{ link.title | link_to: link.url }}
-    {% endfor %}
+  {{- '<!-- Bottom bar -->' -}}
+  <div class="footer__bottom">
+    <div class="footer__bottom-inner">
+
+      <p class="footer__copyright">
+        &copy; {{ 'now' | date: '%Y' }} <strong>{{ shop.name }}</strong>. 
+        {{ section.settings.copyright_extra | default: 'Hecho con ❤️ para los perritos de México.' }}
+      </p>
+
+      {%- if section.settings.show_payment_icons -%}
+        <div class="footer__payment" aria-label="Métodos de pago aceptados">
+          {%- for type in shop.enabled_payment_types -%}
+            {{ type | payment_type_svg_tag: class: 'footer__payment-icon' }}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+    </div>
   </div>
 
-  <div class="footer__payment">
-    {% if section.settings.show_payment_icons %}
-      {% for type in shop.enabled_payment_types %}
-        {{ type | payment_type_svg_tag }}
-      {% endfor %}
-    {% endif %}
-  </div>
 </footer>
 
 {% stylesheet %}
-  footer {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 2rem;
+  /* ── Variables ──────────────────────────────────────── */
+  .footer {
+    --footer-bg: #1a2e35;
+    --footer-surface: rgba(255,255,255,0.06);
+    --footer-border: rgba(255,255,255,0.10);
+    --footer-text: rgba(255,255,255,0.75);
+    --footer-text-muted: rgba(255,255,255,0.42);
   }
-  footer a {
+
+  /* ── Keyframes ──────────────────────────────────────── */
+  @keyframes footer-star-pulse {
+    0%, 100% { opacity: 0.3; transform: scale(1)   rotate(var(--rot, 0deg)); }
+    50%       { opacity: 0.7; transform: scale(1.35) rotate(var(--rot, 0deg)); }
+  }
+
+  @keyframes footer-link-slide {
+    from { opacity: 0; transform: translateX(-6px); }
+    to   { opacity: 1; transform: translateX(0);     }
+  }
+
+  /* ── Wave divider ───────────────────────────────────── */
+  .footer__wave {
+    display: block;
+    width: 100%;
+    height: 64px;
+    margin-bottom: -2px;
+    line-height: 0;
+  }
+
+  .footer__wave svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* ── Section base ───────────────────────────────────── */
+  .footer {
+    position: relative;
+    background: var(--footer-bg);
+    overflow: hidden;
+  }
+
+  /* ── Main area ──────────────────────────────────────── */
+  .footer__main {
+    position: relative;
+  }
+
+  .footer__inner {
+    width: min(var(--page-width), calc(100% - (var(--page-margin) * 2)));
+    margin: 0 auto;
+    padding: clamp(3rem, 6vw, 4.5rem) 0 clamp(2.5rem, 5vw, 3.5rem);
+  }
+
+  /* ── Grid ───────────────────────────────────────────── */
+  .footer__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  @media screen and (min-width: 600px) {
+    .footer__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2.5rem 3rem;
+    }
+    .footer__col--about {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media screen and (min-width: 900px) {
+    .footer__grid {
+      grid-template-columns: 1.6fr 1fr 1.2fr;
+      gap: 0 3.5rem;
+      align-items: start;
+    }
+    .footer__col--about {
+      grid-column: auto;
+    }
+  }
+
+  /* ── Col: About ─────────────────────────────────────── */
+  .footer__logo-wrap {
+    margin-bottom: 1rem;
+  }
+
+  .footer__logo {
+    max-height: 52px;
+    width: auto;
+    display: block;
+  }
+
+  .footer__shop-name {
+    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.01em;
+  }
+
+  .footer__about {
+    margin: 0 0 1.5rem;
+    font-size: 0.88rem;
+    line-height: 1.65;
+    color: var(--footer-text);
+    max-width: 34ch;
+  }
+
+  /* ── Social row ─────────────────────────────────────── */
+  .footer__social {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .footer__social-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 50%;
+    color: #fff;
+    border: 2px solid rgba(255,255,255,0.25);
+    transition: transform 0.22s cubic-bezier(.34,1.56,.64,1),
+                border-color 0.18s ease,
+                box-shadow 0.18s ease;
+  }
+
+  .footer__social-btn:hover {
+    transform: translateY(-5px) scale(1.12);
+    border-color: #fff;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+  }
+
+  .footer__social-btn--instagram { background: linear-gradient(135deg, #f9ce34, #ee2a7b, #6228d7); }
+  .footer__social-btn--tiktok    { background: #111; }
+  .footer__social-btn--facebook  { background: #1877f2; }
+
+  /* ── Col heading ────────────────────────────────────── */
+  .footer__col-heading {
+    margin: 0 0 1.25rem;
+    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.02em;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  /* Teal pill accent under heading */
+  .footer__col-heading::after {
+    content: '';
+    display: block;
+    flex: 1;
+    height: 2px;
+    background: var(--color-secondary, #0296B4);
+    border-radius: 2px;
+    opacity: 0.6;
+  }
+
+  /* ── Links ──────────────────────────────────────────── */
+  .footer__links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .footer__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.9rem;
+    color: var(--footer-text);
     text-decoration: none;
-    color: var(--color-foreground);
+    transition: color 0.18s ease, gap 0.2s ease;
   }
-  footer .footer__links,
-  footer .footer__payment {
+
+  .footer__link-arrow {
+    color: var(--color-accent, #F86D4E);
+    font-size: 0.85rem;
+    transition: transform 0.2s cubic-bezier(.34,1.56,.64,1);
+    display: inline-block;
+  }
+
+  .footer__link:hover {
+    color: #fff;
+    gap: 0.6rem;
+  }
+
+  .footer__link:hover .footer__link-arrow {
+    transform: translateX(4px);
+  }
+
+  /* ── Contact list ───────────────────────────────────── */
+  .footer__contact-list {
+    list-style: none;
+    margin: 0 0 1rem;
+    padding: 0;
     display: flex;
-    gap: 1rem;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .footer__contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+    font-size: 0.88rem;
+    color: var(--footer-text);
+    line-height: 1.45;
+  }
+
+  .footer__contact-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 50%;
+    background: var(--footer-surface);
+    border: 1.5px solid var(--footer-border);
+    flex-shrink: 0;
+    margin-top: 0.05rem;
+    color: var(--color-secondary, #0296B4);
+  }
+
+  .footer__contact-link {
+    color: var(--footer-text);
+    text-decoration: none;
+    transition: color 0.18s ease;
+  }
+
+  .footer__contact-link:hover {
+    color: #fff;
+    text-decoration: underline;
+  }
+
+  /* Small info badge */
+  .footer__contact-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.75rem;
+    background: var(--footer-surface);
+    border: 1.5px solid var(--footer-border);
+    border-radius: 999px;
+    font-size: 0.78rem;
+    color: var(--footer-text-muted);
+  }
+
+  /* ── Bottom bar ─────────────────────────────────────── */
+  .footer__bottom {
+    position: relative;
+    border-top: 1.5px solid var(--footer-border);
+  }
+
+  .footer__bottom-inner {
+    width: min(var(--page-width), calc(100% - (var(--page-margin) * 2)));
+    margin: 0 auto;
+    padding: 1.25rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.85rem;
+    text-align: center;
+  }
+
+  @media screen and (min-width: 750px) {
+    .footer__bottom-inner {
+      flex-direction: row;
+      justify-content: space-between;
+      text-align: left;
+    }
+  }
+
+  .footer__copyright {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--footer-text-muted);
+    line-height: 1.5;
+  }
+
+  .footer__copyright strong {
+    color: var(--footer-text);
+  }
+
+  /* ── Payment icons ──────────────────────────────────── */
+  .footer__payment {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    justify-content: center;
+  }
+
+  @media screen and (min-width: 750px) {
+    .footer__payment { justify-content: flex-end; }
+  }
+
+  .footer__payment-icon {
+    height: 24px;
+    width: auto;
+    border-radius: 4px;
+    opacity: 0.65;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    filter: brightness(0) invert(1);
+  }
+
+  .footer__payment-icon:hover {
+    opacity: 1;
+    transform: translateY(-2px);
   }
 {% endstylesheet %}
 
 {% schema %}
 {
-  "name": "t:general.footer",
+  "name": "Footer",
   "settings": [
+    {
+      "type": "header",
+      "content": "Brand"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image"
+    },
+    {
+      "type": "textarea",
+      "id": "about_text",
+      "label": "About text",
+      "default": "Snacks naturales y deliciosos para perros felices. Hechos con amor en México, sin conservadores ni ingredientes raros."
+    },
+    {
+      "type": "header",
+      "content": "Navigation"
+    },
+    {
+      "type": "text",
+      "id": "links_heading",
+      "label": "Links column heading",
+      "default": "Explora"
+    },
     {
       "type": "link_list",
       "id": "menu",
-      "label": "t:labels.menu"
+      "label": "Footer menu",
+      "default": "footer"
+    },
+    {
+      "type": "header",
+      "content": "Contact"
+    },
+    {
+      "type": "text",
+      "id": "contact_heading",
+      "label": "Contact column heading",
+      "default": "Contáctanos"
+    },
+    {
+      "type": "text",
+      "id": "contact_email",
+      "label": "Email address"
+    },
+    {
+      "type": "text",
+      "id": "contact_phone",
+      "label": "Phone number"
+    },
+    {
+      "type": "text",
+      "id": "contact_location",
+      "label": "Location / City"
+    },
+    {
+      "type": "text",
+      "id": "contact_note",
+      "label": "Contact note (badge)",
+      "default": "Respondemos en menos de 24 hrs"
+    },
+    {
+      "type": "header",
+      "content": "Social media"
+    },
+    {
+      "type": "url",
+      "id": "instagram_url",
+      "label": "Instagram URL"
+    },
+    {
+      "type": "url",
+      "id": "tiktok_url",
+      "label": "TikTok URL"
+    },
+    {
+      "type": "url",
+      "id": "facebook_url",
+      "label": "Facebook URL"
+    },
+    {
+      "type": "header",
+      "content": "Bottom bar"
     },
     {
       "type": "checkbox",
       "id": "show_payment_icons",
-      "label": "t:labels.show_payment_icons",
+      "label": "Show payment icons",
       "default": true
+    },
+    {
+      "type": "text",
+      "id": "copyright_extra",
+      "label": "Copyright extra text",
+      "default": "Hecho con ❤️ para los perritos de México."
     }
-  ]
+  ],
+  "blocks": [],
+  "default": {}
 }
 {% endschema %}

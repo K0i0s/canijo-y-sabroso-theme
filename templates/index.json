@@ -50,6 +50,101 @@
 
       }
     },
+    "reviews": {
+      "type": "reviews",
+      "settings": {},
+      "blocks": {
+        "review_1": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "Canelo enloquece cada vez que escucha el paquete. Ingredientes reales, se nota la diferencia.",
+            "name": "María G.",
+            "dog_name": "Canelo"
+          }
+        },
+        "review_2": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "Pensé que era exagerado hasta que vi cómo mejoró el pelaje de mi perrita. Ya somos clientes de por vida.",
+            "name": "Roberto M.",
+            "dog_name": "Luna"
+          }
+        },
+        "review_3": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "Por fin snacks sin rellenos raros. Mi veterinaria me los recomendó y no me arrepiento para nada.",
+            "name": "Ana P.",
+            "dog_name": "Toby"
+          }
+        },
+        "review_4": {
+          "type": "review",
+          "settings": {
+            "rating": 4,
+            "text": "El envío fue rapidísimo y los snacks frescos. Pancho los acabó en dos días. Eso lo dice todo.",
+            "name": "Carlos R.",
+            "dog_name": "Pancho"
+          }
+        }
+      },
+      "block_order": ["review_1", "review_2", "review_3", "review_4"]
+    },
+    "why_us": {
+      "type": "why-us",
+      "settings": {},
+      "blocks": {
+        "feature_1": {
+          "type": "feature",
+          "settings": {
+            "icon": "🌿",
+            "label": "Ingredientes naturales",
+            "canijo_value": "yes",
+            "competitor_value": "no"
+          }
+        },
+        "feature_2": {
+          "type": "feature",
+          "settings": {
+            "icon": "🚫",
+            "label": "Sin conservadores",
+            "canijo_value": "yes",
+            "competitor_value": "no"
+          }
+        },
+        "feature_3": {
+          "type": "feature",
+          "settings": {
+            "icon": "🌾",
+            "label": "Libre de gluten",
+            "canijo_value": "yes",
+            "competitor_value": "no"
+          }
+        },
+        "feature_4": {
+          "type": "feature",
+          "settings": {
+            "icon": "💪",
+            "label": "Proteína alta",
+            "canijo_value": "yes",
+            "competitor_value": "no"
+          }
+        },
+        "feature_5": {
+          "type": "feature",
+          "settings": {
+            "icon": "😋",
+            "label": "Sabor real",
+            "canijo_value": "yes",
+            "competitor_value": "no"
+          }
+        }
+      },
+      "block_order": ["feature_1", "feature_2", "feature_3", "feature_4", "feature_5"]
+    },
     "social_media": {
       "type": "social-media",
       "settings":{
@@ -62,17 +157,18 @@
 
       }
     },
-    "main": {
-      "type": "hello-world",
-      "settings": {}
-    }
+    // "main": {
+    //   "type": "hello-world",
+    //   "settings": {}
+    // }
   },
   "order": [
     "hero_banner",
     "products_facts",
     "featured_products",
+    "reviews",
+    "why_us",
     "social_media",
     "newsletter",
-    "main"
   ]
 }

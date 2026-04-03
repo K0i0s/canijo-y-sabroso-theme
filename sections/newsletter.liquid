@@ -68,23 +68,25 @@
         </button>
       </div>
 
-      {%- if form.posted_successfully? -%}
-        <p class="newsletter__success" role="status">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/>
-          </svg>
-          {{ section.settings.success_message | default: '¡Listo! Ahora eres parte de la manada. 🐾' }}
-        </p>
-      {%- endif -%}
+      <div class="newsletter__feedback">
+        {%- if form.posted_successfully? -%}
+          <p class="newsletter__success" role="status">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/>
+            </svg>
+            {{ section.settings.success_message | default: '¡Listo! Ahora eres parte de la manada. 🐾' }}
+          </p>
+        {%- endif -%}
 
-      {%- if form.errors -%}
-        <p class="newsletter__error" role="alert">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/>
-          </svg>
-          {{ form.errors | default_errors }}
-        </p>
-      {%- endif -%}
+        {%- if form.errors -%}
+          <p class="newsletter__error" role="alert">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/>
+            </svg>
+            {{ form.errors | default_errors }}
+          </p>
+        {%- endif -%}
+      </div>
 
     {%- endform -%}
 
@@ -327,6 +329,11 @@
   }
 
   /* ── Feedback states ────────────────────────────────── */
+  .newsletter__feedback {
+    min-height: 2.8rem;
+    width: 100%;
+  }
+
   .newsletter__success,
   .newsletter__error {
     display: flex;

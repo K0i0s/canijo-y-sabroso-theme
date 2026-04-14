@@ -1,0 +1,861 @@
+{% comment %}
+  Scenario 2 — Multi-Collection Discovery Page
+  sections/collections-discovery.liquid
+{% endcomment %}
+
+<section class="disc full-width">
+  <div class="disc__inner">
+    {{- '<!-- ══ HEADER ══ -->' -}}
+    <header class="disc__header">
+      {%- if section.settings.heading != blank -%}
+        <h1 class="disc__title">
+          {{ section.settings.heading }}
+          <span class="disc__title-squiggle" aria-hidden="true">
+            <svg viewBox="0 0 240 14" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+              <path d="M0 7 C24 1, 48 13, 72 7 S120 1, 144 7 S192 13, 216 7 S234 3, 240 7" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+            </svg>
+          </span>
+        </h1>
+      {%- endif -%}
+
+      {%- if section.settings.subheading != blank -%}
+        <p class="disc__subtitle">{{ section.settings.subheading }}</p>
+      {%- endif -%}
+    </header>
+
+    {{- '<!-- ══ COLLECTION SECTIONS ══ -->' -}}
+    {%- for block in section.blocks -%}
+      {%- liquid
+        assign block_collection = collections[block.settings.collection]
+        assign preview_count = block.settings.preview_count | default: 6
+      -%}
+
+      {%- if block_collection != blank -%}
+        <div
+          class="disc__section"
+          id="disc-section-{{ forloop.index }}"
+          {{ block.shopify_attributes }}
+        >
+          {{- '<!-- Section header -->' -}}
+          <div class="disc__section-hd">
+            <div class="disc__section-meta">
+              <h2 class="disc__section-title">{{ block_collection.title }}</h2>
+              {%- if block_collection.description != blank -%}
+                <p class="disc__section-desc">{{ block_collection.description | strip_html | truncate: 120 }}</p>
+              {%- endif -%}
+            </div>
+            <a
+              class="disc__section-cta"
+              href="{{ block_collection.url }}"
+              aria-label="Ver todo: {{ block_collection.title }}"
+            >
+              Ver todo
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                aria-hidden="true"
+              >
+                <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+
+          {{- '<!-- Carousel shell -->' -}}
+          <div class="disc__carousel-shell">
+            <button
+              class="disc__nav disc__nav--prev"
+              data-target="disc-track-{{ forloop.index }}"
+              type="button"
+              aria-label="Anterior en {{ block_collection.title }}"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.8"
+                stroke-linecap="round"
+                aria-hidden="true"
+              >
+                <path d="m15 18-6-6 6-6"/>
+              </svg>
+            </button>
+
+            <div
+              class="disc__track"
+              id="disc-track-{{ forloop.index }}"
+              role="region"
+              aria-label="{{ block_collection.title }}"
+              tabindex="0"
+            >
+              {%- for product in block_collection.products limit: preview_count -%}
+                {%- liquid
+                  assign p = product
+                  assign p_price = p.price_min
+                  assign p_compare = p.compare_at_price_min
+                  assign p_onsale = false
+                  if p_compare > p_price
+                    assign p_onsale = true
+                  endif
+                  assign p_img = p.featured_image
+                  assign p_img2 = p.images[1]
+                -%}
+
+                <article class="disc__card" aria-label="{{ p.title }}">
+                  <a class="disc__card-img-link" href="{{ p.url }}" tabindex="-1" aria-hidden="true">
+                    <div class="disc__card-img-wrap">
+                      {%- if p_onsale -%}
+                        <span class="disc__card-badge">Sale</span>
+                      {%- endif -%}
+
+                      {%- if p_img -%}
+                        <img
+                          class="disc__card-img disc__card-img--primary"
+                          src="{{ p_img | image_url: width: 500 }}"
+                          alt="{{ p_img.alt | escape | default: p.title }}"
+                          width="500"
+                          height="{{ 500 | divided_by: p_img.aspect_ratio | round }}"
+                          loading="lazy"
+                        >
+                        {%- if p_img2 -%}
+                          <img
+                            class="disc__card-img disc__card-img--secondary"
+                            src="{{ p_img2 | image_url: width: 500 }}"
+                            alt="{{ p_img2.alt | escape | default: p.title }}"
+                            width="500"
+                            height="{{ 500 | divided_by: p_img2.aspect_ratio | round }}"
+                            loading="lazy"
+                            aria-hidden="true"
+                          >
+                        {%- endif -%}
+                      {%- else -%}
+                        <div class="disc__card-img-ph" aria-hidden="true">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="30"
+                            height="30"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.5"
+                          >
+                            <rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>
+                          </svg>
+                        </div>
+                      {%- endif -%}
+
+                      {%- if p.available -%}
+                        <form class="disc__quick-add" action="{{ routes.cart_add_url }}" method="post">
+                          <input type="hidden" name="id" value="{{ p.selected_or_first_available_variant.id }}">
+                          <input type="hidden" name="quantity" value="1">
+                          <button class="disc__quick-btn" type="submit" aria-label="Agregar {{ p.title }} al carrito">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="14"
+                              height="14"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2.2"
+                              stroke-linecap="round"
+                              aria-hidden="true"
+                            >
+                              <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>
+                            </svg>
+                            Agregar
+                          </button>
+                        </form>
+                      {%- endif -%}
+                    </div>
+                  </a>
+
+                  <div class="disc__card-body">
+                    <h3 class="disc__card-title">
+                      <a class="disc__card-title-link" href="{{ p.url }}">{{ p.title }}</a>
+                    </h3>
+                    <div class="disc__card-prices">
+                      <span class="disc__card-price{% if p_onsale %} is-sale{% endif %}">{{ p_price | money }}</span>
+                      {%- if p_onsale -%}
+                        <s class="disc__card-compare">{{ p_compare | money }}</s>
+                      {%- endif -%}
+                    </div>
+                    {%- unless p.available -%}
+                      <span class="disc__card-sold-out">Agotado</span>
+                    {%- endunless -%}
+                  </div>
+                </article>
+              {%- endfor -%}
+            </div>
+
+            <button
+              class="disc__nav disc__nav--next"
+              data-target="disc-track-{{ forloop.index }}"
+              type="button"
+              aria-label="Siguiente en {{ block_collection.title }}"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.8"
+                stroke-linecap="round"
+                aria-hidden="true"
+              >
+                <path d="m9 18 6-6-6-6"/>
+              </svg>
+            </button>
+          </div>
+
+          {{- '<!-- Scroll dots -->' -}}
+          <div class="disc__dots" id="disc-dots-{{ forloop.index }}" role="tablist" aria-label="Desplazamiento"></div>
+        </div>
+
+        {%- unless forloop.last -%}
+          <hr class="disc__divider" aria-hidden="true">
+        {%- endunless -%}
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</section>
+
+<script>
+  (() => {
+    // ── Per-track carousel logic ───────────────────────────
+    const initTrack = (track) => {
+      const shell = track.closest('.disc__carousel-shell');
+      const section = track.closest('.disc__section');
+      const dotsWrap = section?.querySelector('.disc__dots');
+      const prevBtn = shell?.querySelector('.disc__nav--prev');
+      const nextBtn = shell?.querySelector('.disc__nav--next');
+      const cards = Array.from(track.querySelectorAll('.disc__card'));
+
+      if (!cards.length) return;
+
+      let current = 0;
+
+      // Build dots
+      cards.forEach((_, i) => {
+        const dot = document.createElement('button');
+        dot.className = `disc__dot${i === 0 ? ' is-active' : ''}`;
+        dot.type = 'button';
+        dot.setAttribute('role', 'tab');
+        dot.setAttribute('aria-selected', String(i === 0));
+        dot.setAttribute('aria-label', `Producto ${i + 1}`);
+        dot.dataset.index = String(i);
+        dotsWrap?.appendChild(dot);
+      });
+
+      const dots = dotsWrap ? Array.from(dotsWrap.querySelectorAll('.disc__dot')) : [];
+
+      const visibleCount = () => {
+        const gap = parseInt(getComputedStyle(track).gap || '0', 10);
+        const cardW = cards[0]?.offsetWidth + gap || 1;
+        return Math.max(1, Math.round(track.offsetWidth / cardW));
+      };
+
+      const goTo = (index) => {
+        const count = cards.length;
+        current = Math.max(0, Math.min(index, count - 1));
+        const card = cards[current];
+        const offsetLeft = card.offsetLeft - track.offsetLeft;
+        track.scrollTo({ left: offsetLeft, behavior: 'smooth' });
+        updateUI();
+      };
+
+      const updateUI = () => {
+        const visible = visibleCount();
+        if (prevBtn) prevBtn.disabled = current <= 0;
+        if (nextBtn) nextBtn.disabled = current >= cards.length - visible;
+        dots.forEach((d, i) => {
+          d.classList.toggle('is-active', i === current);
+          d.setAttribute('aria-selected', String(i === current));
+        });
+      };
+
+      const syncFromScroll = () => {
+        let closest = 0;
+        let minDist = Infinity;
+        cards.forEach((card, i) => {
+          const dist = Math.abs(card.offsetLeft - track.offsetLeft - track.scrollLeft);
+          if (dist < minDist) {
+            minDist = dist;
+            closest = i;
+          }
+        });
+        if (closest !== current) {
+          current = closest;
+          updateUI();
+        }
+      };
+
+      prevBtn?.addEventListener('click', () => goTo(current - 1));
+      nextBtn?.addEventListener('click', () => goTo(current + 1));
+      dots.forEach((d) => d.addEventListener('click', () => goTo(parseInt(d.dataset.index, 10))));
+
+      let scrollTimer;
+      track.addEventListener(
+        'scroll',
+        () => {
+          clearTimeout(scrollTimer);
+          scrollTimer = setTimeout(syncFromScroll, 60);
+        },
+        { passive: true }
+      );
+
+      track.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          goTo(current - 1);
+        }
+        if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          goTo(current + 1);
+        }
+      });
+
+      let resizeTimer;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => goTo(current), 140);
+      });
+
+      updateUI();
+    };
+
+    document.querySelectorAll('.disc__track').forEach(initTrack);
+
+    // ── Quick-add AJAX ─────────────────────────────────────
+    document.querySelectorAll('.disc__quick-add').forEach((form) => {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const btn = form.querySelector('.disc__quick-btn');
+        btn?.classList.add('is-loading');
+
+        fetch(form.action, {
+          method: 'POST',
+          headers: { 'X-Requested-With': 'XMLHttpRequest' },
+          body: new FormData(form),
+        })
+          .then((r) => r.json())
+          .then(() => {
+            btn?.classList.remove('is-loading');
+            btn?.classList.add('is-done');
+            setTimeout(() => btn?.classList.remove('is-done'), 1800);
+            document.dispatchEvent(new CustomEvent('cart:updated'));
+          })
+          .catch(() => btn?.classList.remove('is-loading'));
+      });
+    });
+  })();
+</script>
+
+{% stylesheet %}
+  @keyframes disc-squiggle {
+    0%,
+    100% {
+      stroke-dashoffset: 0;
+    }
+    50% {
+      stroke-dashoffset: 14;
+    }
+  }
+
+  @keyframes disc-dot-pop {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.5);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  /* ── Shell ──────────────────────────────────────────── */
+  .disc {
+    background: var(--color-light-cream, #fff6e5);
+  }
+
+  .disc__inner {
+    width: min(var(--page-width, 90rem), calc(100% - (var(--page-margin, 20px) * 2)));
+    margin: 0 auto;
+    padding: clamp(2.5rem, 5vw, 4rem) 0 clamp(3rem, 6vw, 5rem);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  /* ── Header ─────────────────────────────────────────── */
+  .disc__header {
+    text-align: center;
+  }
+
+  .disc__title {
+    margin: 0 0 0.55rem;
+    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.75rem, 4.5vw, 2.75rem);
+    color: var(--color-accent, #f86d4e);
+    letter-spacing: -0.01em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .disc__title-squiggle {
+    display: block;
+    width: clamp(140px, 38%, 240px);
+    height: 14px;
+    color: var(--color-secondary, #0296b4);
+  }
+
+  .disc__title-squiggle svg {
+    width: 100%;
+    height: 100%;
+    stroke-dasharray: 10 4;
+    animation: disc-squiggle 3.2s ease-in-out infinite;
+  }
+
+  .disc__subtitle {
+    margin: 0 auto;
+    max-width: 46ch;
+    font-size: clamp(0.88rem, 2vw, 1rem);
+    color: rgba(51, 51, 51, 0.6);
+    line-height: 1.6;
+  }
+
+  /* ── Per-collection section ─────────────────────────── */
+  .disc__section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+
+  .disc__section-hd {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .disc__section-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .disc__section-title {
+    margin: 0;
+    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.35rem, 3vw, 1.9rem);
+    color: var(--color-foreground, #333);
+    letter-spacing: -0.01em;
+  }
+
+  .disc__section-desc {
+    margin: 0;
+    font-size: 0.88rem;
+    color: rgba(51, 51, 51, 0.55);
+    max-width: 44ch;
+    line-height: 1.55;
+  }
+
+  .disc__section-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1.1rem;
+    background: #fff;
+    border: 2.5px solid #1a1a1a;
+    border-radius: 999px;
+    box-shadow: 3px 3px 0 #1a1a1a;
+    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--color-secondary, #0296b4);
+    text-decoration: none;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s, background 0.15s;
+  }
+
+  .disc__section-cta:hover {
+    background: var(--color-secondary, #0296b4);
+    color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 5px 5px 0 #1a1a1a;
+  }
+
+  .disc__section-cta svg {
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .disc__section-cta:hover svg {
+    transform: translateX(3px);
+  }
+
+  /* ── Carousel shell ─────────────────────────────────── */
+  .disc__carousel-shell {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0.65rem;
+  }
+
+  /* ── Track ──────────────────────────────────────────── */
+  .disc__track {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-bottom: 4px;
+    outline-offset: 3px;
+    border-radius: 0.25rem;
+  }
+
+  .disc__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* ── Cards ──────────────────────────────────────────── */
+  .disc__card {
+    flex: 0 0 min(72vw, 220px);
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    background: #fff;
+    border: 2.5px solid #1a1a1a;
+    border-radius: 1.25rem;
+    box-shadow: 4px 5px 0 #1a1a1a;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s;
+  }
+
+  @media screen and (min-width: 600px) {
+    .disc__card {
+      flex: 0 0 200px;
+    }
+  }
+  @media screen and (min-width: 900px) {
+    .disc__card {
+      flex: 0 0 220px;
+    }
+  }
+  @media screen and (min-width: 1100px) {
+    .disc__card {
+      flex: 0 0 240px;
+    }
+  }
+
+  .disc__card:hover {
+    transform: translateY(-5px);
+    box-shadow: 6px 7px 0 #1a1a1a;
+  }
+
+  /* Teal strip */
+  .disc__card::before {
+    content: '';
+    display: block;
+    height: 5px;
+    background: var(--color-secondary, #0296b4);
+  }
+
+  /* Image */
+  .disc__card-img-link {
+    display: block;
+  }
+
+  .disc__card-img-wrap {
+    position: relative;
+    padding-bottom: 90%;
+    overflow: hidden;
+    background: var(--color-cream, #fcecc9);
+    border-bottom: 2px solid rgba(26, 26, 26, 0.06);
+  }
+
+  .disc__card-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.38s ease, opacity 0.28s ease;
+  }
+
+  .disc__card-img--secondary {
+    opacity: 0;
+  }
+  .disc__card:hover .disc__card-img--primary:not(:only-of-type) {
+    opacity: 0;
+  }
+  .disc__card:hover .disc__card-img--secondary {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  .disc__card:hover .disc__card-img--primary:only-of-type {
+    transform: scale(1.04);
+  }
+
+  .disc__card-img-ph {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(51, 51, 51, 0.2);
+  }
+
+  .disc__card-badge {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    z-index: 2;
+    padding: 0.14rem 0.45rem;
+    background: var(--color-accent, #f86d4e);
+    color: #fff;
+    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border: 2px solid #1a1a1a;
+    border-radius: 999px;
+  }
+
+  .disc__quick-add {
+    position: absolute;
+    bottom: 0.5rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(52px);
+    opacity: 0;
+    z-index: 3;
+    transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s;
+    white-space: nowrap;
+  }
+
+  .disc__card:hover .disc__quick-add {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+
+  .disc__quick-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.28rem;
+    padding: 0.38rem 0.85rem;
+    background: #fff;
+    border: 2.5px solid #1a1a1a;
+    border-radius: 999px;
+    box-shadow: 2px 2px 0 #1a1a1a;
+    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .disc__quick-btn:hover,
+  .disc__quick-btn.is-loading {
+    background: var(--color-secondary, #0296b4);
+    color: #fff;
+  }
+  .disc__quick-btn.is-done {
+    background: #22c55e;
+    color: #fff;
+  }
+
+  /* Card body */
+  .disc__card-body {
+    padding: 0.75rem 0.9rem 0.9rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.28rem;
+    flex: 1;
+  }
+
+  .disc__card-title {
+    margin: 0;
+    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    line-height: 1.25;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .disc__card-title-link {
+    color: var(--color-foreground, #333);
+    text-decoration: none;
+  }
+  .disc__card-title-link:hover {
+    color: var(--color-secondary, #0296b4);
+  }
+
+  .disc__card-prices {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.28rem;
+    margin-top: auto;
+  }
+
+  .disc__card-price {
+    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-secondary, #0296b4);
+  }
+
+  .disc__card-price.is-sale {
+    color: var(--color-accent, #f86d4e);
+  }
+  .disc__card-compare {
+    font-size: 0.75rem;
+    color: rgba(51, 51, 51, 0.38);
+  }
+
+  .disc__card-sold-out {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: rgba(51, 51, 51, 0.38);
+  }
+
+  /* ── Nav buttons ────────────────────────────────────── */
+  .disc__nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.6rem;
+    height: 2.6rem;
+    border-radius: 50%;
+    background: #fff;
+    border: 2.5px solid #1a1a1a;
+    box-shadow: 3px 3px 0 #1a1a1a;
+    cursor: pointer;
+    color: var(--color-foreground, #333);
+    flex-shrink: 0;
+    transition: background 0.15s, color 0.15s, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s;
+  }
+
+  .disc__nav:hover:not(:disabled) {
+    background: var(--color-secondary, #0296b4);
+    color: #fff;
+    transform: scale(1.08);
+    box-shadow: 4px 4px 0 #1a1a1a;
+  }
+
+  .disc__nav:disabled {
+    opacity: 0.28;
+    cursor: default;
+    box-shadow: 2px 2px 0 #1a1a1a;
+  }
+
+  /* ── Dots ───────────────────────────────────────────── */
+  .disc__dots {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
+
+  .disc__dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: transparent;
+    border: 2px solid #1a1a1a;
+    cursor: pointer;
+    padding: 0;
+    transition: background 0.18s ease, width 0.22s ease, border-radius 0.22s ease;
+  }
+
+  .disc__dot.is-active {
+    background: var(--color-secondary, #0296b4);
+    width: 1.4rem;
+    border-radius: 999px;
+    animation: disc-dot-pop 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .disc__dot:hover:not(.is-active) {
+    background: rgba(2, 150, 180, 0.3);
+  }
+
+  /* ── Divider ────────────────────────────────────────── */
+  .disc__divider {
+    border: none;
+    border-top: 2px dashed rgba(2, 150, 180, 0.22);
+    margin: 0;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Collections discovery",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Nuestras colecciones"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Encuentra el snack perfecto para tu perro."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection_row",
+      "name": "Collection row",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "range",
+          "id": "preview_count",
+          "label": "Products to preview",
+          "min": 4,
+          "max": 8,
+          "step": 1,
+          "default": 6
+        }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "Collections discovery"
+    }
+  ]
+}
+{% endschema %}

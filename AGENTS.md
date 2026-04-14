@@ -19,6 +19,6 @@ Auto-invoke the next skills when need it:
 
 ## Project Design Specification
 - Propesed color palette: #F86D4E, #0296B4, #FCECC9, #FFF6E5
-- Fonts: Fredoka (main), Nano Sans (body)
+- Fonts: Fredoka (main), Nunito Sans (body)
 - UI Theme: Playful
 

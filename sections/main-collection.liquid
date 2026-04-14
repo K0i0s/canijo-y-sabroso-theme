@@ -1,0 +1,1338 @@
+{% comment %}
+  Scenario 1 — Single Collection / Catalog Page
+  sections/main-collection.liquid
+{% endcomment %}
+
+{%- liquid
+  assign sort_by = collection.sort_by | default: collection.default_sort_by
+  assign products_per_pg = section.settings.products_per_page | default: 12
+-%}
+
+<div class="coll full-width">
+  <div class="coll__inner">
+    {{- '<!-- ══ HEADER ══ -->' -}}
+    <header class="coll__header">
+      <nav class="coll__breadcrumb" aria-label="Ruta de navegacion">
+        <a class="coll__breadcrumb-link" href="{{ routes.root_url }}">Inicio</a>
+        <span class="coll__breadcrumb-sep" aria-hidden="true">/</span>
+        <span class="coll__breadcrumb-current" aria-current="page">{{ collection.title }}</span>
+      </nav>
+
+      <h1 class="coll__title">{{ collection.title }}</h1>
+
+      {%- if collection.description != blank -%}
+        <p class="coll__description">{{ collection.description | strip_html | truncate: 200 }}</p>
+      {%- endif -%}
+
+      <div class="coll__meta-row">
+        <span class="coll__count" aria-live="polite">
+          {{ collection.products_count }}
+          {%- if collection.products_count == 1 -%}&nbsp;producto{%- else -%}&nbsp;productos{%- endif -%}
+        </span>
+
+        {%- unless current_tags == blank -%}
+          <div class="coll__active-tags" role="list" aria-label="Filtros activos">
+            {%- for tag in current_tags -%}
+              <a class="coll__active-tag" href="{{ collection.url }}" role="listitem">
+                {{ tag }}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="11"
+                  height="11"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.8"
+                  stroke-linecap="round"
+                  aria-hidden="true"
+                >
+                  <path d="M18 6 6 18M6 6l12 12"/>
+                </svg>
+              </a>
+            {%- endfor -%}
+            <a class="coll__clear-tags" href="{{ collection.url }}">Limpiar todo</a>
+          </div>
+        {%- endunless -%}
+      </div>
+    </header>
+
+    {{- '<!-- ══ CONTROLS ══ -->' -}}
+    <div class="coll__controls" id="coll-controls">
+      <button
+        class="coll__ctrl-btn"
+        id="coll-filter-trigger"
+        type="button"
+        aria-expanded="false"
+        aria-controls="coll-filter-drawer"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="15"
+          height="15"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.2"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/>
+        </svg>
+        Filtrar
+        {%- unless current_tags == blank -%}
+          <span class="coll__ctrl-badge" aria-label="{{ current_tags.size }} filtros activos">
+            {{- current_tags.size -}}
+          </span>
+        {%- endunless -%}
+      </button>
+
+      <div class="coll__sort-wrap">
+        <label class="coll__sort-label" for="coll-sort">Ordenar</label>
+        <div class="coll__sort-sel-wrap">
+          <select class="coll__sort-sel" id="coll-sort" aria-label="Ordenar productos">
+            <option
+              value="manual"
+              {% if sort_by == 'manual' %}
+                selected
+              {% endif %}
+            >
+              Destacados
+            </option>
+            <option
+              value="price-ascending"
+              {% if sort_by == 'price-ascending' %}
+                selected
+              {% endif %}
+            >
+              Precio: menor a mayor
+            </option>
+            <option
+              value="price-descending"
+              {% if sort_by == 'price-descending' %}
+                selected
+              {% endif %}
+            >
+              Precio: mayor a menor
+            </option>
+            <option
+              value="created-descending"
+              {% if sort_by == 'created-descending' %}
+                selected
+              {% endif %}
+            >
+              Mas recientes
+            </option>
+            <option
+              value="best-selling"
+              {% if sort_by == 'best-selling' %}
+                selected
+              {% endif %}
+            >
+              Mas vendidos
+            </option>
+            <option
+              value="title-ascending"
+              {% if sort_by == 'title-ascending' %}
+                selected
+              {% endif %}
+            >
+              A–Z
+            </option>
+          </select>
+          <svg
+            class="coll__sort-chevron"
+            xmlns="http://www.w3.org/2000/svg"
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <path d="m6 9 6 6 6-6"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="coll__view-toggle" role="group" aria-label="Tipo de vista">
+        <button
+          class="coll__view-btn coll__view-btn--active"
+          data-cols="grid"
+          type="button"
+          aria-pressed="true"
+          aria-label="Vista cuadricula"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            aria-hidden="true"
+          >
+            <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
+          </svg>
+        </button>
+        <button class="coll__view-btn" data-cols="list" type="button" aria-pressed="false" aria-label="Vista lista">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            aria-hidden="true"
+          >
+            <rect x="3" y="3" width="18" height="5"/><rect x="3" y="10" width="18" height="5"/><rect x="3" y="17" width="18" height="5"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    {{- '<!-- ══ FILTER DRAWER ══ -->' -}}
+    <div
+      class="coll__filter-drawer"
+      id="coll-filter-drawer"
+      role="dialog"
+      aria-modal="true"
+      aria-hidden="true"
+      aria-label="Filtros"
+      tabindex="-1"
+    >
+      <div class="coll__filter-overlay" id="coll-filter-overlay"></div>
+      <div class="coll__filter-panel">
+        <div class="coll__filter-hd">
+          <h2 class="coll__filter-title">Filtros</h2>
+          <button class="coll__filter-close" id="coll-filter-close" type="button" aria-label="Cerrar filtros">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <path d="M18 6 6 18M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+
+        {%- unless collection.all_tags == blank -%}
+          <div class="coll__filter-group">
+            <p class="coll__filter-group-label">Categoria</p>
+            <div class="coll__filter-tags" role="list">
+              {%- for tag in collection.all_tags -%}
+                <a
+                  class="coll__filter-tag{% if current_tags contains tag %} is-active{% endif %}"
+                  href="{{ collection.url }}/{{ tag | handle }}"
+                  role="listitem"
+                  aria-pressed="{% if current_tags contains tag %}true{% else %}false{% endif %}"
+                >
+                  {{- tag -}}
+                </a>
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endunless -%}
+
+        <div class="coll__filter-ft">
+          <a class="coll__filter-clear-link" href="{{ collection.url }}">Limpiar filtros</a>
+          <button class="coll__filter-apply" id="coll-filter-apply" type="button">Ver resultados</button>
+        </div>
+      </div>
+    </div>
+
+    {{- '<!-- ══ PRODUCT GRID ══ -->' -}}
+    {%- paginate collection.products by products_per_pg -%}
+      {%- if collection.products_count == 0 -%}
+        <div class="coll__empty" role="status">
+          <div class="coll__empty-icon" aria-hidden="true">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="38"
+              height="38"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            >
+              <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>
+            </svg>
+          </div>
+          <h2 class="coll__empty-heading">Sin productos</h2>
+          <p class="coll__empty-text">No encontramos productos con los filtros seleccionados.</p>
+          <a class="coll__empty-cta" href="{{ collection.url }}">Ver todos los productos</a>
+        </div>
+
+      {%- else -%}
+        <ul class="coll__grid" id="coll-grid" role="list" aria-label="Productos">
+          {%- for product in collection.products -%}
+            {%- liquid
+              assign p = product
+              assign p_price = p.price_min
+              assign p_compare = p.compare_at_price_min
+              assign p_onsale = false
+              if p_compare > p_price
+                assign p_onsale = true
+              endif
+              assign p_img = p.featured_image
+              assign p_img2 = p.images[1]
+            -%}
+
+            <li class="coll__card" style="animation-delay:{{ forloop.index0 | times: 0.05 }}s" role="listitem">
+              <article aria-label="{{ p.title }}">
+                <a class="coll__card-img-link" href="{{ p.url }}" tabindex="-1" aria-hidden="true">
+                  <div class="coll__card-img-wrap">
+                    {%- if p_onsale -%}
+                      <span class="coll__card-badge">Sale</span>
+                    {%- endif -%}
+
+                    {%- if p_img -%}
+                      <img
+                        class="coll__card-img coll__card-img--primary"
+                        src="{{ p_img | image_url: width: 600 }}"
+                        alt="{{ p_img.alt | escape | default: p.title }}"
+                        width="600"
+                        height="{{ 600 | divided_by: p_img.aspect_ratio | round }}"
+                        loading="lazy"
+                      >
+                      {%- if p_img2 -%}
+                        <img
+                          class="coll__card-img coll__card-img--secondary"
+                          src="{{ p_img2 | image_url: width: 600 }}"
+                          alt="{{ p_img2.alt | escape | default: p.title }}"
+                          width="600"
+                          height="{{ 600 | divided_by: p_img2.aspect_ratio | round }}"
+                          loading="lazy"
+                          aria-hidden="true"
+                        >
+                      {%- endif -%}
+                    {%- else -%}
+                      <div class="coll__card-img-ph" aria-hidden="true">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="34"
+                          height="34"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                        >
+                          <rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>
+                        </svg>
+                      </div>
+                    {%- endif -%}
+
+                    {%- if p.available -%}
+                      <form class="coll__quick-add" action="{{ routes.cart_add_url }}" method="post">
+                        <input type="hidden" name="id" value="{{ p.selected_or_first_available_variant.id }}">
+                        <input type="hidden" name="quantity" value="1">
+                        <button class="coll__quick-btn" type="submit" aria-label="Agregar {{ p.title }} al carrito">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="14"
+                            height="14"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2.2"
+                            stroke-linecap="round"
+                            aria-hidden="true"
+                          >
+                            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>
+                          </svg>
+                          Agregar
+                        </button>
+                      </form>
+                    {%- endif -%}
+                  </div>
+                </a>
+
+                <div class="coll__card-body">
+                  <h2 class="coll__card-title">
+                    <a class="coll__card-title-link" href="{{ p.url }}">{{ p.title }}</a>
+                  </h2>
+                  <div class="coll__card-prices">
+                    <span class="coll__card-price{% if p_onsale %} is-sale{% endif %}">{{ p_price | money }}</span>
+                    {%- if p_onsale -%}
+                      <s class="coll__card-compare">{{ p_compare | money }}</s>
+                      {%- assign disc = p_compare | minus: p_price | times: 100 | divided_by: p_compare -%}
+                      <span class="coll__card-disc">-{{ disc }}%</span>
+                    {%- endif -%}
+                  </div>
+                  {%- unless p.available -%}
+                    <span class="coll__card-sold-out">Agotado</span>
+                  {%- endunless -%}
+                </div>
+              </article>
+            </li>
+          {%- endfor -%}
+        </ul>
+
+        {%- if paginate.pages > 1 -%}
+          <nav class="coll__pagination" aria-label="Paginacion">
+            {%- if paginate.previous -%}
+              <a class="coll__page-btn" href="{{ paginate.previous.url }}" aria-label="Pagina anterior">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  aria-hidden="true"
+                >
+                  <path d="m15 18-6-6 6-6"/>
+                </svg>
+              </a>
+            {%- endif -%}
+            {%- for part in paginate.parts -%}
+              {%- if part.is_link -%}
+                <a class="coll__page-num" href="{{ part.url }}">{{ part.title }}</a>
+              {%- elsif part.title == paginate.current_page -%}
+                <span class="coll__page-num is-active" aria-current="page">{{ part.title }}</span>
+              {%- else -%}
+                <span class="coll__page-ellipsis" aria-hidden="true">…</span>
+              {%- endif -%}
+            {%- endfor -%}
+            {%- if paginate.next -%}
+              <a class="coll__page-btn" href="{{ paginate.next.url }}" aria-label="Pagina siguiente">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  aria-hidden="true"
+                >
+                  <path d="m9 18 6-6-6-6"/>
+                </svg>
+              </a>
+            {%- endif -%}
+          </nav>
+        {%- endif -%}
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</div>
+
+<script>
+  (() => {
+    // ── Sort redirect ──────────────────────────────────────
+    const sortSel = document.getElementById('coll-sort');
+    sortSel?.addEventListener('change', () => {
+      const url = new URL(window.location.href);
+      url.searchParams.set('sort_by', sortSel.value);
+      window.location.href = url.toString();
+    });
+
+    // ── Filter drawer ──────────────────────────────────────
+    const filterTrigger = document.getElementById('coll-filter-trigger');
+    const filterDrawer = document.getElementById('coll-filter-drawer');
+    const filterOverlay = document.getElementById('coll-filter-overlay');
+    const filterClose = document.getElementById('coll-filter-close');
+    const filterApply = document.getElementById('coll-filter-apply');
+
+    const setDrawer = (open) => {
+      filterDrawer?.setAttribute('aria-hidden', String(!open));
+      filterTrigger?.setAttribute('aria-expanded', String(open));
+      document.documentElement.classList.toggle('coll-drawer-open', open);
+      if (open) filterClose?.focus();
+      else filterTrigger?.focus();
+    };
+
+    filterTrigger?.addEventListener('click', () => setDrawer(true));
+    filterClose?.addEventListener('click', () => setDrawer(false));
+    filterOverlay?.addEventListener('click', () => setDrawer(false));
+    filterApply?.addEventListener('click', () => setDrawer(false));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') setDrawer(false);
+    });
+
+    // ── View toggle ────────────────────────────────────────
+    const grid = document.getElementById('coll-grid');
+    const viewBtns = document.querySelectorAll('.coll__view-btn');
+    viewBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        grid?.setAttribute('data-view', btn.dataset.cols);
+        viewBtns.forEach((b) => {
+          b.classList.toggle('coll__view-btn--active', b === btn);
+          b.setAttribute('aria-pressed', String(b === btn));
+        });
+      });
+    });
+
+    // ── Quick-add AJAX ─────────────────────────────────────
+    document.querySelectorAll('.coll__quick-add').forEach((form) => {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const btn = form.querySelector('.coll__quick-btn');
+        btn?.classList.add('is-loading');
+
+        fetch(form.action, {
+          method: 'POST',
+          headers: { 'X-Requested-With': 'XMLHttpRequest' },
+          body: new FormData(form),
+        })
+          .then((r) => r.json())
+          .then(() => {
+            btn?.classList.remove('is-loading');
+            btn?.classList.add('is-done');
+            setTimeout(() => btn?.classList.remove('is-done'), 1800);
+            document.dispatchEvent(new CustomEvent('cart:updated'));
+          })
+          .catch(() => btn?.classList.remove('is-loading'));
+      });
+    });
+
+    // ── Card entrance (IntersectionObserver) ──────────────
+    const cards = document.querySelectorAll('.coll__card');
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(
+        (entries) =>
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              io.unobserve(entry.target);
+            }
+          }),
+        { threshold: 0.08, rootMargin: '0px 0px -20px 0px' }
+      );
+      cards.forEach((c) => io.observe(c));
+    } else {
+      cards.forEach((c) => c.classList.add('is-visible'));
+    }
+  })();
+</script>
+
+{% stylesheet %}
+  html.coll-drawer-open,
+  html.coll-drawer-open body {
+    overflow: hidden;
+  }
+
+  @keyframes coll-in {
+    from {
+      opacity: 0;
+      transform: translateY(14px) scale(0.97);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes coll-drawer-slide {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  /* ── Shell ──────────────────────────────────────────── */
+  .coll {
+    background: var(--color-light-cream, #fff6e5);
+    min-height: 60vh;
+  }
+
+  .coll__inner {
+    width: min(var(--page-width, 90rem), calc(100% - (var(--page-margin, 20px) * 2)));
+    margin: 0 auto;
+    padding: clamp(2rem, 4vw, 3rem) 0 clamp(3rem, 6vw, 5rem);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  /* ── Header ─────────────────────────────────────────── */
+  .coll__breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    font-size: 0.8rem;
+    color: rgba(51, 51, 51, 0.5);
+    margin-bottom: 0.5rem;
+  }
+
+  .coll__breadcrumb-link {
+    color: var(--color-secondary, #0296b4);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .coll__breadcrumb-link:hover {
+    text-decoration: underline;
+  }
+  .coll__breadcrumb-sep {
+    color: rgba(51, 51, 51, 0.3);
+  }
+  .coll__breadcrumb-current {
+    font-weight: 600;
+  }
+
+  .coll__title {
+    margin: 0 0 0.4rem;
+    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.75rem, 4.5vw, 2.75rem);
+    color: var(--color-accent, #f86d4e);
+    letter-spacing: -0.01em;
+  }
+
+  .coll__description {
+    margin: 0 0 0.5rem;
+    max-width: 55ch;
+    font-size: clamp(0.88rem, 2vw, 1rem);
+    color: rgba(51, 51, 51, 0.62);
+    line-height: 1.6;
+  }
+
+  .coll__meta-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .coll__count {
+    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
+    font-size: 0.83rem;
+    font-weight: 700;
+    color: rgba(51, 51, 51, 0.4);
+  }
+
+  .coll__active-tags {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .coll__active-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.22rem 0.6rem;
+    background: var(--color-secondary, #0296b4);
+    color: #fff;
+    border: 2px solid #1a1a1a;
+    border-radius: 999px;
+    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: 2px 2px 0 #1a1a1a;
+    transition: background 0.15s ease, transform 0.15s ease;
+  }
+
+  .coll__active-tag:hover {
+    background: var(--color-accent, #f86d4e);
+    transform: translateY(-1px);
+  }
+
+  .coll__clear-tags {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: rgba(51, 51, 51, 0.45);
+    text-decoration: underline;
+  }
+
+  .coll__clear-tags:hover {
+    color: var(--color-accent, #f86d4e);
+  }
+
+  /* ── Controls bar ───────────────────────────────────── */
+  .coll__controls {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    flex-wrap: wrap;
+    padding: 0.7rem 1rem;
+    background: #fff;
+    border: 2.5px solid #1a1a1a;
+    border-radius: 1.25rem;
+    box-shadow: 4px 4px 0 #1a1a1a;
+    position: sticky;
+    top: 5rem;
+    z-index: 10;
+  }
+
+  .coll__ctrl-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 0.95rem;
+    background: var(--color-light-cream, #fff6e5);
+    border: 2px solid #1a1a1a;
+    border-radius: 999px;
+    box-shadow: 2px 2px 0 #1a1a1a;
+    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--color-foreground, #333);
+    cursor: pointer;
+    transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.18s, background 0.15s;
+  }
+
+  .coll__ctrl-btn:hover {
+    background: #fff;
+    transform: translateY(-2px);
+    box-shadow: 3px 4px 0 #1a1a1a;
+  }
+
+  .coll__ctrl-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.05rem;
+    height: 1.05rem;
+    padding: 0 0.2rem;
+    background: var(--color-accent, #f86d4e);
+    color: #fff;
+    border: 1.5px solid #1a1a1a;
+    border-radius: 999px;
+    font-size: 0.58rem;
+    font-weight: 700;
+  }
+
+  .coll__sort-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-left: auto;
+  }
+
+  .coll__sort-label {
+    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: rgba(51, 51, 51, 0.45);
+    white-space: nowrap;
+    display: none;
+  }
+
+  @media screen and (min-width: 480px) {
+    .coll__sort-label {
+      display: block;
+    }
+  }
+
+  .coll__sort-sel-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .coll__sort-sel {
+    appearance: none;
+    padding: 0.42rem 2rem 0.42rem 0.8rem;
+    background: var(--color-light-cream, #fff6e5);
+    border: 2px solid #1a1a1a;
+    border-radius: 999px;
+    box-shadow: 2px 2px 0 #1a1a1a;
+    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-foreground, #333);
+    cursor: pointer;
+  }
+
+  .coll__sort-sel:focus {
+    outline: 2px solid var(--color-secondary, #0296b4);
+    outline-offset: 2px;
+  }
+
+  .coll__sort-chevron {
+    position: absolute;
+    right: 0.6rem;
+    pointer-events: none;
+    color: rgba(51, 51, 51, 0.45);
+  }
+
+  .coll__view-toggle {
+    display: none;
+    gap: 0.25rem;
+  }
+  @media screen and (min-width: 600px) {
+    .coll__view-toggle {
+      display: flex;
+    }
+  }
+
+  .coll__view-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: 50%;
+    background: transparent;
+    border: 2px solid transparent;
+    color: rgba(51, 51, 51, 0.4);
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+  }
+
+  .coll__view-btn--active,
+  .coll__view-btn:hover {
+    background: var(--color-secondary, #0296b4);
+    border-color: #1a1a1a;
+    color: #fff;
+  }
+
+  /* ── Filter drawer ──────────────────────────────────── */
+  .coll__filter-drawer {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    pointer-events: none;
+  }
+  .coll__filter-drawer[aria-hidden='false'] {
+    pointer-events: auto;
+  }
+
+  .coll__filter-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(26, 26, 26, 0.42);
+    backdrop-filter: blur(3px);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    cursor: pointer;
+  }
+
+  .coll__filter-drawer[aria-hidden='false'] .coll__filter-overlay {
+    opacity: 1;
+  }
+
+  .coll__filter-panel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: min(22rem, 90vw);
+    height: 100dvh;
+    background: var(--color-light-cream, #fff6e5);
+    border-right: 2.5px solid #1a1a1a;
+    box-shadow: 6px 0 0 #1a1a1a;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding: 1.25rem;
+    overflow-y: auto;
+    transform: translateX(-100%);
+    transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .coll__filter-drawer[aria-hidden='false'] .coll__filter-panel {
+    transform: translateX(0);
+    animation: coll-drawer-slide 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+
+  .coll__filter-hd {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 1rem;
+    border-bottom: 2px dashed rgba(2, 150, 180, 0.25);
+  }
+
+  .coll__filter-title {
+    margin: 0;
+    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--color-accent, #f86d4e);
+  }
+
+  .coll__filter-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid #1a1a1a;
+    box-shadow: 2px 2px 0 #1a1a1a;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .coll__filter-close:hover {
+    background: var(--color-accent, #f86d4e);
+    color: #fff;
+    transform: rotate(90deg);
+  }
+
+  .coll__filter-group-label {
+    margin: 0 0 0.6rem;
+    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(51, 51, 51, 0.45);
+  }
+
+  .coll__filter-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .coll__filter-tag {
+    display: inline-flex;
+    padding: 0.32rem 0.8rem;
+    background: #fff;
+    border: 2px solid rgba(26, 26, 26, 0.18);
+    border-radius: 999px;
+    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
+    font-size: 0.83rem;
+    font-weight: 700;
+    color: var(--color-foreground, #333);
+    text-decoration: none;
+    transition: border-color 0.15s, background 0.15s, transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1),
+      box-shadow 0.15s;
+  }
+
+  .coll__filter-tag:hover {
+    border-color: var(--color-secondary, #0296b4);
+    transform: translateY(-1px);
+  }
+  .coll__filter-tag.is-active {
+    background: var(--color-secondary, #0296b4);
+    border-color: #1a1a1a;
+    color: #fff;
+    box-shadow: 2px 2px 0 #1a1a1a;
+  }
+
+  .coll__filter-ft {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.65rem;
+    padding-top: 1rem;
+    border-top: 2px dashed rgba(51, 51, 51, 0.1);
+    margin-top: auto;
+  }
+
+  .coll__filter-clear-link {
+    font-size: 0.83rem;
+    font-weight: 600;
+    color: rgba(51, 51, 51, 0.45);
+    text-decoration: underline;
+  }
+  .coll__filter-clear-link:hover {
+    color: var(--color-accent, #f86d4e);
+  }
+
+  .coll__filter-apply {
+    padding: 0.6rem 1.4rem;
+    background: var(--color-accent, #f86d4e);
+    color: #fff;
+    border: 2.5px solid #1a1a1a;
+    border-radius: 999px;
+    box-shadow: 3px 3px 0 #1a1a1a;
+    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s;
+  }
+
+  .coll__filter-apply:hover {
+    transform: translateY(-3px);
+    box-shadow: 5px 5px 0 #1a1a1a;
+  }
+
+  /* ── Grid ───────────────────────────────────────────── */
+  .coll__grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .coll__grid[data-view='list'] {
+    grid-template-columns: 1fr;
+  }
+
+  @media screen and (min-width: 750px) {
+    .coll__grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+    }
+  }
+  @media screen and (min-width: 1100px) {
+    .coll__grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+  }
+
+  /* ── Cards ──────────────────────────────────────────── */
+  .coll__card {
+    opacity: 0;
+  }
+
+  .coll__card.is-visible {
+    animation: coll-in 0.38s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    animation-delay: inherit;
+  }
+
+  .coll__card article {
+    background: #fff;
+    border: 2.5px solid #1a1a1a;
+    border-radius: 1.35rem;
+    box-shadow: 4px 5px 0 #1a1a1a;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s;
+  }
+
+  .coll__card article:hover {
+    transform: translateY(-6px);
+    box-shadow: 6px 8px 0 #1a1a1a;
+  }
+
+  /* Teal top strip via pseudo */
+  .coll__card article::before {
+    content: '';
+    display: block;
+    height: 5px;
+    background: var(--color-secondary, #0296b4);
+    flex-shrink: 0;
+  }
+
+  /* Image */
+  .coll__card-img-link {
+    display: block;
+  }
+
+  .coll__card-img-wrap {
+    position: relative;
+    padding-bottom: 85%;
+    overflow: hidden;
+    background: var(--color-cream, #fcecc9);
+    border-bottom: 2px solid rgba(26, 26, 26, 0.07);
+  }
+
+  .coll__card-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.38s ease, opacity 0.28s ease;
+  }
+
+  .coll__card-img--secondary {
+    opacity: 0;
+  }
+  .coll__card article:hover .coll__card-img--primary:not(:only-of-type) {
+    opacity: 0;
+  }
+  .coll__card article:hover .coll__card-img--secondary {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+  .coll__card article:hover .coll__card-img--primary:only-of-type {
+    transform: scale(1.04);
+  }
+
+  .coll__card-img-ph {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(51, 51, 51, 0.2);
+  }
+
+  .coll__card-badge {
+    position: absolute;
+    top: 0.6rem;
+    left: 0.6rem;
+    z-index: 2;
+    padding: 0.16rem 0.5rem;
+    background: var(--color-accent, #f86d4e);
+    color: #fff;
+    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border: 2px solid #1a1a1a;
+    border-radius: 999px;
+  }
+
+  /* Quick add */
+  .coll__quick-add {
+    position: absolute;
+    bottom: 0.6rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(56px);
+    opacity: 0;
+    z-index: 3;
+    transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s;
+    white-space: nowrap;
+  }
+
+  .coll__card article:hover .coll__quick-add {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+
+  .coll__quick-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.32rem;
+    padding: 0.42rem 0.9rem;
+    background: #fff;
+    border: 2.5px solid #1a1a1a;
+    border-radius: 999px;
+    box-shadow: 3px 3px 0 #1a1a1a;
+    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .coll__quick-btn:hover,
+  .coll__quick-btn.is-loading {
+    background: var(--color-secondary, #0296b4);
+    color: #fff;
+  }
+  .coll__quick-btn.is-done {
+    background: #22c55e;
+    color: #fff;
+  }
+
+  /* Card body */
+  .coll__card-body {
+    padding: 0.8rem 0.95rem 0.95rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.32rem;
+    flex: 1;
+  }
+
+  .coll__card-title {
+    margin: 0;
+    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
+    font-size: clamp(0.88rem, 2vw, 0.98rem);
+    font-weight: 700;
+    line-height: 1.25;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .coll__card-title-link {
+    color: var(--color-foreground, #333);
+    text-decoration: none;
+  }
+  .coll__card-title-link:hover {
+    color: var(--color-secondary, #0296b4);
+  }
+
+  .coll__card-prices {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    margin-top: auto;
+  }
+
+  .coll__card-price {
+    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--color-secondary, #0296b4);
+  }
+
+  .coll__card-price.is-sale {
+    color: var(--color-accent, #f86d4e);
+  }
+
+  .coll__card-compare {
+    font-size: 0.8rem;
+    color: rgba(51, 51, 51, 0.38);
+  }
+
+  .coll__card-disc {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--color-accent, #f86d4e);
+    padding: 0.08rem 0.32rem;
+    background: rgba(248, 109, 78, 0.1);
+    border-radius: 999px;
+  }
+
+  .coll__card-sold-out {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: rgba(51, 51, 51, 0.38);
+    letter-spacing: 0.04em;
+  }
+
+  /* ── Empty state ────────────────────────────────────── */
+  .coll__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.8rem;
+    padding: clamp(3rem, 8vw, 6rem) 1rem;
+  }
+
+  .coll__empty-icon {
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: 50%;
+    background: #fff;
+    border: 2.5px solid #1a1a1a;
+    box-shadow: 4px 4px 0 #1a1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(51, 51, 51, 0.28);
+  }
+
+  .coll__empty-heading {
+    margin: 0;
+    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-foreground, #333);
+  }
+
+  .coll__empty-text {
+    margin: 0;
+    font-size: 0.88rem;
+    color: rgba(51, 51, 51, 0.5);
+    max-width: 28ch;
+    line-height: 1.55;
+  }
+
+  .coll__empty-cta {
+    display: inline-flex;
+    padding: 0.68rem 1.5rem;
+    background: var(--color-accent, #f86d4e);
+    color: #fff;
+    border: 2.5px solid #1a1a1a;
+    border-radius: 999px;
+    box-shadow: 4px 4px 0 #1a1a1a;
+    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s;
+  }
+
+  .coll__empty-cta:hover {
+    transform: translateY(-3px);
+    box-shadow: 6px 6px 0 #1a1a1a;
+  }
+
+  /* ── Pagination ─────────────────────────────────────── */
+  .coll__pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 2.5rem;
+  }
+
+  .coll__page-btn,
+  .coll__page-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.4rem;
+    height: 2.4rem;
+    padding: 0 0.6rem;
+    border-radius: 999px;
+    border: 2.5px solid #1a1a1a;
+    background: #fff;
+    box-shadow: 3px 3px 0 #1a1a1a;
+    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--color-foreground, #333);
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.18s, background 0.15s, color 0.15s;
+  }
+
+  .coll__page-btn:hover,
+  .coll__page-num:hover {
+    background: var(--color-secondary, #0296b4);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 4px 5px 0 #1a1a1a;
+  }
+
+  .coll__page-num.is-active {
+    background: var(--color-accent, #f86d4e);
+    color: #fff;
+    cursor: default;
+  }
+  .coll__page-num.is-active:hover {
+    transform: none;
+  }
+
+  .coll__page-ellipsis {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.8rem;
+    height: 2.4rem;
+    color: rgba(51, 51, 51, 0.35);
+    font-weight: 700;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Main collection",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Products per page",
+      "min": 8,
+      "max": 24,
+      "step": 4,
+      "default": 12
+    }
+  ],
+  "disabled_on": { "groups": ["header", "footer"] }
+}
+{% endschema %}

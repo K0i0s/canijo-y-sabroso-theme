@@ -15,7 +15,7 @@
         "heading": "Premios canijos para perros con gran antojo.",
         "subtext": "Snacks deshidratados hechos en México para consentir a tu perro con ingredientes simples, textura crujiente y mucho sabor.",
         "button_text": "¡Compra ahora!",
-        "button_url": "",
+        "button_url": "shopify://collections/premios-para-perros",
         "bg_color": "#fcecc9"
       }
     },
@@ -62,7 +62,7 @@
       "settings": {
         "heading": "Los favoritos de tu Canijo",
         "subheading": "Recetas hechas con amor, aprobadas por colas movidas.",
-        "collection": "pechuga-de-pollo",
+        "collection": "premios-para-perros",
         "products_to_show": 3,
         "show_cta": true,
         "cta_label": "Ver todo el catálogo"

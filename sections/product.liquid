@@ -4,15 +4,15 @@
 {% endcomment %}
 
 {%- liquid
-  assign current_variant   = product.selected_or_first_available_variant
-  assign compare_price     = current_variant.compare_at_price
-  assign current_price     = current_variant.price
-  assign on_sale           = false
+  assign current_variant = product.selected_or_first_available_variant
+  assign compare_price = current_variant.compare_at_price
+  assign current_price = current_variant.price
+  assign on_sale = false
   if compare_price > current_price
     assign on_sale = true
   endif
   assign low_stock_threshold = 20
-  assign show_stock_warning  = false
+  assign show_stock_warning = false
   if current_variant.inventory_management == 'shopify' and current_variant.inventory_quantity > 0 and current_variant.inventory_quantity < low_stock_threshold
     assign show_stock_warning = true
   endif
@@ -25,17 +25,13 @@
 -%}
 
 <div class="pdp full-width">
-
   {{- '<!-- Bg texture -->' -}}
   <div class="pdp__bg-texture" aria-hidden="true"></div>
 
-
   <div class="pdp__inner">
     <div class="pdp__layout">
-
       {{- '<!--════════════ GALLERY ════════════-->' -}}
       <div class="pdp__gallery" id="pdp-gallery">
-
         {{- '<!-- Main image -->' -}}
         <div class="pdp__main-image-wrap" id="pdp-main-wrap">
           {%- if on_sale -%}
@@ -54,7 +50,16 @@
             >
           {%- else -%}
             <div class="pdp__image-placeholder" aria-label="Sin imagen">
-              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="48"
+                height="48"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                aria-hidden="true"
+              >
                 <rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>
               </svg>
             </div>
@@ -88,13 +93,11 @@
             {%- endfor -%}
           </div>
         {%- endif -%}
-
-      </div>{{- '<!-- /gallery -->' -}}
-
+      </div>
+      {{- '<!-- /gallery -->' -}}
 
       {{- '<!--════════════ INFO PANEL ════════════-->' -}}
       <div class="pdp__info">
-
         {{- '<!-- Brand eyebrow -->' -}}
         <div class="pdp__eyebrow">
           {{ product.vendor | default: 'Canijo y Sabroso' }}
@@ -106,14 +109,24 @@
         {{- '<!-- Star rating -->' -}}
         {%- if rating_value > 0 -%}
           <div class="pdp__rating" aria-label="{{ rating_value | round: 1 }} de 5 estrellas">
-            {%- assign full_stars  = rating_value | floor -%}
+            {%- assign full_stars = rating_value | floor -%}
             {%- assign empty_stars = 5 | minus: full_stars -%}
             <div class="pdp__stars" aria-hidden="true">
               {%- for i in (1..full_stars) -%}
-                <svg class="pdp__star pdp__star--full" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.953a1 1 0 00.95.69h4.162c.969 0 1.372 1.24.588 1.81l-3.368 2.448a1 1 0 00-.364 1.118l1.286 3.953c.3.921-.755 1.688-1.54 1.118L10 15.347l-3.951 2.87c-.784.57-1.838-.197-1.539-1.118l1.286-3.953a1 1 0 00-.364-1.118L2.064 9.38c-.784-.57-.38-1.81.588-1.81h4.162a1 1 0 00.951-.69l1.284-3.953z"/></svg>
+                <svg class="pdp__star pdp__star--full" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.953a1 1 0 00.95.69h4.162c.969 0 1.372 1.24.588 1.81l-3.368 2.448a1 1 0 00-.364 1.118l1.286 3.953c.3.921-.755 1.688-1.54 1.118L10 15.347l-3.951 2.87c-.784.57-1.838-.197-1.539-1.118l1.286-3.953a1 1 0 00-.364-1.118L2.064 9.38c-.784-.57-.38-1.81.588-1.81h4.162a1 1 0 00.951-.69l1.284-3.953z"/>
+                </svg>
               {%- endfor -%}
               {%- for i in (1..empty_stars) -%}
-                <svg class="pdp__star pdp__star--empty" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.953a1 1 0 00.95.69h4.162c.969 0 1.372 1.24.588 1.81l-3.368 2.448a1 1 0 00-.364 1.118l1.286 3.953c.3.921-.755 1.688-1.54 1.118L10 15.347l-3.951 2.87c-.784.57-1.838-.197-1.539-1.118l1.286-3.953a1 1 0 00-.364-1.118L2.064 9.38c-.784-.57-.38-1.81.588-1.81h4.162a1 1 0 00.951-.69l1.284-3.953z"/></svg>
+                <svg
+                  class="pdp__star pdp__star--empty"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                >
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.953a1 1 0 00.95.69h4.162c.969 0 1.372 1.24.588 1.81l-3.368 2.448a1 1 0 00-.364 1.118l1.286 3.953c.3.921-.755 1.688-1.54 1.118L10 15.347l-3.951 2.87c-.784.57-1.838-.197-1.539-1.118l1.286-3.953a1 1 0 00-.364-1.118L2.064 9.38c-.784-.57-.38-1.81.588-1.81h4.162a1 1 0 00.951-.69l1.284-3.953z"/>
+                </svg>
               {%- endfor -%}
             </div>
             <span class="pdp__rating-count">({{ rating_count }} reseñas)</span>
@@ -135,12 +148,27 @@
         {{- '<!-- Stock urgency bar -->' -}}
         {%- if show_stock_warning -%}
           <div class="pdp__stock-alert" id="pdp-stock" role="status" aria-live="polite">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
               <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/>
             </svg>
-            <span>¡Solo quedan <strong>{{ current_variant.inventory_quantity }}</strong> en stock!</span>
+            <span
+              >¡Solo quedan <strong>{{ current_variant.inventory_quantity }}</strong> en stock!</span
+            >
             <div class="pdp__stock-bar">
-              {%- assign pct_remaining = current_variant.inventory_quantity | times: 100 | divided_by: low_stock_threshold -%}
+              {%- assign pct_remaining = current_variant.inventory_quantity
+                | times: 100
+                | divided_by: low_stock_threshold
+              -%}
               <div class="pdp__stock-fill" style="width: {{ pct_remaining }}%"></div>
             </div>
           </div>
@@ -148,7 +176,6 @@
 
         {{- '<!-- Product form -->' -}}
         {%- form 'product', product, id: 'pdp-form', class: 'pdp__form' -%}
-
           {{- '<!-- Variant selector -->' -}}
           {%- if has_multiple_variants -%}
             <div class="pdp__variants" id="pdp-variants">
@@ -163,7 +190,9 @@
                           type="radio"
                           name="option-{{ option.position }}"
                           value="{{ value }}"
-                          {% if option.selected_value == value %}checked{% endif %}
+                          {% if option.selected_value == value %}
+                            checked
+                          {% endif %}
                           data-option-position="{{ option.position }}"
                         >
                         <span class="pdp__pill-text">{{ value }}</span>
@@ -184,7 +213,15 @@
           <div class="pdp__qty-row">
             <label class="pdp__qty-label" for="pdp-qty">Cantidad</label>
             <div class="pdp__qty-stepper" role="group" aria-label="Cantidad">
-              <button class="pdp__qty-btn" type="button" id="pdp-qty-minus" aria-label="Reducir cantidad" data-action="minus">−</button>
+              <button
+                class="pdp__qty-btn"
+                type="button"
+                id="pdp-qty-minus"
+                aria-label="Reducir cantidad"
+                data-action="minus"
+              >
+                −
+              </button>
               <input
                 class="pdp__qty-input"
                 id="pdp-qty"
@@ -192,10 +229,20 @@
                 name="quantity"
                 value="1"
                 min="1"
-                {% if current_variant.inventory_management == 'shopify' %}max="{{ current_variant.inventory_quantity }}"{% endif %}
+                {% if current_variant.inventory_management == 'shopify' %}
+                  max="{{ current_variant.inventory_quantity }}"
+                {% endif %}
                 aria-label="Cantidad"
               >
-              <button class="pdp__qty-btn" type="button" id="pdp-qty-plus" aria-label="Aumentar cantidad" data-action="plus">+</button>
+              <button
+                class="pdp__qty-btn"
+                type="button"
+                id="pdp-qty-plus"
+                aria-label="Aumentar cantidad"
+                data-action="plus"
+              >
+                +
+              </button>
             </div>
           </div>
 
@@ -206,9 +253,21 @@
               type="submit"
               name="add"
               id="pdp-add-to-cart"
-              {% unless current_variant.available %}disabled{% endunless %}
+              {% unless current_variant.available %}
+                disabled
+              {% endunless %}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.2"
+                stroke-linecap="round"
+                aria-hidden="true"
+              >
                 <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/>
                 <path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>
               </svg>
@@ -223,7 +282,6 @@
               {{ form | payment_button }}
             </div>
           </div>
-
         {%- endform -%}
 
         {{- '<!-- Trust chips -->' -}}
@@ -249,7 +307,17 @@
         {{- '<!-- Share button -->' -}}
         <div class="pdp__share-wrap">
           <button class="pdp__share-btn" id="pdp-share" type="button" aria-label="Compartir producto">
-            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="15"
+              height="15"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.2"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
               <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
               <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
             </svg>
@@ -260,13 +328,25 @@
 
         {{- '<!-- Accordion: Description / Ingredients / Nutrition -->' -}}
         <div class="pdp__accordions">
-
           {{- '<!-- Description -->' -}}
           <details class="pdp__accordion" open>
             <summary class="pdp__accordion-trigger">
               <span class="pdp__accordion-icon" aria-hidden="true">📝</span>
               <span>Descripción</span>
-              <svg class="pdp__accordion-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+              <svg
+                class="pdp__accordion-chevron"
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                aria-hidden="true"
+              >
+                <path d="m6 9 6 6 6-6"/>
+              </svg>
             </summary>
             <div class="pdp__accordion-body rte">
               {{ product.description }}
@@ -279,7 +359,20 @@
               <summary class="pdp__accordion-trigger">
                 <span class="pdp__accordion-icon" aria-hidden="true">🌿</span>
                 <span>Ingredientes</span>
-                <svg class="pdp__accordion-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+                <svg
+                  class="pdp__accordion-chevron"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  aria-hidden="true"
+                >
+                  <path d="m6 9 6 6 6-6"/>
+                </svg>
               </summary>
               <div class="pdp__accordion-body">
                 <p class="pdp__ingredients-text">{{ product.metafields.custom.ingredients }}</p>
@@ -293,13 +386,28 @@
               <summary class="pdp__accordion-trigger">
                 <span class="pdp__accordion-icon" aria-hidden="true">💪</span>
                 <span>Información Nutricional</span>
-                <svg class="pdp__accordion-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+                <svg
+                  class="pdp__accordion-chevron"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  aria-hidden="true"
+                >
+                  <path d="m6 9 6 6 6-6"/>
+                </svg>
               </summary>
               <div class="pdp__accordion-body">
                 <div class="pdp__nutrition-table">
                   <div class="pdp__nutrition-header">
                     <span>Información Nutricional</span>
-                    <span class="pdp__nutrition-serving">{{ product.metafields.custom.serving_size | default: 'por 100g' }}</span>
+                    <span class="pdp__nutrition-serving">
+                      {{- product.metafields.custom.serving_size | default: 'por 100g' -}}
+                    </span>
                   </div>
                   <div class="pdp__nutrition-body rte">
                     {{ product.metafields.custom.nutrition_facts }}
@@ -314,246 +422,348 @@
             <summary class="pdp__accordion-trigger">
               <span class="pdp__accordion-icon" aria-hidden="true">🚚</span>
               <span>Envío y devoluciones</span>
-              <svg class="pdp__accordion-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+              <svg
+                class="pdp__accordion-chevron"
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                aria-hidden="true"
+              >
+                <path d="m6 9 6 6 6-6"/>
+              </svg>
             </summary>
             <div class="pdp__accordion-body">
-              <p>Enviamos a toda la República Mexicana. Los pedidos se procesan en 1–2 días hábiles. Si tienes algún problema con tu pedido, contáctanos y lo resolvemos sin complicaciones.</p>
+              <p>
+                Enviamos a toda la República Mexicana. Los pedidos se procesan en 1–2 días hábiles. Si tienes algún
+                problema con tu pedido, contáctanos y lo resolvemos sin complicaciones.
+              </p>
             </div>
           </details>
-
-        </div>{{- '<!-- /accordions -->' -}}
-
-      </div>{{- '<!-- /info -->' -}}
-    </div>{{- '<!-- /layout -->' -}}
-  </div>{{- '<!-- /inner -->' -}}
-</div>{{- '<!-- /pdp -->' -}}
+        </div>
+        {{- '<!-- /accordions -->' -}}
+      </div>
+      {{- '<!-- /info -->' -}}
+    </div>
+    {{- '<!-- /layout -->' -}}
+  </div>
+  {{- '<!-- /inner -->' -}}
+</div>
+{{- '<!-- /pdp -->' -}}
 
 <script>
-(function () {
-  // ── Gallery image switcher ───────────────────────────────
-  var thumbs   = document.querySelectorAll('.pdp__thumb');
-  var mainImg  = document.getElementById('pdp-main-img');
+  (function () {
+    // ── Gallery image switcher ───────────────────────────────
+    const thumbs = document.querySelectorAll('.pdp__thumb');
+    const mainImg = document.getElementById('pdp-main-img');
 
-  thumbs.forEach(function (thumb) {
-    thumb.addEventListener('click', function () {
-      if (!mainImg) return;
+    thumbs.forEach((thumb) => {
+      thumb.addEventListener('click', () => {
+        if (!mainImg) return;
 
-      // Fade out
-      mainImg.style.opacity = '0';
-      mainImg.style.transform = 'scale(0.97)';
+        // Fade out
+        mainImg.style.opacity = '0';
+        mainImg.style.transform = 'scale(0.97)';
 
-      setTimeout(function () {
-        mainImg.src = thumb.dataset.src;
-        mainImg.alt = thumb.dataset.alt || '';
-        // Fade in
-        mainImg.style.opacity = '1';
-        mainImg.style.transform = 'scale(1)';
-      }, 160);
+        setTimeout(() => {
+          mainImg.src = thumb.dataset.src;
+          mainImg.alt = thumb.dataset.alt || '';
+          // Fade in
+          mainImg.style.opacity = '1';
+          mainImg.style.transform = 'scale(1)';
+        }, 160);
 
-      thumbs.forEach(function (t) { t.classList.remove('pdp__thumb--active'); });
-      thumb.classList.add('pdp__thumb--active');
-    });
-  });
-
-  // ── Quantity stepper ─────────────────────────────────────
-  var qtyInput = document.getElementById('pdp-qty');
-  var minusBtn = document.getElementById('pdp-qty-minus');
-  var plusBtn  = document.getElementById('pdp-qty-plus');
-
-  function updateQty(delta) {
-    if (!qtyInput) return;
-    var current = parseInt(qtyInput.value, 10) || 1;
-    var min     = parseInt(qtyInput.min, 10) || 1;
-    var max     = parseInt(qtyInput.max, 10) || 999;
-    var next    = Math.min(Math.max(current + delta, min), max);
-    qtyInput.value = next;
-
-    // Animate input
-    qtyInput.style.transform = 'scale(1.15)';
-    setTimeout(function () { qtyInput.style.transform = 'scale(1)'; }, 150);
-
-    if (minusBtn) minusBtn.disabled = next <= min;
-    if (plusBtn)  plusBtn.disabled  = next >= max;
-  }
-
-  if (minusBtn) {
-    minusBtn.disabled = true; // starts at 1
-    minusBtn.addEventListener('click', function () { updateQty(-1); });
-  }
-  if (plusBtn)  plusBtn.addEventListener('click',  function () { updateQty(1);  });
-
-  // ── Variant selector ─────────────────────────────────────
-  var variantInputs = document.querySelectorAll('.pdp__pill-input');
-  var variantIdInput = document.getElementById('pdp-variant-id');
-  var priceBlock   = document.getElementById('pdp-price');
-  var addToCart    = document.getElementById('pdp-add-to-cart');
-  var stockAlert   = document.getElementById('pdp-stock');
-
-  if (variantInputs.length && variantIdInput) {
-    variantInputs.forEach(function (input) {
-      input.addEventListener('change', function () {
-        // Build selected options map
-        var selectedOptions = {};
-        document.querySelectorAll('.pdp__pill-input:checked').forEach(function (checked) {
-          selectedOptions['option' + checked.dataset.optionPosition] = checked.value;
-        });
-
-        // Find matching variant via Shopify JS (product JSON)
-        fetch(window.location.pathname + '.js')
-          .then(function (res) { return res.json(); })
-          .then(function (data) {
-            var match = data.variants.find(function (v) {
-              return Object.keys(selectedOptions).every(function (key) {
-                var pos = parseInt(key.replace('option', ''), 10);
-                return v['option' + pos] === selectedOptions[key];
-              });
-            });
-
-            if (!match) return;
-
-            variantIdInput.value = match.id;
-
-            // Update price display
-            if (priceBlock) {
-              var priceEl   = priceBlock.querySelector('.pdp__price');
-              var compareEl = priceBlock.querySelector('.pdp__compare-price');
-              var badgeEl   = priceBlock.querySelector('.pdp__discount-badge');
-              var fmt = function (cents) {
-                return '$' + (cents / 100).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' MXN';
-              };
-
-              if (priceEl) priceEl.textContent = fmt(match.price);
-
-              if (match.compare_at_price && match.compare_at_price > match.price) {
-                if (compareEl) compareEl.textContent = fmt(match.compare_at_price);
-                else {
-                  var s = document.createElement('s');
-                  s.className = 'pdp__compare-price';
-                  s.textContent = fmt(match.compare_at_price);
-                  priceEl.after(s);
-                }
-              } else {
-                if (compareEl) compareEl.remove();
-                if (badgeEl)   badgeEl.remove();
-              }
-            }
-
-            // Update add to cart availability
-            if (addToCart) {
-              addToCart.disabled = !match.available;
-              addToCart.querySelector('span') || (addToCart.lastChild.textContent = match.available ? 'Agregar al carrito' : 'Agotado');
-            }
-
-            // Update qty max
-            if (qtyInput && match.inventory_management === 'shopify') {
-              qtyInput.max = match.inventory_quantity;
-            }
-          })
-          .catch(function () {});
+        thumbs.forEach((t) => t.classList.remove('pdp__thumb--active'));
+        thumb.classList.add('pdp__thumb--active');
       });
     });
-  }
 
-  // ── Share button ─────────────────────────────────────────
-  var shareBtn     = document.getElementById('pdp-share');
-  var shareConfirm = document.getElementById('pdp-share-confirm');
+    // ── Quantity stepper ─────────────────────────────────────
+    const qtyInput = document.getElementById('pdp-qty');
+    const minusBtn = document.getElementById('pdp-qty-minus');
+    const plusBtn = document.getElementById('pdp-qty-plus');
 
-  if (shareBtn) {
-    shareBtn.addEventListener('click', function () {
-      var shareData = {
-        title: document.title,
-        url: window.location.href
-      };
+    function updateQty(delta) {
+      if (!qtyInput) return;
+      const current = parseInt(qtyInput.value, 10) || 1;
+      const min = parseInt(qtyInput.min, 10) || 1;
+      const max = parseInt(qtyInput.max, 10) || 999;
+      const next = Math.min(Math.max(current + delta, min), max);
+      qtyInput.value = next;
 
-      if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
-        navigator.share(shareData).catch(function () {});
-      } else {
-        // Fallback: copy to clipboard
-        navigator.clipboard.writeText(window.location.href).then(function () {
-          if (shareConfirm) {
-            shareConfirm.hidden = false;
-            setTimeout(function () { shareConfirm.hidden = true; }, 2500);
-          }
-        }).catch(function () {});
-      }
+      // Animate input
+      qtyInput.style.transform = 'scale(1.15)';
+      setTimeout(() => {
+        qtyInput.style.transform = 'scale(1)';
+      }, 150);
 
-      // Bounce animation
-      shareBtn.style.transform = 'scale(0.92)';
-      setTimeout(function () { shareBtn.style.transform = 'scale(1)'; }, 180);
-    });
-  }
+      if (minusBtn) minusBtn.disabled = next <= min;
+      if (plusBtn) plusBtn.disabled = next >= max;
+    }
 
-  // ── Accordion smooth height animation ───────────────────
-  document.querySelectorAll('.pdp__accordion').forEach(function (details) {
-    var summary = details.querySelector('summary');
-    var body    = details.querySelector('.pdp__accordion-body');
-    if (!summary || !body) return;
+    if (minusBtn) {
+      minusBtn.disabled = true; // starts at 1
+      minusBtn.addEventListener('click', () => updateQty(-1));
+    }
+    if (plusBtn) plusBtn.addEventListener('click', () => updateQty(1));
 
-    summary.addEventListener('click', function (e) {
-      e.preventDefault();
-      if (details.open) {
-        body.style.maxHeight = body.scrollHeight + 'px';
-        requestAnimationFrame(function () {
-          body.style.maxHeight = '0';
-          body.style.opacity   = '0';
-        });
-        setTimeout(function () { details.open = false; }, 300);
-      } else {
-        details.open = true;
-        body.style.maxHeight = '0';
-        body.style.opacity   = '0';
-        requestAnimationFrame(function () {
-          requestAnimationFrame(function () {
-            body.style.maxHeight = body.scrollHeight + 'px';
-            body.style.opacity   = '1';
+    // ── Variant selector ─────────────────────────────────────
+    const variantInputs = document.querySelectorAll('.pdp__pill-input');
+    const variantIdInput = document.getElementById('pdp-variant-id');
+    const priceBlock = document.getElementById('pdp-price');
+    const addToCart = document.getElementById('pdp-add-to-cart');
+    const stockAlert = document.getElementById('pdp-stock');
+
+    if (variantInputs.length && variantIdInput) {
+      variantInputs.forEach((input) => {
+        input.addEventListener('change', () => {
+          // Build selected options map
+          const selectedOptions = {};
+          document.querySelectorAll('.pdp__pill-input:checked').forEach((checked) => {
+            selectedOptions['option' + checked.dataset.optionPosition] = checked.value;
           });
-        });
-        setTimeout(function () { body.style.maxHeight = 'none'; }, 310);
-      }
-    });
-  });
 
-})();
+          // Find matching variant via Shopify JS (product JSON)
+          fetch(window.location.pathname + '.js')
+            .then((res) => res.json())
+            .then((data) => {
+              const match = data.variants.find((v) => {
+                return Object.keys(selectedOptions).every((key) => {
+                  const pos = parseInt(key.replace('option', ''), 10);
+                  return v['option' + pos] === selectedOptions[key];
+                });
+              });
+
+              if (!match) return;
+
+              variantIdInput.value = match.id;
+
+              // Update price display
+              if (priceBlock) {
+                const priceEl = priceBlock.querySelector('.pdp__price');
+                const compareEl = priceBlock.querySelector('.pdp__compare-price');
+                const badgeEl = priceBlock.querySelector('.pdp__discount-badge');
+                const fmt = (cents) => '$' + (cents / 100).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' MXN';
+
+                if (priceEl) priceEl.textContent = fmt(match.price);
+
+                if (match.compare_at_price && match.compare_at_price > match.price) {
+                  if (compareEl) compareEl.textContent = fmt(match.compare_at_price);
+                  else {
+                    const s = document.createElement('s');
+                    s.className = 'pdp__compare-price';
+                    s.textContent = fmt(match.compare_at_price);
+                    priceEl.after(s);
+                  }
+                } else {
+                  if (compareEl) compareEl.remove();
+                  if (badgeEl) badgeEl.remove();
+                }
+              }
+
+              // Update add to cart availability
+              if (addToCart) {
+                addToCart.disabled = !match.available;
+                addToCart.querySelector('span') ||
+                  (addToCart.lastChild.textContent = match.available ? 'Agregar al carrito' : 'Agotado');
+              }
+
+              // Update qty max
+              if (qtyInput && match.inventory_management === 'shopify') {
+                qtyInput.max = match.inventory_quantity;
+              }
+            })
+            .catch(() => {});
+        });
+      });
+    }
+
+    // ── Share button ─────────────────────────────────────────
+    const shareBtn = document.getElementById('pdp-share');
+    const shareConfirm = document.getElementById('pdp-share-confirm');
+
+    if (shareBtn) {
+      shareBtn.addEventListener('click', () => {
+        const shareData = {
+          title: document.title,
+          url: window.location.href,
+        };
+
+        if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+          navigator.share(shareData).catch(() => {});
+        } else {
+          // Fallback: copy to clipboard
+          navigator.clipboard
+            .writeText(window.location.href)
+            .then(() => {
+              if (shareConfirm) {
+                shareConfirm.hidden = false;
+                setTimeout(() => {
+                  shareConfirm.hidden = true;
+                }, 2500);
+              }
+            })
+            .catch(() => {});
+        }
+
+        // Bounce animation
+        shareBtn.style.transform = 'scale(0.92)';
+        setTimeout(() => {
+          shareBtn.style.transform = 'scale(1)';
+        }, 180);
+      });
+    }
+
+    // ── Accordion smooth height animation ───────────────────
+    document.querySelectorAll('.pdp__accordion').forEach((details) => {
+      const summary = details.querySelector('summary');
+      const body = details.querySelector('.pdp__accordion-body');
+      if (!summary || !body) return;
+
+      summary.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (details.open) {
+          body.style.maxHeight = body.scrollHeight + 'px';
+          requestAnimationFrame(() => {
+            body.style.maxHeight = '0';
+            body.style.opacity = '0';
+          });
+          setTimeout(() => {
+            details.open = false;
+          }, 300);
+        } else {
+          details.open = true;
+          body.style.maxHeight = '0';
+          body.style.opacity = '0';
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              body.style.maxHeight = body.scrollHeight + 'px';
+              body.style.opacity = '1';
+            });
+          });
+          setTimeout(() => {
+            body.style.maxHeight = 'none';
+          }, 310);
+        }
+      });
+    });
+
+    // ── Add to Cart (AJAX + Drawer) ─────────────────────────
+    const productForm = document.getElementById('pdp-form');
+    if (productForm && addToCart) {
+      productForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const prevText = addToCart.lastChild.textContent;
+        addToCart.disabled = true;
+        addToCart.lastChild.textContent = 'Agregando...';
+
+        const formData = new FormData(productForm);
+
+        fetch((window.Shopify?.routes?.root || '/') + 'cart/add.js', {
+          method: 'POST',
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+          },
+          body: formData,
+        })
+          .then((res) => {
+            if (!res.ok) throw new Error('Error agregando al carrito');
+            return res.json();
+          })
+          .then(() => {
+            // Trigger drawer update rendering
+            document.dispatchEvent(new CustomEvent('cart:updated'));
+
+            // Open drawer
+            if (window.__cartDrawer) {
+              window.__cartDrawer.open();
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+            alert('Hubo un error intentando agregar este producto al carrito.');
+          })
+          .finally(() => {
+            addToCart.disabled = false;
+            addToCart.lastChild.textContent = prevText;
+          });
+      });
+    }
+  })();
 </script>
 
 {% stylesheet %}
   /* ── Keyframes ──────────────────────────────────────── */
   @keyframes pdp-pop-in {
-    from { opacity: 0; transform: translateY(22px) scale(0.96); }
-    to   { opacity: 1; transform: translateY(0)    scale(1);    }
+    from {
+      opacity: 0;
+      transform: translateY(22px) scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
   }
 
   @keyframes pdp-slide-in {
-    from { opacity: 0; transform: translateX(24px); }
-    to   { opacity: 1; transform: translateX(0);    }
+    from {
+      opacity: 0;
+      transform: translateX(24px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
   }
 
   @keyframes pdp-star-blink {
-    0%, 100% { opacity: 0.45; transform: scale(1)    rotate(var(--r, 0deg)); }
-    50%       { opacity: 0.85; transform: scale(1.35) rotate(var(--r, 0deg)); }
+    0%,
+    100% {
+      opacity: 0.45;
+      transform: scale(1) rotate(var(--r, 0deg));
+    }
+    50% {
+      opacity: 0.85;
+      transform: scale(1.35) rotate(var(--r, 0deg));
+    }
   }
 
   @keyframes pdp-stock-flash {
-    0%, 100% { opacity: 1;   }
-    50%       { opacity: 0.6; }
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.6;
+    }
   }
 
   @keyframes pdp-cart-bounce {
-    0%, 100% { transform: translateY(0); }
-    40%       { transform: translateY(-4px); }
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    40% {
+      transform: translateY(-4px);
+    }
   }
 
   /* ── Wrapper ────────────────────────────────────────── */
   .pdp {
     position: relative;
-    background: var(--color-light-cream, #FFF6E5);
+    background: var(--color-light-cream, #fff6e5);
     overflow: hidden;
   }
 
   .pdp__bg-texture {
     position: absolute;
     inset: 0;
-    background-image: radial-gradient(circle, rgba(2,150,180,0.08) 2px, transparent 2px);
+    background-image: radial-gradient(circle, rgba(2, 150, 180, 0.08) 2px, transparent 2px);
     background-size: 28px 28px;
     pointer-events: none;
   }
@@ -595,7 +805,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.85rem;
-    animation: pdp-pop-in 0.5s cubic-bezier(.34,1.56,.64,1) both;
+    animation: pdp-pop-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
   }
 
   /* Main image */
@@ -606,7 +816,7 @@
     border: 2.5px solid #1a1a1a;
     box-shadow: 7px 8px 0px 0px #1a1a1a;
     overflow: hidden;
-    background: var(--color-cream, #FCECC9);
+    background: var(--color-cream, #fcecc9);
     aspect-ratio: 1 / 1;
   }
 
@@ -624,14 +834,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: rgba(51,51,51,0.25);
+    color: rgba(51, 51, 51, 0.25);
   }
 
   /* Shine overlay */
   .pdp__image-shine {
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.22) 0%, transparent 55%);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.22) 0%, transparent 55%);
     pointer-events: none;
   }
 
@@ -642,7 +852,7 @@
     left: 1rem;
     z-index: 2;
     padding: 0.28rem 0.7rem;
-    background: var(--color-accent, #F86D4E);
+    background: var(--color-accent, #f86d4e);
     color: #fff;
     font-family: var(--font-heading-family), 'Fredoka', sans-serif;
     font-size: 0.78rem;
@@ -665,13 +875,11 @@
     width: 4.5rem;
     height: 4.5rem;
     border-radius: 0.9rem;
-    border: 2px solid rgba(26,26,26,0.18);
+    border: 2px solid rgba(26, 26, 26, 0.18);
     overflow: hidden;
-    background: var(--color-cream, #FCECC9);
+    background: var(--color-cream, #fcecc9);
     cursor: pointer;
-    transition: border-color 0.18s ease,
-                box-shadow 0.18s ease,
-                transform 0.2s cubic-bezier(.34,1.56,.64,1);
+    transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
     padding: 0;
   }
 
@@ -683,7 +891,7 @@
   }
 
   .pdp__thumb:hover {
-    border-color: var(--color-secondary, #0296B4);
+    border-color: var(--color-secondary, #0296b4);
     transform: translateY(-3px);
     box-shadow: 2px 3px 0px 0px #1a1a1a;
   }
@@ -701,7 +909,7 @@
     display: flex;
     flex-direction: column;
     gap: 1.1rem;
-    animation: pdp-slide-in 0.5s cubic-bezier(.34,1.56,.64,1) 0.1s both;
+    animation: pdp-slide-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
   }
 
   /* Eyebrow */
@@ -720,7 +928,7 @@
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--color-secondary, #0296B4);
+    color: var(--color-secondary, #0296b4);
   }
 
   /* Title */
@@ -746,13 +954,20 @@
     gap: 0.1rem;
   }
 
-  .pdp__star { width: 1rem; height: 1rem; }
-  .pdp__star--full  { color: var(--color-accent, #F86D4E); }
-  .pdp__star--empty { color: #d6cfc4; }
+  .pdp__star {
+    width: 1rem;
+    height: 1rem;
+  }
+  .pdp__star--full {
+    color: var(--color-accent, #f86d4e);
+  }
+  .pdp__star--empty {
+    color: #d6cfc4;
+  }
 
   .pdp__rating-count {
     font-size: 0.82rem;
-    color: rgba(51,51,51,0.55);
+    color: rgba(51, 51, 51, 0.55);
   }
 
   /* Price block */
@@ -767,15 +982,17 @@
     font-family: var(--font-heading-family), 'Fredoka', sans-serif;
     font-size: 2rem;
     font-weight: 700;
-    color: var(--color-secondary, #0296B4);
+    color: var(--color-secondary, #0296b4);
     line-height: 1;
   }
 
-  .pdp__price--sale { color: var(--color-accent, #F86D4E); }
+  .pdp__price--sale {
+    color: var(--color-accent, #f86d4e);
+  }
 
   .pdp__compare-price {
     font-size: 1.1rem;
-    color: rgba(51,51,51,0.4);
+    color: rgba(51, 51, 51, 0.4);
   }
 
   .pdp__discount-badge {
@@ -783,12 +1000,12 @@
     align-items: center;
     padding: 0.2rem 0.55rem;
     background: #fff0ee;
-    border: 2px solid var(--color-accent, #F86D4E);
+    border: 2px solid var(--color-accent, #f86d4e);
     border-radius: 999px;
     font-family: var(--font-heading-family), 'Fredoka', sans-serif;
     font-size: 0.78rem;
     font-weight: 700;
-    color: var(--color-accent, #F86D4E);
+    color: var(--color-accent, #f86d4e);
   }
 
   /* Stock urgency */
@@ -807,14 +1024,19 @@
     animation: pdp-stock-flash 2.4s ease-in-out infinite;
   }
 
-  .pdp__stock-alert strong { color: var(--color-accent, #F86D4E); }
+  .pdp__stock-alert strong {
+    color: var(--color-accent, #f86d4e);
+  }
 
-  .pdp__stock-alert svg { color: var(--color-accent, #F86D4E); flex-shrink: 0; }
+  .pdp__stock-alert svg {
+    color: var(--color-accent, #f86d4e);
+    flex-shrink: 0;
+  }
 
   .pdp__stock-bar {
     width: 100%;
     height: 5px;
-    background: rgba(248,109,78,0.15);
+    background: rgba(248, 109, 78, 0.15);
     border-radius: 999px;
     overflow: hidden;
     margin-top: 0.2rem;
@@ -822,7 +1044,7 @@
 
   .pdp__stock-fill {
     height: 100%;
-    background: var(--color-accent, #F86D4E);
+    background: var(--color-accent, #f86d4e);
     border-radius: 999px;
     transition: width 0.6s ease;
   }
@@ -834,7 +1056,11 @@
     gap: 0.85rem;
   }
 
-  .pdp__option-group { display: flex; flex-direction: column; gap: 0.5rem; }
+  .pdp__option-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
 
   .pdp__option-label {
     margin: 0;
@@ -843,41 +1069,47 @@
     font-weight: 700;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: rgba(51,51,51,0.65);
+    color: rgba(51, 51, 51, 0.65);
   }
 
-  .pdp__option-pills { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+  .pdp__option-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
 
   .pdp__pill-input {
     position: absolute;
-    width: 1px; height: 1px;
-    margin: -1px; overflow: hidden;
-    clip: rect(0,0,0,0);
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border-width: 0;
   }
 
-  .pdp__pill-label { cursor: pointer; }
+  .pdp__pill-label {
+    cursor: pointer;
+  }
 
   .pdp__pill-text {
     display: inline-flex;
     align-items: center;
     padding: 0.4rem 1rem;
     background: #fff;
-    border: 2px solid rgba(26,26,26,0.22);
+    border: 2px solid rgba(26, 26, 26, 0.22);
     border-radius: 999px;
     font-family: var(--font-heading-family), 'Fredoka', sans-serif;
     font-size: 0.88rem;
     font-weight: 700;
     color: var(--color-foreground, #333);
-    transition: border-color 0.18s ease,
-                background 0.18s ease,
-                box-shadow 0.18s ease,
-                transform 0.18s cubic-bezier(.34,1.56,.64,1);
+    transition: border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease,
+      transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
   .pdp__pill-input:checked + .pdp__pill-text {
-    background: var(--color-secondary, #0296B4);
+    background: var(--color-secondary, #0296b4);
     border-color: #1a1a1a;
     color: #fff;
     box-shadow: 3px 3px 0px 0px #1a1a1a;
@@ -885,7 +1117,7 @@
   }
 
   .pdp__pill-label:hover .pdp__pill-text {
-    border-color: var(--color-secondary, #0296B4);
+    border-color: var(--color-secondary, #0296b4);
     transform: translateY(-1px);
   }
 
@@ -903,7 +1135,7 @@
     font-weight: 700;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: rgba(51,51,51,0.65);
+    color: rgba(51, 51, 51, 0.65);
     white-space: nowrap;
   }
 
@@ -931,27 +1163,37 @@
     font-size: 1.25rem;
     font-weight: 700;
     line-height: 1;
-    transition: background 0.15s ease, color 0.15s ease, transform 0.15s cubic-bezier(.34,1.56,.64,1);
+    transition: background 0.15s ease, color 0.15s ease, transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
     flex-shrink: 0;
   }
 
   .pdp__qty-btn:hover:not(:disabled) {
-    background: var(--color-secondary, #0296B4);
+    background: var(--color-secondary, #0296b4);
     color: #fff;
   }
 
-  .pdp__qty-btn:active:not(:disabled) { transform: scale(0.9); }
+  .pdp__qty-btn:active:not(:disabled) {
+    transform: scale(0.9);
+  }
 
-  .pdp__qty-btn:disabled { opacity: 0.3; cursor: default; }
+  .pdp__qty-btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
 
   .pdp__qty-btn:hover:not(:disabled) {
-    background: var(--color-secondary, #0296B4);
+    background: var(--color-secondary, #0296b4);
     color: #fff;
   }
 
-  .pdp__qty-btn:active:not(:disabled) { transform: scale(0.9); }
+  .pdp__qty-btn:active:not(:disabled) {
+    transform: scale(0.9);
+  }
 
-  .pdp__qty-btn:disabled { opacity: 0.3; cursor: default; }
+  .pdp__qty-btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
 
   .pdp__qty-btn svg {
     width: 16px;
@@ -962,8 +1204,8 @@
   .pdp__qty-input {
     width: 3rem;
     border: none;
-    border-left: 1.5px solid rgba(26,26,26,0.1);
-    border-right: 1.5px solid rgba(26,26,26,0.1);
+    border-left: 1.5px solid rgba(26, 26, 26, 0.1);
+    border-right: 1.5px solid rgba(26, 26, 26, 0.1);
     text-align: center;
     font-family: var(--font-heading-family), 'Fredoka', sans-serif;
     font-size: 1.05rem;
@@ -971,11 +1213,13 @@
     color: var(--color-foreground, #333);
     background: transparent;
     outline: none;
-    transition: transform 0.15s cubic-bezier(.34,1.56,.64,1);
+    transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
   .pdp__qty-input::-webkit-inner-spin-button,
-  .pdp__qty-input::-webkit-outer-spin-button { -webkit-appearance: none; }
+  .pdp__qty-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+  }
 
   /* ── CTA buttons ────────────────────────────────────── */
   .pdp__cta-group {
@@ -997,9 +1241,8 @@
     font-weight: 700;
     letter-spacing: 0.02em;
     cursor: pointer;
-    transition: transform 0.2s cubic-bezier(.34,1.56,.64,1),
-                box-shadow 0.2s cubic-bezier(.34,1.56,.64,1),
-                background 0.15s ease;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+      background 0.15s ease;
   }
 
   .pdp__btn:disabled {
@@ -1008,7 +1251,7 @@
   }
 
   .pdp__btn--cart {
-    background: var(--color-accent, #F86D4E);
+    background: var(--color-accent, #f86d4e);
     color: #fff;
     border: 2.5px solid #1a1a1a;
     box-shadow: 5px 5px 0px 0px #1a1a1a;
@@ -1036,8 +1279,7 @@
     font-family: var(--font-heading-family), 'Fredoka', sans-serif !important;
     font-size: 1.05rem !important;
     font-weight: 700 !important;
-    transition: transform 0.2s cubic-bezier(.34,1.56,.64,1),
-                box-shadow 0.2s cubic-bezier(.34,1.56,.64,1) !important;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
   }
 
   .pdp__btn-buy-wrap .shopify-payment-button__button:hover {
@@ -1058,12 +1300,12 @@
     gap: 0.45rem;
     padding: 0.55rem 0.75rem;
     background: #fff;
-    border: 2px solid rgba(26,26,26,0.12);
+    border: 2px solid rgba(26, 26, 26, 0.12);
     border-radius: 0.85rem;
     font-size: 0.8rem;
     font-weight: 600;
-    color: rgba(51,51,51,0.75);
-    transition: border-color 0.18s ease, transform 0.2s cubic-bezier(.34,1.56,.64,1);
+    color: rgba(51, 51, 51, 0.75);
+    transition: border-color 0.18s ease, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
   .pdp__trust-item:hover {
@@ -1071,7 +1313,11 @@
     transform: translateY(-2px);
   }
 
-  .pdp__trust-icon { font-size: 1rem; line-height: 1; flex-shrink: 0; }
+  .pdp__trust-icon {
+    font-size: 1rem;
+    line-height: 1;
+    flex-shrink: 0;
+  }
 
   /* ── Share button ───────────────────────────────────── */
   .pdp__share-wrap {
@@ -1086,22 +1332,20 @@
     gap: 0.45rem;
     padding: 0.45rem 1rem;
     background: #fff;
-    border: 2px solid rgba(26,26,26,0.22);
+    border: 2px solid rgba(26, 26, 26, 0.22);
     border-radius: 999px;
     font-family: var(--font-heading-family), 'Fredoka', sans-serif;
     font-size: 0.85rem;
     font-weight: 700;
-    color: rgba(51,51,51,0.65);
+    color: rgba(51, 51, 51, 0.65);
     cursor: pointer;
-    transition: border-color 0.18s ease,
-                color 0.18s ease,
-                transform 0.2s cubic-bezier(.34,1.56,.64,1),
-                box-shadow 0.18s ease;
+    transition: border-color 0.18s ease, color 0.18s ease, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+      box-shadow 0.18s ease;
   }
 
   .pdp__share-btn:hover {
     border-color: #1a1a1a;
-    color: var(--color-secondary, #0296B4);
+    color: var(--color-secondary, #0296b4);
     box-shadow: 2px 2px 0px 0px #1a1a1a;
     transform: translateY(-2px);
   }
@@ -1110,7 +1354,7 @@
     font-family: var(--font-heading-family), 'Fredoka', sans-serif;
     font-size: 0.85rem;
     font-weight: 700;
-    color: var(--color-secondary, #0296B4);
+    color: var(--color-secondary, #0296b4);
   }
 
   /* ── Accordions ─────────────────────────────────────── */
@@ -1125,10 +1369,12 @@
   }
 
   .pdp__accordion {
-    border-bottom: 1.5px solid rgba(26,26,26,0.1);
+    border-bottom: 1.5px solid rgba(26, 26, 26, 0.1);
   }
 
-  .pdp__accordion:last-child { border-bottom: none; }
+  .pdp__accordion:last-child {
+    border-bottom: none;
+  }
 
   .pdp__accordion-trigger {
     display: flex;
@@ -1147,29 +1393,39 @@
     user-select: none;
   }
 
-  .pdp__accordion-trigger::-webkit-details-marker { display: none; }
-
-  .pdp__accordion-trigger:hover { background: var(--color-light-cream, #FFF6E5); }
-
-  .pdp__accordion[open] .pdp__accordion-trigger {
-    background: var(--color-cream, #FCECC9);
-    color: var(--color-accent, #F86D4E);
+  .pdp__accordion-trigger::-webkit-details-marker {
+    display: none;
   }
 
-  .pdp__accordion-icon { font-size: 1rem; line-height: 1; flex-shrink: 0; }
+  .pdp__accordion-trigger:hover {
+    background: var(--color-light-cream, #fff6e5);
+  }
 
-  .pdp__accordion-trigger > span:nth-child(2) { flex: 1; }
+  .pdp__accordion[open] .pdp__accordion-trigger {
+    background: var(--color-cream, #fcecc9);
+    color: var(--color-accent, #f86d4e);
+  }
+
+  .pdp__accordion-icon {
+    font-size: 1rem;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .pdp__accordion-trigger > span:nth-child(2) {
+    flex: 1;
+  }
 
   .pdp__accordion-chevron {
     margin-left: auto;
     flex-shrink: 0;
     transition: transform 0.25s ease;
-    color: rgba(51,51,51,0.45);
+    color: rgba(51, 51, 51, 0.45);
   }
 
   .pdp__accordion[open] .pdp__accordion-chevron {
     transform: rotate(180deg);
-    color: var(--color-accent, #F86D4E);
+    color: var(--color-accent, #f86d4e);
   }
 
   .pdp__accordion-body {
@@ -1177,12 +1433,14 @@
     background: #fff;
     font-size: 0.9rem;
     line-height: 1.65;
-    color: rgba(51,51,51,0.8);
+    color: rgba(51, 51, 51, 0.8);
     overflow: hidden;
     transition: max-height 0.28s ease, opacity 0.25s ease;
   }
 
-  .pdp__accordion-body p { margin: 0; }
+  .pdp__accordion-body p {
+    margin: 0;
+  }
 
   /* Ingredients */
   .pdp__ingredients-text {
@@ -1203,7 +1461,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 0.6rem 0.85rem;
-    background: var(--color-secondary, #0296B4);
+    background: var(--color-secondary, #0296b4);
     color: #fff;
     font-family: var(--font-heading-family), 'Fredoka', sans-serif;
     font-size: 0.85rem;
@@ -1223,12 +1481,18 @@
   /* RTE reset inside accordion */
   .pdp__accordion-body.rte p,
   .pdp__accordion-body.rte ul,
-  .pdp__accordion-body.rte ol { margin: 0 0 0.5rem; }
+  .pdp__accordion-body.rte ol {
+    margin: 0 0 0.5rem;
+  }
 
   .pdp__accordion-body.rte ul,
-  .pdp__accordion-body.rte ol { padding-left: 1.25rem; }
+  .pdp__accordion-body.rte ol {
+    padding-left: 1.25rem;
+  }
 
-  .pdp__accordion-body.rte *:last-child { margin-bottom: 0; }
+  .pdp__accordion-body.rte *:last-child {
+    margin-bottom: 0;
+  }
 {% endstylesheet %}
 
 {% schema %}

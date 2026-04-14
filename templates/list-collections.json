@@ -11,7 +11,22 @@
   "sections": {
     "main": {
       "type": "collections-discovery",
-      "settings": {}
+      "blocks": {
+        "collection_row_4VGFym": {
+          "type": "collection_row",
+          "settings": {
+            "collection": "premios-para-perros",
+            "preview_count": 6
+          }
+        }
+      },
+      "block_order": [
+        "collection_row_4VGFym"
+      ],
+      "settings": {
+        "heading": "Nuestras colecciones",
+        "subheading": "Encuentra el snack perfecto para tu perro."
+      }
     }
   },
   "order": [

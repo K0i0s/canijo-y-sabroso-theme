@@ -60,7 +60,11 @@
             class="header-section__nav-link{% if template.name == 'collection' %} is-active{% endif %}"
             >Shop</a
           >
-          <a href="/pages/contact" class="header-section__nav-link">Contact</a>
+          <a
+            href="{{ blogs['news'].url | default: '/blogs/news' }}"
+            class="header-section__nav-link{% if template.name == 'blog' %} is-active{% endif %}"
+            >Blog</a
+          >
         {%- endif -%}
       </nav>
 
@@ -213,8 +217,11 @@
               <path d="m9 18 6-6-6-6"/>
             </svg>
           </a>
-          <a href="/pages/contact" class="header-section__drawer-link">
-            <span>Contact</span>
+          <a
+            href="{{ blogs['news'].url | default: '/blogs/news' }}"
+            class="header-section__drawer-link{% if template.name == 'blog' %} is-active{% endif %}"
+          >
+            <span>Blog</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"

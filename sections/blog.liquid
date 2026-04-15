@@ -1,31 +1,194 @@
 {% comment %}
-  This section is used in the blog template to render the blog page listing all
-  articles within a blog.
-
+  Blog listing section.
+  - Desktop: zig-zag layout (odd = image left, even = image right)
+  - Mobile: vertical scroll
+  - Max 5 articles per page
   https://shopify.dev/docs/storefronts/themes/architecture/templates/blog
 {% endcomment %}
 
-<h1>{{ blog.title }}</h1>
+<section class="blog-listing" id="blog-listing">
+  <div class="blog-listing__header">
+    <h1 class="blog-listing__title">{{ blog.title }}</h1>
+  </div>
 
-{% paginate blog.articles by 5 %}
-  {% for article in blog.articles %}
-    <div>
-      {% if article.image %}
-        {{ article.image | image_url: width: 1000 | image_tag }}
-      {% endif %}
-      <h2>
-        {{ article.title | link_to: article.url }}
-      </h2>
-      {% assign date = article.published_at | time_tag: format: 'date' %}
-      <p>{{ 'blog.article_metadata_html' | t: date: date, author: article.author }}</p>
-      <p>{{ article.excerpt }}</p>
-    </div>
-  {% endfor %}
+  {% paginate blog.articles by 5 %}
+    <ul class="blog-listing__list" role="list">
+      {% for article in blog.articles %}
+        <li class="blog-listing__item{% if forloop.index0 != 0 %} blog-listing__item--even{% if forloop.index0 == 0 %}{% endif %}{% cycle '', '', ' blog-listing__item--flip' %}{% endif %}">
+          {%- comment -%}
+            Zig-zag: every even-indexed article flips the layout.
+            We use a CSS class driven by :nth-child so the snippet stays layout-agnostic.
+          {%- endcomment -%}
+          {% render 'article-card', article: article %}
+        </li>
+      {% endfor %}
+    </ul>
 
-  {%- if paginate.pages > 1 -%}
-    {{- paginate | default_pagination -}}
-  {%- endif -%}
-{% endpaginate %}
+    {%- if paginate.pages > 1 -%}
+      <nav class="blog-listing__pagination" aria-label="Paginación">
+        {{- paginate | default_pagination -}}
+      </nav>
+    {%- endif -%}
+  {% endpaginate %}
+</section>
+
+{% stylesheet %}
+  /* ── Section wrapper ────────────────────────────────────── */
+  .blog-listing {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 3rem 1.25rem 5rem;
+  }
+
+  .blog-listing__header {
+    margin-bottom: 2.5rem;
+  }
+
+  .blog-listing__title {
+    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 800;
+    color: var(--color-foreground, #1a1a1a);
+    margin: 0;
+  }
+
+  /* ── List ────────────────────────────────────────────────── */
+  .blog-listing__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+  }
+
+  /* ── Mobile: card occupies full width ────────────────────── */
+  .blog-listing__item {
+    width: 100%;
+  }
+
+  /* On mobile keep it as a regular card (article-card handles its own layout) */
+
+  /* ── Desktop: zig-zag ──────────────────────────────────── */
+  @media (min-width: 768px) {
+    .blog-listing__item {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border-radius: 1.5rem;
+      border: 2.5px solid #1a1a1a;
+      box-shadow: 5px 6px 0px 0px #1a1a1a;
+      overflow: hidden;
+      transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .blog-listing__item:hover {
+      transform: translateY(-5px);
+      box-shadow: 8px 10px 0px 0px #1a1a1a;
+    }
+
+    /* Override card shell since the li *is* the card on desktop */
+    .blog-listing__item .acard {
+      border: none;
+      box-shadow: none;
+      border-radius: 0;
+      transform: none !important;
+    }
+
+    .blog-listing__item .acard__image-wrap {
+      padding-bottom: 0;
+      height: 100%;
+      min-height: 320px;
+      border-bottom: none;
+      border-right: 2.5px solid #1a1a1a;
+    }
+
+    /* Even items: flip the columns (image right, text left) */
+    .blog-listing__item:nth-child(even) .acard__link {
+      flex-direction: row-reverse;
+    }
+
+    .blog-listing__item:nth-child(odd) .acard__link {
+      flex-direction: row;
+    }
+
+    .blog-listing__item .acard__link {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      height: 100%;
+    }
+
+    .blog-listing__item:nth-child(even) .acard__image-wrap {
+      border-right: none;
+      border-left: 2.5px solid #1a1a1a;
+    }
+
+    .blog-listing__item .acard__body {
+      padding: 2rem 2.2rem;
+      justify-content: center;
+    }
+
+    .blog-listing__item .acard__title {
+      font-size: 1.45rem;
+      -webkit-line-clamp: 3;
+      line-clamp: 3;
+    }
+
+    .blog-listing__item .acard__excerpt {
+      -webkit-line-clamp: 4;
+      line-clamp: 4;
+    }
+  }
+
+  /* ── Pagination ─────────────────────────────────────────── */
+  .blog-listing__pagination {
+    margin-top: 3.5rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .blog-listing__pagination .pagination {
+    display: flex;
+    gap: 0.4rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .blog-listing__pagination .pagination li a,
+  .blog-listing__pagination .pagination li span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.5rem;
+    height: 2.5rem;
+    padding: 0 0.75rem;
+    border-radius: 0.75rem;
+    border: 2px solid #1a1a1a;
+    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-decoration: none;
+    color: var(--color-foreground, #1a1a1a);
+    background: #fff;
+    box-shadow: 3px 3px 0 #1a1a1a;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .blog-listing__pagination .pagination li a:hover {
+    transform: translateY(-2px);
+    box-shadow: 4px 5px 0 #1a1a1a;
+  }
+
+  .blog-listing__pagination .pagination li span.current {
+    background: var(--color-accent, #f86d4e);
+    color: #fff;
+    border-color: #1a1a1a;
+  }
+{% endstylesheet %}
 
 {% schema %}
 {

@@ -1,64 +1,366 @@
 {% comment %}
-  This section is used in the article template to render the article page, which
-  displays the full content of the blog post and can optionally include a
-  comments section for customers (not shown in this example).
-
+  Article page section.
+  - Title, date, author, share button (top)
+  - Featured image
+  - article.content
+  - Footer metadata: publish date, updated date, author, share button
+  - Other blogs section (≤3 random articles, excluding current)
   https://shopify.dev/docs/storefronts/themes/architecture/templates/article
 {% endcomment %}
 
-{% if article.image %}
-  {{ article.image | image_url: width: 1000 | image_tag }}
-{% endif %}
+<article class="article-page" itemscope itemtype="https://schema.org/Article">
+  {%- comment -%} ── Header ──────────────────────────────────────── {%- endcomment -%}
+  <header class="article-page__header">
+    <h1 class="article-page__title" itemprop="headline">{{ article.title }}</h1>
 
-<h1>{{ article.title }}</h1>
+    <div class="article-page__meta">
+      <div class="article-page__meta-group">
+        <span class="article-page__meta-label">Publicado</span>
+        <time
+          class="article-page__meta-value"
+          datetime="{{ article.published_at | date: '%Y-%m-%d' }}"
+          itemprop="datePublished"
+        >
+          {{ article.published_at | date: '%B %d, %Y' }}
+        </time>
+      </div>
 
-{% assign date = article.published_at | time_tag: format: 'date' %}
-<p>{{ 'blog.article_metadata_html' | t: date: date, author: article.author }}</p>
-
-{{ article.content }}
-
-{% if blog.comments_enabled? %}
-  <h2>{{ 'blog.article_comments' | t }}</h2>
-
-  <div id="comments">
-    {% paginate article.comments by 10 %}
-      {% for comment in article.comments %}
-        <div>
-          <p>{{ comment.author }}</p>
-          <p>
-            {{- comment.created_at | time_tag: format: 'date' -}}
-          </p>
-          <p>{{ comment.content }}</p>
+      {%- if article.metafields.custom.updated_at != blank -%}
+        <div class="article-page__meta-group">
+          <span class="article-page__meta-label">Actualizado</span>
+          <time class="article-page__meta-value">
+            {{ article.metafields.custom.updated_at }}
+          </time>
         </div>
-      {% endfor %}
+      {%- endif -%}
 
-      {{ paginate | default_pagination: anchor: 'comments' }}
-    {% endpaginate %}
+      <div class="article-page__meta-group">
+        <span class="article-page__meta-label">Autor</span>
+        <span class="article-page__meta-value" itemprop="author">{{ article.author }}</span>
+      </div>
+
+      <button
+        class="article-page__share-btn"
+        data-share-url="{{ shop.url }}{{ article.url }}"
+        data-share-title="{{ article.title | escape }}"
+        aria-label="Compartir artículo"
+        id="share-btn-top"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+        </svg>
+        Compartir
+      </button>
+    </div>
+  </header>
+
+  {%- comment -%} ── Feature image ────────────────────────────────── {%- endcomment -%}
+  {%- if article.image -%}
+    <div class="article-page__image-wrap">
+      <img
+        class="article-page__image"
+        src="{{ article.image | image_url: width: 1400 }}"
+        alt="{{ article.image.alt | escape | default: article.title | escape }}"
+        width="1400"
+        height="{{ 1400 | divided_by: article.image.aspect_ratio | round }}"
+        loading="eager"
+        decoding="async"
+        itemprop="image"
+      >
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} ── Content ──────────────────────────────────────── {%- endcomment -%}
+  <div class="article-page__content rte" itemprop="articleBody">
+    {{ article.content }}
   </div>
 
-  {% form 'new_comment', article %}
-    <h2>{{ 'blog.comment_form_title' | t }}</h2>
+  {%- comment -%} ── Footer metadata ───────────────────────────────── {%- endcomment -%}
+  <footer class="article-page__footer">
+    <div class="article-page__footer-inner">
+      <div class="article-page__meta">
+        <div class="article-page__meta-group">
+          <span class="article-page__meta-label">Publicado</span>
+          <time class="article-page__meta-value" datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
+            {{ article.published_at | date: '%B %d, %Y' }}
+          </time>
+        </div>
 
-    {{ form.errors | default_errors }}
+        {%- if article.metafields.custom.updated_at != blank -%}
+          <div class="article-page__meta-group">
+            <span class="article-page__meta-label">Actualizado</span>
+            <time class="article-page__meta-value">
+              {{ article.metafields.custom.updated_at }}
+            </time>
+          </div>
+        {%- endif -%}
 
-    <div>
-      <label for="author">{{ 'blog.comment_form_name' | t }}</label>
-      <input type="text" name="comment[author]" id="author" value="{{ form.author }}" required>
+        <div class="article-page__meta-group">
+          <span class="article-page__meta-label">Autor</span>
+          <span class="article-page__meta-value">{{ article.author }}</span>
+        </div>
+
+        <button
+          class="article-page__share-btn"
+          data-share-url="{{ shop.url }}{{ article.url }}"
+          data-share-title="{{ article.title | escape }}"
+          aria-label="Compartir artículo"
+          id="share-btn-bottom"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+          </svg>
+          Compartir
+        </button>
+      </div>
     </div>
+  </footer>
+</article>
 
-    <div>
-      <label for="email">{{ 'blog.comment_form_email' | t }}</label>
-      <input type="email" name="comment[email]" id="email" value="{{ form.email }}" required>
-    </div>
+{%- comment -%} ── Related articles ─────────────────────────────────── {%- endcomment -%}
+{%- if blog.articles.size > 1 -%}
+  {%- assign related_count = 0 -%}
+  {%- assign related_articles = blog.articles -%}
 
-    <div>
-      <label for="body">{{ 'blog.comment_form_body' | t }}</label>
-      <textarea name="comment[body]" id="body" required>{{ form.body }}</textarea>
-    </div>
+  <section class="related-articles" aria-label="Otros artículos">
+    <h2 class="related-articles__title">Otros artículos</h2>
+    <ul class="related-articles__list" role="list">
+      {%- for related in related_articles -%}
+        {%- if related.handle != article.handle and related_count < 3 -%}
+          <li class="related-articles__item">
+            {%- render 'article-card', article: related -%}
+          </li>
+          {%- assign related_count = related_count | plus: 1 -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </ul>
+  </section>
+{%- endif -%}
 
-    <input type="submit" value="{{ 'blog.comment_form_submit' | t }}">
-  {% endform %}
-{% endif %}
+{% stylesheet %}
+  /* ── Page layout ─────────────────────────────────────────── */
+  .article-page {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 3rem 1.25rem 5rem;
+  }
+
+  /* ── Header ──────────────────────────────────────────────── */
+  .article-page__title {
+    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    font-weight: 800;
+    color: var(--color-foreground, #1a1a1a);
+    margin: 0 0 1.25rem;
+    line-height: 1.15;
+  }
+
+  /* ── Meta row ────────────────────────────────────────────── */
+  .article-page__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .article-page__meta-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+
+  .article-page__meta-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(51, 51, 51, 0.45);
+    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
+  }
+
+  .article-page__meta-value {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--color-foreground, #1a1a1a);
+  }
+
+  /* ── Share button ────────────────────────────────────────── */
+  .article-page__share-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1.1rem;
+    border-radius: 999px;
+    border: 2.5px solid #1a1a1a;
+    background: #fff;
+    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 3px 3px 0 #1a1a1a;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    margin-left: auto;
+  }
+
+  .article-page__share-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 4px 5px 0 #1a1a1a;
+    background: var(--color-accent, #f86d4e);
+    color: #fff;
+  }
+
+  .article-page__share-btn.copied {
+    background: var(--color-secondary, #0296b4);
+    color: #fff;
+  }
+
+  /* ── Feature image ───────────────────────────────────────── */
+  .article-page__image-wrap {
+    margin-bottom: 2.5rem;
+    border-radius: 1.5rem;
+    overflow: hidden;
+    border: 2.5px solid #1a1a1a;
+    box-shadow: 5px 6px 0 #1a1a1a;
+  }
+
+  .article-page__image {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16/7;
+    object-fit: cover;
+  }
+
+  /* ── Content (RTE) ───────────────────────────────────────── */
+  .article-page__content.rte {
+    font-size: 1.05rem;
+    line-height: 1.75;
+    color: var(--color-foreground, #333);
+    margin-bottom: 3rem;
+  }
+
+  .article-page__content.rte h2,
+  .article-page__content.rte h3,
+  .article-page__content.rte h4 {
+    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
+    font-weight: 700;
+    margin-top: 2em;
+    margin-bottom: 0.5em;
+    color: var(--color-foreground, #1a1a1a);
+  }
+
+  .article-page__content.rte p {
+    margin: 0 0 1.25em;
+  }
+
+  .article-page__content.rte img {
+    max-width: 100%;
+    border-radius: 1rem;
+    border: 2px solid #1a1a1a;
+    margin: 1.5em 0;
+  }
+
+  .article-page__content.rte a {
+    color: var(--color-accent, #f86d4e);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* ── Footer ──────────────────────────────────────────────── */
+  .article-page__footer {
+    border-top: 2.5px solid #1a1a1a;
+    padding-top: 2rem;
+  }
+
+  .article-page__footer-inner {
+    background: var(--color-cream, #fcecc9);
+    border-radius: 1.25rem;
+    border: 2.5px solid #1a1a1a;
+    box-shadow: 4px 5px 0 #1a1a1a;
+    padding: 1.5rem 2rem;
+  }
+
+  /* ── Related articles ────────────────────────────────────── */
+  .related-articles {
+    max-width: 1200px;
+    margin: 5rem auto 0;
+    padding: 0 1.25rem 5rem;
+  }
+
+  .related-articles__title {
+    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 800;
+    color: var(--color-foreground, #1a1a1a);
+    margin: 0 0 2rem;
+  }
+
+  .related-articles__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+    gap: 1.5rem;
+  }
+
+  .related-articles__item {
+    display: flex;
+    flex-direction: column;
+  }
+{% endstylesheet %}
+
+<script>
+  (function () {
+    document.querySelectorAll('.article-page__share-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var url = btn.dataset.shareUrl;
+        var title = btn.dataset.shareTitle;
+        if (navigator.share) {
+          navigator.share({ title: title, url: url }).catch(function () {});
+        } else {
+          navigator.clipboard.writeText(url).then(function () {
+            btn.classList.add('copied');
+            var original = btn.innerHTML;
+            btn.textContent = '¡Enlace copiado!';
+            setTimeout(function () {
+              btn.innerHTML = original;
+              btn.classList.remove('copied');
+            }, 2000);
+          });
+        }
+      });
+    });
+  })();
+</script>
 
 {% schema %}
 {

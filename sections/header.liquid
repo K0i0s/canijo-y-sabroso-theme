@@ -74,6 +74,7 @@
           class="header-section__icon-link header-section__icon-link--search"
           href="{{ routes.search_url }}"
           aria-label="Buscar"
+          data-search-open
         >
           <svg
             viewBox="0 0 24 24"
@@ -241,7 +242,11 @@
 
       {{- '<!-- Drawer utility links -->' -}}
       <div class="header-section__drawer-meta">
-        <a class="header-section__drawer-utility" href="{{ routes.search_url }}">
+        <a
+          class="header-section__drawer-utility psearch-mobile-search-btn"
+          href="{{ routes.search_url }}"
+          data-search-open
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="15"
@@ -300,6 +305,8 @@
     </div>
   </div>
 </header>
+
+{%- render 'predictive-search' -%}
 
 <script>
   (() => {
@@ -545,6 +552,7 @@
 
   .header-section__icon-link--search {
     display: none;
+    font: inherit;
   }
 
   /* Cart count badge */

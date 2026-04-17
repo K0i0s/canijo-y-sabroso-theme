@@ -186,11 +186,11 @@
       "settings": {
         "heading": "¡Síguenos en redes!",
         "instagram_label": "@canijo-y-sabroso",
-        "instagram_url": "",
-        "tiktok_label": "TikTok",
-        "tiktok_url": "",
-        "facebook_label": "Facebook",
-        "facebook_url": ""
+        "instagram_url": "https://www.instagram.com/canijoysabroso/",
+        "tiktok_label": "@canijo.y.sabroso",
+        "tiktok_url": "https://www.tiktok.com/@canijo.y.sabroso",
+        "facebook_label": "Canijo Y Sabroso",
+        "facebook_url": "https://www.facebook.com/CanijoYSabroso"
       }
     },
     "newsletter": {

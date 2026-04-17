@@ -14,8 +14,18 @@
     "footer": {
       "type": "footer",
       "settings": {
-        "menu": "",
-        "show_payment_icons": true
+        "logo": "shopify://shop_images/canijo-sabroso-logo-transparent.png",
+        "brand_text": "Snacks naturales y deliciosos para perros felices. Hechos con amor en México, sin conservadores ni ingredientes raros.",
+        "brand_tagline": "Snacks naturales · Hecho en México",
+        "nav_heading": "Explora",
+        "nav_menu": "footer",
+        "support_heading": "Ayuda & Legal",
+        "support_menu": "",
+        "instagram_url": "https://www.instagram.com/canijoysabroso/",
+        "tiktok_url": "https://www.tiktok.com/@canijo.y.sabroso",
+        "facebook_url": "https://www.facebook.com/CanijoYSabroso",
+        "show_payment_icons": true,
+        "copyright_extra": "Hecho con amor en México."
       }
     }
   },

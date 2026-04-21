@@ -343,11 +343,56 @@
       bindNote();
     };
 
-    // ── Section Rendering API re-render ───────────────────
-    const rerender = () =>
-      fetch('/?section_id=cart-drawer')
+    // ── Header badge refresh ─────────────────────────────
+    const refreshHeaderBadge = () => {
+      const headerSection = document.querySelector('[data-header-section]');
+      if (!headerSection) return;
+      const sectionId = headerSection.id?.replace('shopify-section-', '').replace('-header', '');
+      if (!sectionId) return;
+      fetch(`/?section_id=${sectionId}`)
         .then((r) => r.text())
-        .then(replaceHTML);
+        .then((html) => {
+          const tmp = document.createElement('div');
+          tmp.innerHTML = html;
+          // Update cart count badge in header
+          const currentLink = document.querySelector('.header-section__cart-link');
+          const newLink = tmp.querySelector('.header-section__cart-link');
+          if (currentLink && newLink) {
+            const currentBadge = currentLink.querySelector('.header-section__cart-count');
+            const newBadge = newLink.querySelector('.header-section__cart-count');
+            if (currentBadge && newBadge) {
+              currentBadge.textContent = newBadge.textContent;
+            } else if (!currentBadge && newBadge) {
+              currentLink.insertBefore(newBadge, currentLink.firstChild);
+            } else if (currentBadge && !newBadge) {
+              currentBadge.remove();
+            }
+            // Update aria-label
+            currentLink.setAttribute('aria-label', newLink.getAttribute('aria-label') || '');
+          }
+          // Update drawer utility cart count
+          const currentDrawerCount = document.querySelector('.header-section__drawer-cart-count');
+          const newDrawerCount = tmp.querySelector('.header-section__drawer-cart-count');
+          if (currentDrawerCount && newDrawerCount) {
+            currentDrawerCount.textContent = newDrawerCount.textContent;
+          }
+        })
+        .catch(() => {});
+    };
+
+    // ── Section Rendering API re-render ───────────────────
+    const rerender = (openDrawer = false) => {
+      const done = () => {
+        if (openDrawer) setOpen(true);
+      };
+      return fetch('/?section_id=cart-drawer')
+        .then((r) => r.text())
+        .then((html) => {
+          replaceHTML(html);
+          done();
+        })
+        .catch(done);
+    };
 
     // ── Cart API helpers ───────────────────────────────────
     const cartChange = (line, quantity) => {
@@ -364,7 +409,8 @@
           } else {
             rerender(); // Fallback just in case
           }
-          document.dispatchEvent(new CustomEvent('cart:updated'));
+          // Internal cart change: refresh header badge only (drawer already open)
+          refreshHeaderBadge();
         })
         .finally(() => setCheckoutLoading(false));
     };
@@ -433,7 +479,11 @@
     };
 
     // ── Listen for external add-to-cart events ────────────
-    document.addEventListener('cart:updated', () => rerender());
+    // (e.g. quick-add buttons from product cards)
+    document.addEventListener('cart:updated', () => {
+      rerender(true); // re-render drawer + auto-open it
+      refreshHeaderBadge(); // update header cart count badge
+    });
 
     // Initial bind
     bindItems();

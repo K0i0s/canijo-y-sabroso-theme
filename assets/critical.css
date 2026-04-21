@@ -102,7 +102,6 @@ button,
   font-family: var(--font-heading-family);
   font-weight: var(--font-heading-weight);
   background-color: var(--color-accent);
-  color: #fff;
   border: none;
   border-radius: 0px;
   padding: 0.75rem 1.75rem;

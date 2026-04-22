@@ -382,29 +382,6 @@
       });
     });
 
-    // ── Quick-add AJAX ─────────────────────────────────────
-    document.querySelectorAll('.coll__quick-add').forEach((form) => {
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const btn = form.querySelector('.coll__quick-btn');
-        btn?.classList.add('is-loading');
-
-        fetch(form.action, {
-          method: 'POST',
-          headers: { 'X-Requested-With': 'XMLHttpRequest' },
-          body: new FormData(form),
-        })
-          .then((r) => r.json())
-          .then(() => {
-            btn?.classList.remove('is-loading');
-            btn?.classList.add('is-done');
-            setTimeout(() => btn?.classList.remove('is-done'), 1800);
-            document.dispatchEvent(new CustomEvent('cart:updated'));
-          })
-          .catch(() => btn?.classList.remove('is-loading'));
-      });
-    });
-
     // ── Card entrance (IntersectionObserver) ──────────────
     const cards = document.querySelectorAll('.coll__card');
     if ('IntersectionObserver' in window) {

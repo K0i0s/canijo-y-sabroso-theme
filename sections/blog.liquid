@@ -67,14 +67,64 @@
     width: 100%;
   }
 
+  .blog-listing__item .acard__link {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .blog-listing__item .acard__image-wrap {
+    padding-bottom: 0;
+    height: auto;
+  }
+
+  .blog-listing__item .acard__image {
+    position: static;
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* ── Tablet / Middle point ──────────────────────────────── */
+  @media (min-width: 480px) {
+    .blog-listing__item .acard__link {
+      display: grid;
+      grid-template-columns: auto 1fr;
+    }
+
+    .blog-listing__item .acard__image-wrap {
+      padding-bottom: 0;
+      height: 100%;
+      min-height: 280px;
+      width: auto;
+      border-bottom: none;
+      border-right: 2.5px solid #1a1a1a;
+    }
+
+    .blog-listing__item .acard__image {
+      position: static;
+      width: auto;
+      max-width: 14rem;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .blog-listing__item .acard__image-placeholder {
+      position: relative;
+      width: 14rem;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
   /* On mobile keep it as a regular card (article-card handles its own layout) */
 
   /* ── Desktop: zig-zag ──────────────────────────────────── */
   @media (min-width: 768px) {
     .blog-listing__item {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0;
       border-radius: 1.5rem;
       border: 2.5px solid #1a1a1a;
       box-shadow: 5px 6px 0px 0px #1a1a1a;
@@ -96,32 +146,35 @@
     }
 
     .blog-listing__item .acard__image-wrap {
-      padding-bottom: 0;
-      height: 100%;
       min-height: 320px;
-      border-bottom: none;
-      border-right: 2.5px solid #1a1a1a;
     }
 
-    /* Even items: flip the columns (image right, text left) */
+    .blog-listing__item .acard__image {
+      max-width: 24rem;
+    }
+
+    .blog-listing__item .acard__image-placeholder {
+      width: 320px;
+      height: 320px;
+    }
+
+    /* Zig-zag layout using grid */
     .blog-listing__item:nth-child(even) .acard__link {
-      flex-direction: row-reverse;
-    }
-
-    .blog-listing__item:nth-child(odd) .acard__link {
-      flex-direction: row;
-    }
-
-    .blog-listing__item .acard__link {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      height: 100%;
+      grid-template-columns: 1fr auto;
     }
 
     .blog-listing__item:nth-child(even) .acard__image-wrap {
+      grid-column: 2;
       border-right: none;
       border-left: 2.5px solid #1a1a1a;
     }
+
+    .blog-listing__item:nth-child(even) .acard__body {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    /* Border override for even items is now handled above */
 
     .blog-listing__item .acard__body {
       padding: 2rem 2.2rem;

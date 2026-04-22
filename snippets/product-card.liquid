@@ -72,7 +72,7 @@
   </div>
   {%- if product.available -%}
     <div class="{{ class_prefix }}__card-actions">
-      <form class="{{ class_prefix }}__quick-add" action="{{ routes.cart_add_url }}" method="post">
+      <form class="{{ class_prefix }}__quick-add" action="{{ routes.cart_add_url }}" method="post" data-quick-add-form>
         <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
         <input type="hidden" name="quantity" value="1">
         <button class="{{ class_prefix }}__quick-btn" type="submit" aria-label="Agregar {{ product.title }} al carrito">
@@ -95,3 +95,50 @@
     </div>
   {%- endif -%}
 </div>
+
+<script>
+  if (!window.__quickAddCartAttached) {
+    window.__quickAddCartAttached = true;
+    document.addEventListener('submit', (e) => {
+      const form = e.target.closest('form[data-quick-add-form]');
+      if (!form) return;
+
+      e.preventDefault();
+
+      const btn = form.querySelector('button[type="submit"]');
+      if (btn) btn.classList.add('is-loading');
+
+      const formData = new FormData(form);
+
+      fetch((window.Shopify?.routes?.root || '/') + 'cart/add.js', {
+        method: 'POST',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+        },
+        body: formData,
+      })
+        .then((res) => {
+          if (!res.ok) throw new Error('Error agregando al carrito');
+          return res.json();
+        })
+        .then(() => {
+          document.dispatchEvent(new CustomEvent('cart:updated'));
+          if (window.__cartDrawer) {
+            window.__cartDrawer.open();
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+          if (btn) btn.classList.remove('is-loading');
+          alert('Hubo un error intentando agregar este producto al carrito.');
+        })
+        .finally(() => {
+          if (btn) {
+            btn.classList.remove('is-loading');
+            btn.classList.add('is-done');
+            setTimeout(() => btn.classList.remove('is-done'), 1800);
+          }
+        });
+    });
+  }
+</script>

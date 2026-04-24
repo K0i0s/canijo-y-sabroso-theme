@@ -136,7 +136,7 @@
     <div class="footer__bottom-inner">
       {{- '<!-- Payments -->' -}}
       {%- if section.settings.show_payment_icons -%}
-        <div class="footer__payment" aria-label="Métodos de pago aceptados">
+        <div class="footer__payment" role="group" aria-label="Métodos de pago aceptados">
           {%- for type in shop.enabled_payment_types -%}
             {{ type | payment_type_svg_tag: class: 'footer__payment-icon' }}
           {%- endfor -%}
@@ -151,6 +151,7 @@
             href="{{ section.settings.instagram_url }}"
             target="_blank"
             rel="noopener noreferrer"
+            role="listitem"
             aria-label="Instagram"
           >
             <svg
@@ -176,6 +177,7 @@
             href="{{ section.settings.tiktok_url }}"
             target="_blank"
             rel="noopener noreferrer"
+            role="listitem"
             aria-label="TikTok"
           >
             <svg
@@ -197,6 +199,7 @@
             href="{{ section.settings.facebook_url }}"
             target="_blank"
             rel="noopener noreferrer"
+            role="listitem"
             aria-label="Facebook"
           >
             <svg

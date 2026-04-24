@@ -1,6 +1,5 @@
 <section class="why-us full-width">
   <div class="why-us__inner">
-
     {{- '<!-- Header -->' -}}
     <div class="why-us__header">
       {%- if section.settings.eyebrow != blank -%}
@@ -28,7 +27,6 @@
       <table class="why-us__table" role="table">
         <thead>
           <tr class="why-us__header-row">
-
             {{- '<!-- Empty feature col — transparent, blends with bg -->' -}}
             <th class="why-us__th why-us__th--feature" scope="col">
               <span class="why-us__sr-only">Característica</span>
@@ -37,7 +35,11 @@
             {{- '<!-- Canijo col — logo image -->' -}}
             <th class="why-us__th why-us__th--canijo" scope="col">
               <div class="why-us__col-header why-us__col-header--canijo">
-                <a class="why-us__brand-logo" href="{{ routes.root_url }}" aria-label="{{ section.settings.brand_name | default: 'Canijo y Sabroso' }}">
+                <a
+                  class="why-us__brand-logo"
+                  href="{{ routes.root_url }}"
+                  aria-label="{{ section.settings.brand_name | default: 'Canijo y Sabroso' }}"
+                >
                   <img
                     src="{{ 'canijo-y-sabroso-logo.webp' | asset_url }}"
                     alt="{{ section.settings.brand_name | default: 'Canijo y Sabroso' }}"
@@ -52,17 +54,17 @@
             {{- '<!-- Competitor col — name only, no icon -->' -}}
             <th class="why-us__th why-us__th--competitor" scope="col">
               <div class="why-us__col-header why-us__col-header--competitor">
-                <span class="why-us__col-name">{{ section.settings.competitor_name | default: 'Snacks promedio' }}</span>
+                <span class="why-us__col-name">
+                  {{- section.settings.competitor_name | default: 'Snacks promedio' -}}
+                </span>
               </div>
             </th>
-
           </tr>
         </thead>
 
         <tbody>
           {%- for block in section.blocks -%}
             <tr class="why-us__row{% cycle ' why-us__row--odd', ' why-us__row--even' %}" {{ block.shopify_attributes }}>
-
               {{- '<!-- Feature label — no emoji -->' -}}
               <td class="why-us__td why-us__td--feature">
                 <span class="why-us__feature-label">{{ block.settings.label }}</span>
@@ -71,14 +73,36 @@
               {{- '<!-- Canijo value -->' -}}
               <td class="why-us__td why-us__td--canijo">
                 {%- if block.settings.canijo_value == 'yes' -%}
-                  <span class="why-us__check why-us__check--yes" aria-label="Sí">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <span class="why-us__check why-us__check--yes" role="img" aria-label="Sí">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="17"
+                      height="17"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="3"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
                       <path d="M20 6 9 17l-5-5"/>
                     </svg>
                   </span>
                 {%- elsif block.settings.canijo_value == 'no' -%}
-                  <span class="why-us__check why-us__check--no" aria-label="No">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <span class="why-us__check why-us__check--no" role="img" aria-label="No">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="15"
+                      height="15"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="3"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
                       <path d="M18 6 6 18M6 6l12 12"/>
                     </svg>
                   </span>
@@ -90,14 +114,36 @@
               {{- '<!-- Competitor value -->' -}}
               <td class="why-us__td why-us__td--competitor">
                 {%- if block.settings.competitor_value == 'yes' -%}
-                  <span class="why-us__check why-us__check--yes" aria-label="Sí">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <span class="why-us__check why-us__check--yes" role="img" aria-label="Sí">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="17"
+                      height="17"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="3"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
                       <path d="M20 6 9 17l-5-5"/>
                     </svg>
                   </span>
                 {%- elsif block.settings.competitor_value == 'no' -%}
-                  <span class="why-us__check why-us__check--no" aria-label="No">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <span class="why-us__check why-us__check--no" role="img" aria-label="No">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="15"
+                      height="15"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="3"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
                       <path d="M18 6 6 18M6 6l12 12"/>
                     </svg>
                   </span>
@@ -105,7 +151,6 @@
                   <span class="why-us__check why-us__check--text">{{ block.settings.competitor_value }}</span>
                 {%- endif -%}
               </td>
-
             </tr>
           {%- endfor -%}
         </tbody>
@@ -117,38 +162,67 @@
       <div class="why-us__cta-wrap">
         <a class="why-us__cta" href="{{ section.settings.cta_url }}">
           {{ section.settings.cta_label }}
-          <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="17"
+            height="17"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
             <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
           </svg>
         </a>
       </div>
     {%- endif -%}
-
   </div>
 </section>
 
 {% stylesheet %}
   /* ── Keyframes ──────────────────────────────────────── */
   @keyframes wu-squiggle {
-    0%, 100% { stroke-dashoffset: 0;  }
-    50%       { stroke-dashoffset: 14; }
+    0%,
+    100% {
+      stroke-dashoffset: 0;
+    }
+    50% {
+      stroke-dashoffset: 14;
+    }
   }
 
   @keyframes wu-check-pop {
-    0%   { transform: scale(0) rotate(-15deg); opacity: 0; }
-    70%  { transform: scale(1.2) rotate(4deg);  opacity: 1; }
-    100% { transform: scale(1)   rotate(0deg);  opacity: 1; }
+    0% {
+      transform: scale(0) rotate(-15deg);
+      opacity: 0;
+    }
+    70% {
+      transform: scale(1.2) rotate(4deg);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1) rotate(0deg);
+      opacity: 1;
+    }
   }
 
   @keyframes wu-cta-arrow {
-    0%, 100% { transform: translateX(0);   }
-    50%       { transform: translateX(5px); }
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    50% {
+      transform: translateX(5px);
+    }
   }
 
   /* ── Section ────────────────────────────────────────── */
   .why-us {
     position: relative;
-    background: var(--color-light-cream, #FFF6E5);
+    background: var(--color-light-cream, #fff6e5);
     overflow: hidden;
   }
 
@@ -156,7 +230,7 @@
     content: '';
     position: absolute;
     inset: 0;
-    background-image: radial-gradient(circle, rgba(248,109,78,0.08) 2px, transparent 2px);
+    background-image: radial-gradient(circle, rgba(248, 109, 78, 0.08) 2px, transparent 2px);
     background-size: 28px 28px;
     pointer-events: none;
   }
@@ -182,7 +256,7 @@
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--color-secondary, #0296B4);
+    color: var(--color-secondary, #0296b4);
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
@@ -203,7 +277,7 @@
     font-family: var(--font-heading-family), 'Fredoka', sans-serif;
     font-weight: 700;
     font-size: clamp(1.75rem, 4.5vw, 2.75rem);
-    color: var(--color-accent, #F86D4E);
+    color: var(--color-accent, #f86d4e);
     letter-spacing: -0.01em;
     display: flex;
     flex-direction: column;
@@ -216,7 +290,7 @@
     display: block;
     width: clamp(130px, 35%, 220px);
     height: 14px;
-    color: var(--color-secondary, #0296B4);
+    color: var(--color-secondary, #0296b4);
   }
 
   .why-us__heading-squiggle svg {
@@ -230,7 +304,7 @@
     margin: 0.65rem auto 0;
     max-width: 46ch;
     font-size: clamp(0.88rem, 2vw, 1rem);
-    color: rgba(51,51,51,0.6);
+    color: rgba(51, 51, 51, 0.6);
     line-height: 1.6;
   }
 
@@ -255,11 +329,17 @@
 
   /* ── Column widths ──────────────────────────────────── */
   .why-us__th--feature,
-  .why-us__td--feature    { width: 52%; }
+  .why-us__td--feature {
+    width: 52%;
+  }
   .why-us__th--canijo,
-  .why-us__td--canijo     { width: 24%; }
+  .why-us__td--canijo {
+    width: 24%;
+  }
   .why-us__th--competitor,
-  .why-us__td--competitor { width: 24%; }
+  .why-us__td--competitor {
+    width: 24%;
+  }
 
   /* ── Header row ─────────────────────────────────────── */
   .why-us__header-row {
@@ -283,7 +363,7 @@
 
   /* Brand th — top of the coral column panel */
   .why-us__th--canijo {
-    background: var(--color-accent, #F86D4E);
+    background: var(--color-accent, #f86d4e);
     border-radius: 1.25rem 1.25rem 0 0;
     border: 2.5px solid #1a1a1a;
     border-bottom: none;
@@ -293,7 +373,7 @@
   .why-us__th--competitor {
     background: #fff;
     border-radius: 1.25rem 1.25rem 0 0;
-    border: 2px solid rgba(26,26,26,0.12);
+    border: 2px solid rgba(26, 26, 26, 0.12);
     border-bottom: none;
   }
 
@@ -319,11 +399,11 @@
     border: 2.5px solid #1a1a1a;
     box-shadow: 3px 3px 0px 0px #1a1a1a;
     text-decoration: none;
-    transition: transform 0.3s cubic-bezier(.34,1.56,.64,1);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
   .why-us__brand-logo:hover {
-    animation: wu-logo-bounce 0.55s cubic-bezier(.34,1.56,.64,1) both;
+    animation: wu-logo-bounce 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
   }
 
   .why-us__brand-logo img {
@@ -345,12 +425,16 @@
     font-weight: 700;
     line-height: 1.25;
     text-align: center;
-    color: rgba(51,51,51,0.5);
+    color: rgba(51, 51, 51, 0.5);
   }
 
   /* ── Data rows ──────────────────────────────────────── */
-  .why-us__row--odd  { background: transparent; }
-  .why-us__row--even { background: transparent; }
+  .why-us__row--odd {
+    background: transparent;
+  }
+  .why-us__row--even {
+    background: transparent;
+  }
 
   /* ── Cells ──────────────────────────────────────────── */
   .why-us__td {
@@ -364,37 +448,37 @@
     background: transparent;
     text-align: left;
     padding-left: 0;
-    border-top: 1.5px solid rgba(26,26,26,0.08);
+    border-top: 1.5px solid rgba(26, 26, 26, 0.08);
   }
 
   /* Brand column — solid coral panel that runs unbroken */
   .why-us__td--canijo {
     text-align: center;
-    background: rgba(248,109,78,0.10);
-    border-left:  2.5px solid #1a1a1a;
+    background: rgba(248, 109, 78, 0.1);
+    border-left: 2.5px solid #1a1a1a;
     border-right: 2.5px solid #1a1a1a;
-    border-top:   1.5px solid rgba(26,26,26,0.08);
+    border-top: 1.5px solid rgba(26, 26, 26, 0.08);
   }
 
   /* Last brand cell — close the bottom of the panel */
   .why-us__row:last-child .why-us__td--canijo {
-    border-bottom:        2.5px solid #1a1a1a;
-    border-bottom-left-radius:  1rem;
+    border-bottom: 2.5px solid #1a1a1a;
+    border-bottom-left-radius: 1rem;
     border-bottom-right-radius: 1rem;
   }
 
   /* Competitor column */
   .why-us__td--competitor {
     text-align: center;
-    background: rgba(255,255,255,0.55);
-    border-left:  2px solid rgba(26,26,26,0.10);
-    border-right: 2px solid rgba(26,26,26,0.10);
-    border-top:   1.5px solid rgba(26,26,26,0.08);
+    background: rgba(255, 255, 255, 0.55);
+    border-left: 2px solid rgba(26, 26, 26, 0.1);
+    border-right: 2px solid rgba(26, 26, 26, 0.1);
+    border-top: 1.5px solid rgba(26, 26, 26, 0.08);
   }
 
   .why-us__row:last-child .why-us__td--competitor {
-    border-bottom:        2px solid rgba(26,26,26,0.10);
-    border-bottom-left-radius:  1rem;
+    border-bottom: 2px solid rgba(26, 26, 26, 0.1);
+    border-bottom-left-radius: 1rem;
     border-bottom-right-radius: 1rem;
   }
 
@@ -421,7 +505,7 @@
 
   /* Brand yes — white check on coral bg */
   .why-us__td--canijo .why-us__check--yes {
-    background: var(--color-accent, #F86D4E);
+    background: var(--color-accent, #f86d4e);
     color: #fff;
     box-shadow: 2px 2px 0px 0px #1a1a1a;
     /* Slightly more opaque so it pops off the tinted column bg */
@@ -430,7 +514,7 @@
 
   /* Competitor yes — teal */
   .why-us__td--competitor .why-us__check--yes {
-    background: var(--color-secondary, #0296B4);
+    background: var(--color-secondary, #0296b4);
     color: #fff;
     box-shadow: 2px 2px 0px 0px #1a1a1a;
   }
@@ -452,27 +536,41 @@
     border: none;
     padding: 0.2rem 0.5rem;
     border-radius: 999px;
-    background: rgba(0,0,0,0.05);
+    background: rgba(0, 0, 0, 0.05);
   }
 
   /* Pop animation when row enters viewport */
   .why-us__row.is-visible .why-us__check {
-    animation: wu-check-pop 0.38s cubic-bezier(.34,1.56,.64,1) both;
+    animation: wu-check-pop 0.38s cubic-bezier(0.34, 1.56, 0.64, 1) both;
   }
-  .why-us__row.is-visible:nth-child(1) .why-us__check { animation-delay: 0.00s; }
-  .why-us__row.is-visible:nth-child(2) .why-us__check { animation-delay: 0.06s; }
-  .why-us__row.is-visible:nth-child(3) .why-us__check { animation-delay: 0.12s; }
-  .why-us__row.is-visible:nth-child(4) .why-us__check { animation-delay: 0.18s; }
-  .why-us__row.is-visible:nth-child(5) .why-us__check { animation-delay: 0.24s; }
-  .why-us__row.is-visible:nth-child(6) .why-us__check { animation-delay: 0.30s; }
+  .why-us__row.is-visible:nth-child(1) .why-us__check {
+    animation-delay: 0s;
+  }
+  .why-us__row.is-visible:nth-child(2) .why-us__check {
+    animation-delay: 0.06s;
+  }
+  .why-us__row.is-visible:nth-child(3) .why-us__check {
+    animation-delay: 0.12s;
+  }
+  .why-us__row.is-visible:nth-child(4) .why-us__check {
+    animation-delay: 0.18s;
+  }
+  .why-us__row.is-visible:nth-child(5) .why-us__check {
+    animation-delay: 0.24s;
+  }
+  .why-us__row.is-visible:nth-child(6) .why-us__check {
+    animation-delay: 0.3s;
+  }
 
   /* ── Screenreader util ──────────────────────────────── */
   .why-us__sr-only {
     position: absolute;
-    width: 1px; height: 1px;
-    padding: 0; margin: -1px;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
     overflow: hidden;
-    clip: rect(0,0,0,0);
+    clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border-width: 0;
   }
@@ -495,12 +593,11 @@
     letter-spacing: 0.02em;
     text-decoration: none;
     color: #fff;
-    background: var(--color-accent, #F86D4E);
+    background: var(--color-accent, #f86d4e);
     border: 2.5px solid #1a1a1a;
     border-radius: 999px;
     box-shadow: 4px 5px 0px 0px #1a1a1a;
-    transition: transform 0.2s cubic-bezier(.34,1.56,.64,1),
-                box-shadow 0.2s cubic-bezier(.34,1.56,.64,1);
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
   .why-us__cta:hover {
@@ -522,7 +619,9 @@
   (function () {
     var rows = document.querySelectorAll('.why-us__row');
     if (!rows.length || !('IntersectionObserver' in window)) {
-      rows.forEach(function (r) { r.classList.add('is-visible'); });
+      rows.forEach(function (r) {
+        r.classList.add('is-visible');
+      });
       return;
     }
     var observer = new IntersectionObserver(
@@ -536,7 +635,9 @@
       },
       { threshold: 0.25, rootMargin: '0px 0px -40px 0px' }
     );
-    rows.forEach(function (r) { observer.observe(r); });
+    rows.forEach(function (r) {
+      observer.observe(r);
+    });
   })();
 {% endjavascript %}
 
@@ -603,7 +704,7 @@
           "label": "Canijo y Sabroso value",
           "options": [
             { "value": "yes", "label": "✓ Yes" },
-            { "value": "no",  "label": "✗ No"  }
+            { "value": "no", "label": "✗ No" }
           ],
           "default": "yes"
         },
@@ -613,7 +714,7 @@
           "label": "Competitor value",
           "options": [
             { "value": "yes", "label": "✓ Yes" },
-            { "value": "no",  "label": "✗ No"  }
+            { "value": "no", "label": "✗ No" }
           ],
           "default": "no"
         }
@@ -625,10 +726,22 @@
     {
       "name": "Why us",
       "blocks": [
-        { "type": "feature", "settings": { "label": "Ingredientes naturales", "canijo_value": "yes", "competitor_value": "no" } },
-        { "type": "feature", "settings": { "label": "Sin conservadores", "canijo_value": "yes", "competitor_value": "no" } },
-        { "type": "feature", "settings": { "label": "Libre de gluten", "canijo_value": "yes", "competitor_value": "no" } },
-        { "type": "feature", "settings": { "label": "Proteína alta", "canijo_value": "yes", "competitor_value": "no" } },
+        {
+          "type": "feature",
+          "settings": { "label": "Ingredientes naturales", "canijo_value": "yes", "competitor_value": "no" }
+        },
+        {
+          "type": "feature",
+          "settings": { "label": "Sin conservadores", "canijo_value": "yes", "competitor_value": "no" }
+        },
+        {
+          "type": "feature",
+          "settings": { "label": "Libre de gluten", "canijo_value": "yes", "competitor_value": "no" }
+        },
+        {
+          "type": "feature",
+          "settings": { "label": "Proteína alta", "canijo_value": "yes", "competitor_value": "no" }
+        },
         { "type": "feature", "settings": { "label": "Sabor real", "canijo_value": "yes", "competitor_value": "no" } }
       ]
     }

@@ -41,7 +41,7 @@
       <time class="acard__date" datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
         {{ article.published_at | date: '%B %d, %Y' }}
       </time>
-      <h3 class="acard__title">{{ article.title }}</h3>
+      <h2 class="acard__title">{{ article.title }}</h2>
       {%- if article.excerpt != blank -%}
         <p class="acard__excerpt">{{ article.excerpt | strip_html | truncate: 120 }}</p>
       {%- endif -%}

@@ -55,9 +55,9 @@
 
 <div class="{{ class_prefix }}__card-body">
   <div class="{{ class_prefix }}__card-info">
-    <h3 class="{{ class_prefix }}__card-title">
+    <p class="{{ class_prefix }}__card-title">
       <a class="{{ class_prefix }}__card-title-link" href="{{ product.url }}">{{ product.title }}</a>
-    </h3>
+    </p>
     <div class="{{ class_prefix }}__card-prices">
       <span class="{{ class_prefix }}__card-price{% if p_onsale %} is-sale{% endif %}">{{ p_price | money }}</span>
       {%- if p_onsale -%}

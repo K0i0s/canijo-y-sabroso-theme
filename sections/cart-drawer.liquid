@@ -61,15 +61,17 @@
         aria-label="Cerrar carrito"
         data-cart-close
       >
+        <span>Cerrar</span>
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
+          width="15"
+          height="15"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          stroke-width="2.8"
+          stroke-width="3"
           stroke-linecap="round"
+          stroke-linejoin="round"
           aria-hidden="true"
         >
           <path d="M18 6 6 18M6 6l12 12"/>
@@ -172,9 +174,10 @@
                 </div>
               </div>
 
-              <button
+              <span
                 class="cart-drawer__remove"
-                type="button"
+                role="button"
+                tabindex="0"
                 data-line="{{ forloop.index }}"
                 aria-label="Eliminar {{ item.product.title }}"
               >
@@ -185,16 +188,18 @@
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
-                  stroke-width="2"
+                  stroke-width="2.5"
                   stroke-linecap="round"
+                  stroke-linejoin="round"
                   aria-hidden="true"
                 >
-                  <polyline points="3 6 5 6 21 6"/>
-                  <path d="M19 6 18.1 20a2 2 0 0 1-2 1.9H7.9a2 2 0 0 1-2-1.9L5 6"/>
-                  <path d="M10 11v6"/><path d="M14 11v6"/>
-                  <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+                  <path d="M3 6h18"/>
+                  <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                  <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                  <line x1="10" x2="10" y1="11" y2="17"/>
+                  <line x1="14" x2="14" y1="11" y2="17"/>
                 </svg>
-              </button>
+              </span>
             </li>
           {%- endfor -%}
         </ul>
@@ -651,22 +656,24 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 2.2rem;
-    height: 2.2rem;
-    border-radius: 50%;
+    gap: 0.35rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 999px;
     background: #fff;
-    border: 2px solid #1a1a1a;
-    box-shadow: 2px 2px 0 #1a1a1a;
+    border: 2px solid #e0e0e0;
+    box-shadow: none;
     cursor: pointer;
-    color: var(--color-foreground, #333);
+    color: #999;
+    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
     flex-shrink: 0;
-    transition: background 0.15s, color 0.15s, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
   .cart-drawer__close:hover {
-    background: var(--color-accent, #f86d4e);
-    color: #fff;
-    transform: rotate(90deg) scale(1.1);
+    border-color: #1a1a1a;
+    color: #1a1a1a;
   }
 
   /* ── Body ────────────────────────────────────────────── */
@@ -731,8 +738,9 @@
   }
 
   .cart-drawer__item {
+    position: relative;
     display: grid;
-    grid-template-columns: 4.5rem 1fr auto;
+    grid-template-columns: 4.5rem 1fr;
     gap: 0.75rem;
     background: #fff;
     border: 2.5px solid #1a1a1a;
@@ -788,6 +796,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.1rem;
+    padding-right: 2.5rem; /* leave space for the absolute remove button */
   }
 
   .cart-drawer__item-title {
@@ -818,6 +827,7 @@
   .cart-drawer__item-bottom {
     display: flex;
     align-items: center;
+    padding: 0.75rem 0.25rem;
     justify-content: space-between;
     gap: 0.5rem;
   }
@@ -837,12 +847,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 1.65rem;
-    height: 1.65rem;
+    width: 1.45rem;
+    height: 1.45rem;
     background: transparent;
     border: none;
     font-family: var(--font-heading-family), 'Fredoka', sans-serif;
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 700;
     color: var(--color-foreground, #333);
     cursor: pointer;
@@ -868,14 +878,14 @@
 
   .cart-drawer__qty-num {
     font-family: var(--font-heading-family), 'Fredoka', sans-serif;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 700;
     color: var(--color-foreground, #333);
-    min-width: 1.4rem;
+    min-width: 1.2rem;
     text-align: center;
     border-left: 1.5px solid rgba(26, 26, 26, 0.15);
     border-right: 1.5px solid rgba(26, 26, 26, 0.15);
-    line-height: 1.65rem;
+    line-height: 1.45rem;
   }
 
   .cart-drawer__item-price {
@@ -888,31 +898,38 @@
 
   /* Remove button */
   .cart-drawer__remove {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 2rem;
-    height: 2rem;
+    width: 2.2rem;
+    height: 2.2rem;
     border-radius: 50%;
-    background: rgba(248, 109, 78, 0.08);
-    border: 2px solid rgba(248, 109, 78, 0.35);
-    color: var(--color-accent, #f86d4e);
+    background: #ff0000;
+    border: 2.5px solid #1a1a1a;
+    box-shadow: 2px 2px 0 #1a1a1a;
+    color: #fff;
     cursor: pointer;
     flex-shrink: 0;
-    transition: background 0.5s, border-color 0.5s, color 0.5s;
+    transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.15s cubic-bezier(0.34, 1.56, 0.64, 1),
+      background 0.15s, color 0.15s;
   }
 
   @media (hover: hover) and (pointer: fine) {
     .cart-drawer__remove:hover {
-      background: var(--color-accent, #f86d4e);
-      border-color: #1a1a1a;
-      color: #fff;
+      background: #fff; /* light red tint */
+      color: #ff0000;
+      transform: translateY(-2px);
+      box-shadow: 3px 3px 0 #1a1a1a;
     }
   }
   .cart-drawer__remove:active {
-    background: var(--color-accent, #f86d4e);
-    border-color: #1a1a1a;
+    background: #ff0000;
     color: #fff;
+    transform: translateY(0);
+    box-shadow: 0 0 0 #1a1a1a;
   }
 
   /* ── Notes (fixed slot above footer) ────────────────── */

@@ -11,6 +11,14 @@
 <article class="article-page" itemscope itemtype="https://schema.org/Article">
   {%- comment -%} ── Header ──────────────────────────────────────── {%- endcomment -%}
   <header class="article-page__header">
+    <nav class="article-page__breadcrumb" aria-label="Ruta de navegacion">
+      <a class="article-page__breadcrumb-link" href="{{ routes.root_url }}">Inicio</a>
+      <span class="article-page__breadcrumb-sep" aria-hidden="true">/</span>
+      <a class="article-page__breadcrumb-link" href="{{ blog.url }}">{{ blog.title }}</a>
+      <span class="article-page__breadcrumb-sep" aria-hidden="true">/</span>
+      <span class="article-page__breadcrumb-current" aria-current="page">{{ article.title }}</span>
+    </nav>
+
     <h1 class="article-page__title" itemprop="headline">{{ article.title }}</h1>
 
     <div class="article-page__meta">
@@ -172,6 +180,34 @@
   }
 
   /* ── Header ──────────────────────────────────────────────── */
+  .article-page__breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    font-size: 0.85rem;
+    color: rgba(51, 51, 51, 0.5);
+    margin-bottom: 0.8rem;
+  }
+
+  .article-page__breadcrumb-link {
+    color: var(--color-secondary, #0296b4);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .article-page__breadcrumb-link:hover {
+    text-decoration: underline;
+  }
+
+  .article-page__breadcrumb-sep {
+    color: rgba(51, 51, 51, 0.3);
+  }
+
+  .article-page__breadcrumb-current {
+    font-weight: 600;
+  }
+
   .article-page__title {
     font-family: var(--font-heading-family), 'Fredoka', sans-serif;
     font-size: clamp(1.8rem, 5vw, 3rem);
@@ -254,7 +290,7 @@
     display: block;
     width: 100%;
     height: auto;
-    aspect-ratio: 16/7;
+
     object-fit: cover;
   }
 

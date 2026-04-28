@@ -12,9 +12,22 @@
     "main": {
       "type": "blog",
       "settings": {}
+    },
+    "newsletter_XqAt9V": {
+      "type": "newsletter",
+      "name": "Newsletter",
+      "settings": {
+        "heading": "Únete a la manada",
+        "subtext": "Recetas nuevas, descuentos exclusivos y tips para tu perro. Sin spam, solo lo bueno.",
+        "input_placeholder": "tu@correo.com",
+        "button_label": "Suscribirse",
+        "success_message": "¡Listo! Ahora eres parte de la manada. 🐾",
+        "privacy_note": "Sin spam. Puedes darte de baja cuando quieras."
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "newsletter_XqAt9V"
   ]
 }

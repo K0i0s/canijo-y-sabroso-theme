@@ -164,13 +164,6 @@
             <span
               >¡Solo quedan <strong>{{ current_variant.inventory_quantity }}</strong> en stock!</span
             >
-            <div class="pdp__stock-bar">
-              {%- assign pct_remaining = current_variant.inventory_quantity
-                | times: 100
-                | divided_by: low_stock_threshold
-              -%}
-              <div class="pdp__stock-fill" style="width: {{ pct_remaining }}%"></div>
-            </div>
           </div>
         {%- endif -%}
 
@@ -1273,6 +1266,7 @@
   .pdp__btn-buy-wrap .shopify-payment-button,
   .pdp__btn-buy-wrap .shopify-payment-button__button {
     width: 100% !important;
+    padding: 0rem;
     border-radius: 999px !important;
     border: 2.5px solid #1a1a1a !important;
     box-shadow: 5px 5px 0px 0px #1a1a1a !important;

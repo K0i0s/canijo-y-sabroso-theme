@@ -15,7 +15,7 @@
       "type": "announcement-bar",
       "settings": {
         "enabled": true,
-        "text": "Envio GRATIS en carritos con un valor minimo de 799 MXN",
+        "text": "Envio GRATIS en compras mayores a 799.00",
         "link": ""
       }
     },

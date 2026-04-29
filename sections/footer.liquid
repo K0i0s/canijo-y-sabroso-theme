@@ -56,7 +56,6 @@
           {%- endif -%}
 
           <div class="footer__brand-badge">
-            <span class="footer__brand-badge-dot"></span>
             {{ section.settings.brand_tagline | default: 'Snacks naturales · Hecho en México' }}
           </div>
         </div>
@@ -73,7 +72,6 @@
                 {%- for link in nav_menu.links -%}
                   <li class="footer__link-item">
                     <a class="footer__link" href="{{ link.url }}">
-                      <span class="footer__link-arrow" aria-hidden="true">→</span>
                       {{ link.title }}
                     </a>
                   </li>
@@ -95,7 +93,6 @@
                 {%- for link in support_menu.links -%}
                   <li class="footer__link-item">
                     <a class="footer__link" href="{{ link.url }}">
-                      <span class="footer__link-arrow" aria-hidden="true">→</span>
                       {{ link.title }}
                     </a>
                   </li>
@@ -106,22 +103,13 @@
             {{- '<!-- Fallback static links -->' -}}
             <ul class="footer__links" role="list">
               <li class="footer__link-item">
-                <a class="footer__link" href="/policies/refund-policy">
-                  <span class="footer__link-arrow" aria-hidden="true">→</span>
-                  Devoluciones &amp; Cambios
-                </a>
+                <a class="footer__link" href="/policies/refund-policy"> Devoluciones &amp; Cambios </a>
               </li>
               <li class="footer__link-item">
-                <a class="footer__link" href="/policies/privacy-policy">
-                  <span class="footer__link-arrow" aria-hidden="true">→</span>
-                  Política de Privacidad
-                </a>
+                <a class="footer__link" href="/policies/privacy-policy"> Política de Privacidad </a>
               </li>
               <li class="footer__link-item">
-                <a class="footer__link" href="/pages/atencion-al-cliente">
-                  <span class="footer__link-arrow" aria-hidden="true">→</span>
-                  Atención al Cliente
-                </a>
+                <a class="footer__link" href="/pages/atencion-al-cliente"> Atención al Cliente </a>
               </li>
             </ul>
           {%- endif -%}
@@ -376,28 +364,6 @@
     box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.35);
   }
 
-  .footer__brand-badge-dot {
-    display: inline-block;
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: #fff;
-    flex-shrink: 0;
-    animation: badge-pulse 2.4s ease-in-out infinite;
-  }
-
-  @keyframes badge-pulse {
-    0%,
-    100% {
-      opacity: 1;
-      transform: scale(1);
-    }
-    50% {
-      opacity: 0.5;
-      transform: scale(0.7);
-    }
-  }
-
   /* ── Col headings ───────────────────────────────────── */
   .footer__col-heading {
     margin: 0 0 1.25rem;
@@ -432,21 +398,10 @@
     transition: color 0.18s ease, gap 0.2s ease;
   }
 
-  .footer__link-arrow {
-    color: var(--footer-accent);
-    font-size: 0.8rem;
-    font-weight: 700;
-    transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
-    display: inline-block;
-  }
-
   .footer__link:hover {
     color: #fff;
     gap: 0.65rem;
-  }
-
-  .footer__link:hover .footer__link-arrow {
-    transform: translateX(5px);
+    transform: translateY(-1px);
   }
 
   /* ── Row 2: Bottom bar ──────────────────────────────── */

@@ -24,35 +24,70 @@
         <p class="coll__description">{{ collection.description | strip_html | truncate: 200 }}</p>
       {%- endif -%}
 
+      {%- assign active_filter_count = 0 -%}
+      {%- for filter in collection.filters -%}
+        {%- for value in filter.active_values -%}
+          {%- assign active_filter_count = active_filter_count | plus: 1 -%}
+        {%- endfor -%}
+        {%- if filter.type == 'price_range' -%}
+          {%- if filter.min_value.value != null or filter.max_value.value != null -%}
+            {%- assign active_filter_count = active_filter_count | plus: 1 -%}
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+
       <div class="coll__meta-row">
         <span class="coll__count" aria-live="polite">
           {{ collection.products_count }}
           {%- if collection.products_count == 1 -%}&nbsp;producto{%- else -%}&nbsp;productos{%- endif -%}
         </span>
 
-        {%- unless current_tags == blank -%}
+        {%- if active_filter_count > 0 -%}
           <div class="coll__active-tags" role="list" aria-label="Filtros activos">
-            {%- for tag in current_tags -%}
-              <a class="coll__active-tag" href="{{ collection.url }}" role="listitem">
-                {{ tag }}
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="11"
-                  height="11"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2.8"
-                  stroke-linecap="round"
-                  aria-hidden="true"
-                >
-                  <path d="M18 6 6 18M6 6l12 12"/>
-                </svg>
-              </a>
+            {%- for filter in collection.filters -%}
+              {%- for value in filter.active_values -%}
+                <a class="coll__active-tag" href="{{ value.url_to_remove }}" role="listitem">
+                  {{ value.label }}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="11"
+                    height="11"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.8"
+                    stroke-linecap="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M18 6 6 18M6 6l12 12"/>
+                  </svg>
+                </a>
+              {%- endfor -%}
+              {%- if filter.type == 'price_range' -%}
+                {%- if filter.min_value.value != null or filter.max_value.value != null -%}
+                  <a class="coll__active-tag" href="{{ filter.url_to_remove }}" role="listitem">
+                    {{ filter.min_value.value | default: 0 | money }} -
+                    {{ filter.max_value.value | default: filter.range_max | money }}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="11"
+                      height="11"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.8"
+                      stroke-linecap="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M18 6 6 18M6 6l12 12"/>
+                    </svg>
+                  </a>
+                {%- endif -%}
+              {%- endif -%}
             {%- endfor -%}
             <a class="coll__clear-tags" href="{{ collection.url }}">Limpiar todo</a>
           </div>
-        {%- endunless -%}
+        {%- endif -%}
       </div>
     </header>
 
@@ -79,11 +114,11 @@
           <line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/>
         </svg>
         Filtrar
-        {%- unless current_tags == blank -%}
-          <span class="coll__ctrl-badge" aria-label="{{ current_tags.size }} filtros activos">
-            {{- current_tags.size -}}
+        {%- if active_filter_count > 0 -%}
+          <span class="coll__ctrl-badge" aria-label="{{ active_filter_count }} filtros activos">
+            {{- active_filter_count -}}
           </span>
-        {%- endunless -%}
+        {%- endif -%}
       </button>
 
       <div class="coll__sort-wrap">
@@ -172,15 +207,17 @@
         <div class="coll__filter-hd">
           <h2 class="coll__filter-title">Filtros</h2>
           <button class="coll__filter-close" id="coll-filter-close" type="button" aria-label="Cerrar filtros">
+            <span>Cerrar</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
+              width="15"
+              height="15"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              stroke-width="2.5"
+              stroke-width="3"
               stroke-linecap="round"
+              stroke-linejoin="round"
               aria-hidden="true"
             >
               <path d="M18 6 6 18M6 6l12 12"/>
@@ -188,28 +225,79 @@
           </button>
         </div>
 
-        {%- unless collection.all_tags == blank -%}
-          <div class="coll__filter-group">
-            <p class="coll__filter-group-label">Categoria</p>
-            <div class="coll__filter-tags" role="list">
-              {%- for tag in collection.all_tags -%}
-                <a
-                  class="coll__filter-tag{% if current_tags contains tag %} is-active{% endif %}"
-                  href="{{ collection.url }}/{{ tag | handle }}"
-                  role="listitem"
-                  aria-pressed="{% if current_tags contains tag %}true{% else %}false{% endif %}"
-                >
-                  {{- tag -}}
-                </a>
-              {%- endfor -%}
-            </div>
-          </div>
-        {%- endunless -%}
+        <form class="coll__filter-form" id="coll-filter-form">
+          <input type="hidden" name="sort_by" value="{{ sort_by }}">
 
-        <div class="coll__filter-ft">
-          <a class="coll__filter-clear-link" href="{{ collection.url }}">Limpiar filtros</a>
-          <button class="coll__filter-apply" id="coll-filter-apply" type="button">Ver resultados</button>
-        </div>
+          <div class="coll__filter-scroll">
+            {%- for filter in collection.filters -%}
+              <div class="coll__filter-group">
+                <p class="coll__filter-group-label">{{ filter.label }}</p>
+
+                {%- case filter.type -%}
+                  {%- when 'boolean', 'list' -%}
+                    <div class="coll__filter-options">
+                      {%- for value in filter.values -%}
+                        <label class="coll__filter-option {% if value.count == 0 and value.active == false %}is-disabled{% endif %}">
+                          <input
+                            type="checkbox"
+                            name="{{ value.param_name }}"
+                            value="{{ value.value }}"
+                            {% if value.active %}
+                              checked
+                            {% endif %}
+                            {% if value.count == 0 and value.active == false %}
+                              disabled
+                            {% endif %}
+                            class="coll__filter-checkbox-input"
+                          >
+                          <span class="coll__filter-checkbox-box"></span>
+                          <span class="coll__filter-text">{{ value.label }} ({{ value.count }})</span>
+                        </label>
+                      {%- endfor -%}
+                    </div>
+
+                  {%- when 'price_range' -%}
+                    <div class="coll__filter-price">
+                      <div class="coll__filter-price-field">
+                        <span class="coll__filter-price-currency">{{ cart.currency.symbol }}</span>
+                        <input
+                          class="coll__filter-price-input"
+                          name="{{ filter.min_value.param_name }}"
+                          {% if filter.min_value.value %}
+                            value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"
+                          {% endif %}
+                          type="number"
+                          placeholder="0"
+                          min="0"
+                          max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                        >
+                      </div>
+                      <span class="coll__filter-price-sep">a</span>
+                      <div class="coll__filter-price-field">
+                        <span class="coll__filter-price-currency">{{ cart.currency.symbol }}</span>
+                        <input
+                          class="coll__filter-price-input"
+                          name="{{ filter.max_value.param_name }}"
+                          {% if filter.max_value.value %}
+                            value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"
+                          {% endif %}
+                          type="number"
+                          placeholder="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                          min="0"
+                          max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                        >
+                      </div>
+                    </div>
+                {%- endcase -%}
+              </div>
+            {%- endfor -%}
+          </div>
+
+          <div class="coll__filter-ft">
+            <button class="coll__filter-apply" id="coll-filter-apply" type="submit">Ver resultados</button>
+            <a class="coll__filter-clear-link" href="{{ collection.url }}">Limpiar filtros</a>
+          </div>
+        </form>
       </div>
     </div>
 
@@ -736,20 +824,24 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 2.2rem;
-    height: 2.2rem;
-    border-radius: 50%;
+    gap: 0.35rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 999px;
     background: #fff;
-    border: 2px solid #1a1a1a;
-    box-shadow: 2px 2px 0 #1a1a1a;
+    border: 2px solid #e0e0e0;
+    box-shadow: none;
     cursor: pointer;
-    transition: background 0.15s, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    color: #999;
+    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
   .coll__filter-close:hover {
-    background: var(--color-accent, #f86d4e);
-    color: #fff;
-    transform: rotate(90deg);
+    border-color: #1a1a1a;
+    color: #1a1a1a;
   }
 
   .coll__filter-group-label {
@@ -762,75 +854,191 @@
     color: rgba(51, 51, 51, 0.45);
   }
 
-  .coll__filter-tags {
+  .coll__filter-form {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
   }
 
-  .coll__filter-tag {
+  .coll__filter-scroll {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding-bottom: 2rem;
+  }
+
+  .coll__filter-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .coll__filter-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+  }
+
+  .coll__filter-option.is-disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .coll__filter-checkbox-input {
+    appearance: none;
+    width: 0;
+    height: 0;
+    position: absolute;
+    opacity: 0;
+  }
+
+  .coll__filter-checkbox-box {
     display: inline-flex;
-    padding: 0.32rem 0.8rem;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 2px solid rgba(26, 26, 26, 0.25);
+    border-radius: 0.35rem;
     background: #fff;
-    border: 2px solid rgba(26, 26, 26, 0.18);
-    border-radius: 999px;
-    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
-    font-size: 0.83rem;
-    font-weight: 700;
-    color: var(--color-foreground, #333);
-    text-decoration: none;
-    transition: border-color 0.15s, background 0.15s, transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1),
-      box-shadow 0.15s;
+    flex-shrink: 0;
+    transition: all 0.15s;
+    position: relative;
   }
 
-  .coll__filter-tag:hover {
+  .coll__filter-option:hover .coll__filter-checkbox-box {
     border-color: var(--color-secondary, #0296b4);
-    transform: translateY(-1px);
   }
-  .coll__filter-tag.is-active {
+
+  .coll__filter-checkbox-input:focus-visible + .coll__filter-checkbox-box {
+    outline: 2px solid var(--color-secondary, #0296b4);
+    outline-offset: 2px;
+  }
+
+  .coll__filter-checkbox-input:checked + .coll__filter-checkbox-box {
     background: var(--color-secondary, #0296b4);
     border-color: #1a1a1a;
-    color: #fff;
+  }
+
+  .coll__filter-checkbox-input:checked + .coll__filter-checkbox-box::after {
+    content: '';
+    position: absolute;
+    width: 5px;
+    height: 9px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    top: 2px;
+  }
+
+  .coll__filter-text {
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--color-foreground, #333);
+  }
+
+  .coll__filter-price {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .coll__filter-price-field {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    flex: 1;
+  }
+
+  .coll__filter-price-currency {
+    font-weight: 600;
+    color: rgba(51, 51, 51, 0.5);
+  }
+
+  .coll__filter-price-input {
+    width: 100%;
+    padding: 0.5rem 0.6rem;
+    background: #fff;
+    border: 2px solid rgba(26, 26, 26, 0.18);
+    border-radius: 0.65rem;
+    box-shadow: 2px 2px 0 rgba(26, 26, 26, 0.08);
+    font-family: var(--font-body-family, 'Nunito Sans'), sans-serif;
+    font-size: 0.85rem;
+    color: var(--color-foreground, #333);
+    transition: border-color 0.18s, box-shadow 0.18s;
+    box-sizing: border-box;
+  }
+
+  .coll__filter-price-input:focus {
+    outline: none;
+    border-color: var(--color-secondary, #0296b4);
     box-shadow: 2px 2px 0 #1a1a1a;
   }
 
   .coll__filter-ft {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.65rem;
-    padding-top: 1rem;
-    border-top: 2px dashed rgba(51, 51, 51, 0.1);
     margin-top: auto;
-  }
-
-  .coll__filter-clear-link {
-    font-size: 0.83rem;
-    font-weight: 600;
-    color: rgba(51, 51, 51, 0.45);
-    text-decoration: underline;
-  }
-  .coll__filter-clear-link:hover {
-    color: var(--color-accent, #f86d4e);
+    padding-top: 1rem;
+    border-top: 2px dashed rgba(51, 51, 51, 0.12);
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    flex-shrink: 0;
   }
 
   .coll__filter-apply {
-    padding: 0.6rem 1.4rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    width: 100%;
+    padding: 0.85rem 1.5rem;
     background: var(--color-accent, #f86d4e);
     color: #fff;
     border: 2.5px solid #1a1a1a;
     border-radius: 999px;
-    box-shadow: 3px 3px 0 #1a1a1a;
+    box-shadow: 4px 4px 0 #1a1a1a;
     font-family: var(--font-heading-family), 'Fredoka', sans-serif;
-    font-size: 0.92rem;
+    font-size: 1rem;
     font-weight: 700;
     cursor: pointer;
+    text-decoration: none;
     transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s;
   }
 
   .coll__filter-apply:hover {
     transform: translateY(-3px);
-    box-shadow: 5px 5px 0 #1a1a1a;
+    box-shadow: 6px 6px 0 #1a1a1a;
+  }
+
+  .coll__filter-clear-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    width: 100%;
+    padding: 0.85rem 1.5rem;
+    background: #fff;
+    color: var(--color-secondary, #0296b4);
+    border: 2.5px solid #1a1a1a;
+    border-radius: 999px;
+    box-shadow: 4px 4px 0 #1a1a1a;
+    font-family: var(--font-heading-family), 'Fredoka', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s, background 0.15s;
+  }
+
+  .coll__filter-clear-link:hover {
+    background: var(--color-secondary, #0296b4);
+    color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 6px 6px 0 #1a1a1a;
   }
 
   /* ── Grid ───────────────────────────────────────────── */
